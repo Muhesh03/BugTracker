@@ -1,0 +1,106 @@
+/* 1. COMPONENT-SPECIFIC STYLES */
+
+/* Sidebar Item Styling (The trigger container) */
+.sidebar-item {
+  position: relative; 
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+  margin-left: 50px;
+  background-color: white; 
+  width: max-content; 
+}
+
+/* Icon styling (for the sidebar trigger icon) */
+.icon {
+  height: 40px;
+  width: 40px;
+  font-size: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: lightgreen;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: transform 0.6s ease, color 0.6s ease;
+}
+
+.icon:hover {
+  color: darkgreen;
+}
+
+.maindiv {
+  margin-left: 500px;
+}
+
+/* ------------------------------------------------------------- */
+/* 2. ANGULAR MATERIAL OVERRIDES (Using ::ng-deep) */
+
+/* Override the menu panel background and dimensions */
+::ng-deep .mat-menu-panel {
+    background-color: #698e79 !important;
+    border: 1px solid #ccc !important;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1) !important;
+    width: 250px !important;
+    border-radius: 10px !important;
+    padding: 5px 0 !important;
+    
+    /* FIX: Remove scrollbars */
+    overflow-x: hidden !important; 
+    overflow-y: hidden !important;
+}
+
+/* Styling for the menu items */
+::ng-deep .dropdown-item {
+    display: flex !important;
+    align-items: center !important;
+    text-decoration: none !important;
+    
+    /* Reduced vertical padding for smaller height */
+    padding: 1px 15px;        
+    height: auto !important; 
+    
+    /* ADDED: Transition for background/border-radius change */
+    transition: background-color 0.3s ease, border-radius 0.3s ease; 
+}
+
+/* Icon styling for alignment and spacing */
+::ng-deep .matListIcon {
+  margin-right: 15px;
+  /* Increased size */
+  font-size: 20px; 
+  /* ADDED: Transition for color change */
+  transition: color 0.3s ease;
+}
+
+/* Text Styling */
+::ng-deep .dropdown-item .item-text {
+    /* Increased size */
+    font-size: 16px; 
+    font-weight: 500;
+    /* ADDED: Transition for color change */
+    transition: color 0.3s ease;
+}
+
+/* Text and Icon Colors (Default State: White on Green Background) */
+::ng-deep .dropdown-item .item-text, 
+::ng-deep .dropdown-item .matListIcon {
+    color: white !important;
+}
+
+/* Hover Effect Override */
+::ng-deep .mat-menu-item:hover {
+    /* Solid white background on hover with slight transparency */
+    background-color: rgba(255, 255, 255, 0.9) !important; 
+    
+    /* Hover Shape Fix: Rounded corners on the hovered area */
+    border-radius: 8px !important; 
+}
+
+/* Hover Text/Icon Color Change: Dark text/icon on White Background for readability */
+::ng-deep .mat-menu-item:hover .item-text,
+::ng-deep .mat-menu-item:hover .matListIcon {
+    /* Final color state (Dark Gray/Black) */
+    color: #333 !important; 
+}

@@ -1,0 +1,29 @@
+<mat-toolbar style="background-color: var(--formheader-color);" class="dialog-toolbar mb-3">
+  <span>
+    <h2 mat-dialog-title>Assign Team  {{ project.projectname }}</h2>
+  </span>
+  <span class="toolbar-spacer"></span>
+  <button mat-icon-button (click)="onclose()" aria-label="Close dialog">
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-toolbar>
+
+<div class="m-3 p-3">
+  <mat-dialog-content>
+    <div *ngFor="let group of groupList" class="group-box">
+      <h3 class="group-title">{{ group.usergroup }}</h3>
+      <div *ngFor="let user of group.users" class="user-row">
+        <mat-checkbox [(ngModel)]="user.selected">
+          {{ user.fullname }}
+        </mat-checkbox>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-raised-button style="background-color: var(--formbutton-color); color: var(--formcontent-color);" (click)="submitTeam()">
+      Save
+    </button>
+  </mat-dialog-actions>
+</div>

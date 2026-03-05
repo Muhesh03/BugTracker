@@ -1,0 +1,160 @@
+.project-table {
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+
+.maindiv {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+
+.table-wrapper {
+  max-width: 100%;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.project-table {
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.project-table .mat-header-cell {
+  background: var(--tableheader-color);
+  color: var(--tablecontent-color);
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.project-table.sticky-header th.mat-header-cell {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.project-table .mat-row:hover {
+  background-color: #f1f5ff;
+  transition: 0.2s ease-in-out;
+}
+
+.mat-row:nth-child(even) {
+  background-color: #f7f8fa;
+}
+
+.project-table .mat-cell {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* Columns */
+.project-table .col-si-no {
+  width: 70px;
+  padding-left: 16px;
+  text-align: center;
+}
+
+.project-table .col-name {
+  min-width: 220px;
+  padding-left: 16px;
+}
+
+.project-table .col-remarks {
+  min-width: 260px;
+  padding-left: 16px;
+}
+
+.project-table .col-status {
+  width: 140px;
+}
+
+.project-table .col-actions {
+  width: 80px;
+}
+
+/* Remarks wrapping */
+.project-table .remarks-cell {
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.4;
+}
+
+/* Status badge */
+.project-table .status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85em;
+  font-weight: 500;
+}
+
+.project-table .status-badge mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+/* Action buttons */
+
+
+.mat-header-row,
+.mat-row {
+  height: 30px;
+  /* smaller than default 48px */
+}
+
+.firstdiv {
+
+  width: 100%;
+  height: 44px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.firstdivheading {
+  margin-left: 10px;
+  margin-top: 10px;
+  font-size: 17px;
+
+}
+
+.close-btn {
+  position: absolute;
+  top: 2px;
+  right: 10px;
+}
+
+/* Form container */
+.min-form {
+  width: 100%;
+  max-width: 500px;
+  margin: 20px auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Form buttons */
+.projectbuttondiv {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 15px;
+  margin-left: 300px;
+}
+
+mat-paginator {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0;
+}
+
+::ng-deep .custom-dialog .mat-dialog-container {
+  overflow: hidden !important;
+  padding: 0 !important;
+}

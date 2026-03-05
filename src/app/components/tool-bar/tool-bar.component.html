@@ -1,0 +1,48 @@
+<mat-toolbar class="app-toolbar">
+
+  <!-- Dashboard (always visible) -->
+  <button data-aos="fade-right" mat-icon-button routerLink="/sidenav/dashboard" routerLinkActive="active-link"
+    class="icon-container">
+    <mat-icon matTooltip="Dashboard">grid_view</mat-icon>
+  </button>
+
+  <!-- User -->
+  <button data-aos="fade-left" mat-icon-button routerLink="/sidenav/tab" routerLinkActive="active-link"
+    class="icon-container" *ngIf="permissions?.user || permissions?.usergroup">
+    <mat-icon matTooltip="User">person</mat-icon>
+  </button>
+
+  <!-- Masters -->
+  <button data-aos="fade-right" mat-icon-button routerLink="/sidenav/mastertab" routerLinkActive="active-link"
+    class="icon-container" *ngIf="
+      permissions?.project ||
+      permissions?.tickettype ||
+      permissions?.ticketstatus ||
+      permissions?.ticketpriority ||
+      permissions?.tickettag
+    ">
+    <mat-icon matTooltip="Master">settings</mat-icon>
+  </button>
+
+  <!-- Ticket -->
+  <button data-aos="fade-left" mat-icon-button routerLink="/sidenav/ticketissue" routerLinkActive="active-link"
+    class="icon-container" *ngIf="permissions?.settings">
+    <mat-icon matTooltip="QC Ticket">edit_note</mat-icon>
+  </button>
+
+  <!-- View Ticket -->
+  <button data-aos="fade-right" mat-icon-button routerLink="/sidenav/viewticketissue" routerLinkActive="active-link"
+    class="icon-container" *ngIf="permissions?.view">
+    <mat-icon matTooltip="View Ticket">add_task</mat-icon>
+  </button>
+
+
+  <button data-aos="fade-right" mat-icon-button routerLink="/sidenav/liveticket" routerLinkActive="active-link"
+    class="icon-container" *ngIf="permissions?.clientTicketView">
+    <mat-icon matTooltip="Client Ticket">arrow_circle_right</mat-icon>
+  </button>
+
+
+  <span class="example-spacer"></span>
+
+</mat-toolbar>

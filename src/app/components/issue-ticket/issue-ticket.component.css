@@ -1,0 +1,301 @@
+/* Parent scroll container */
+.page-scroll-container {
+ 
+  overflow: hidden;
+  /* position: relative; */
+}
+.sticky-filter {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: #fff;
+  padding: 8px 12px;
+}
+
+/* Table wrapper should scroll */
+.table-wrapper {
+  max-height: calc(100vh - 200px); 
+  position: relative;
+  overflow-y: auto;
+  margin-top: 10px;
+}
+
+.mat-column-summary {
+  min-width: 200px;
+  max-width: 450px;
+  white-space: normal;
+  line-height: 1.4;
+}
+.mat-column-icons {
+  min-width: 70px;
+  max-width: 70px;
+  white-space: normal;
+  line-height: 1.4;
+}
+
+
+
+/* --- CONTAINER STYLES --- */
+
+.issueticket-table .mat-header-row,
+.issueticket-table .mat-row {
+  height: 30px;
+  min-height: 30px;
+}
+
+.issueticket-table .mat-header-row {
+  top: 56px !important; /* button height */
+  z-index: 20;
+  height: 40px !important;
+}
+
+.issueticket-table .mat-header-cell {
+  background: var(--tableheader-color);
+  color: var(--tablecontent-color);
+  font-weight: 400;
+  background-color: var(--tableheader-color);
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+  /* padding: 6px 10px; */
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  
+}
+
+.issueticket-table {
+  width: 100%;
+}
+
+
+
+.firstdiv {
+  /* width: 100%;
+  height: 50px;
+  position: relative;
+  display: flex;
+
+  align-items: center;
+  padding: 0 10px; */
+
+   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+}
+
+.close-btn {
+  margin-left: auto;
+  /* pushes the button all the way to the right */
+}
+
+.projectbuttondiv {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 15px;
+  margin-left: 200px;
+}
+
+.firstdivheading {
+  /* margin-left: 20px;
+  margin-top: 10px;
+  font-size: 18px; */
+   margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.ticketnumber {
+  width: 12%;
+}
+
+/* --- MAIN FILTER DIV --- */
+
+.mainfilterdiv {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  /* padding: 10px 16px; */
+  box-sizing: border-box;
+ padding: 0;
+
+}
+
+/* --- Left Container (Create Ticket Button) --- */
+.left-container {
+  flex: 1;
+  /* Takes up 1 portion of available space */
+  display: flex;
+  justify-content: flex-start;
+  /* Align the button to the left */
+}
+
+.filterbutton {
+  background-color: var(--tablebutton-color, #007bff);
+  color: white;
+  width: 140px;
+  height: 32px;
+  border-radius: 5px;
+  cursor: pointer;
+  flex-shrink: 0;
+ 
+}
+.image-icon{
+  cursor: pointer;
+
+}
+/* --- Right Container (Search Box) --- */
+.right-container {
+  margin-right: 30px;
+  flex: 2;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* --- SEARCH BOX --- */
+
+.searchbox {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.25);
+
+  width: 250px;
+  /* Fixed width for search box */
+  height: 38px;
+  /* Match button height */
+  display: flex;
+  align-items: center;
+  /* Center items vertically */
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.searchbox mat-icon {
+  color: #584f4f;
+  font-size: 18px;
+  margin-right: 10px;
+
+  cursor: pointer;
+}
+
+.searchbox input {
+  height: 24px;
+  font-size: 14px;
+  margin-top: 10px;
+  border: none;
+  box-sizing: border-box;
+  width: 100%;
+  /* Ensure input takes the full width of the box */
+}
+
+.searchbox input::placeholder {
+  color: #584f4f;
+  font-size: 12px;
+}
+
+/* --- Hide Underline/Ripple Effect --- */
+.searchbox .mat-form-field-underline,
+.searchbox .mat-form-field-ripple {
+  display: none;
+}
+
+/* --- CUSTOM DIALOG OVERRIDES --- */
+::ng-deep .custom-dialog .mat-dialog-container {
+  overflow: auto !important;
+  padding: 0 !important;
+}
+
+/* --- Form Styles --- */
+.min-form {
+  /* width: 100%;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  position: relative; */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 24px;
+  align-items: start;
+
+} 
+.mat-form-field textarea.mat-input-element {
+  min-height: 90px;      /* Set your desired default height */
+  height: auto;           /* Let it grow with content */
+  resize: vertical;       /* User can resize vertically */
+  padding: 10px;          /* Optional: adjust text spacing */
+  font-size: 14px;
+}
+
+
+.min-form input,
+.min-form select,
+.min-form textarea {
+  height: 14px;
+
+  /* Adjust padding so text isn't cut off */
+  font-size: 14px;
+  /* Optional: adjust font size */
+  box-sizing: border-box;
+  /* Ensure padding doesn't increase height */
+}
+
+.thumb {
+  width: 20px;
+  height: 20px;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.thumb.big {
+  width: 50%;
+  height: 50%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #000;
+  padding: 5px;
+}
+
+
+
+/* scroll codes below  */
+
+
+.form-scroll-container {
+  /* max-height: calc(100vh - 100px);
+  overflow-y: auto; 
+  padding: 5px; */
+   max-height: 75vh;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+/* Make the scrollbar thinner */
+.form-scroll-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.form-scroll-container::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.3); 
+  border-radius: 3px; /* rounded corners */
+}
+
+.form-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(0,0,0,0.5); /* slightly darker on hover */
+}
+
+.form-scroll-container::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.05); /* track color */
+  border-radius: 3px;
+}
+.steps-field textarea {
+  min-height: 140px;
+}
+
+.steps-field {
+  grid-column: 1 / -1; 
+}

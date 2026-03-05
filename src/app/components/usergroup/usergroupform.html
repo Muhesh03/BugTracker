@@ -1,0 +1,42 @@
+<div class="firstdiv"    style="background-color: var(--formheader-color);color: var(--formcontent-color);">
+<h2 class="firstdivheading">
+  {{ isEditMode ? 'Update User Group' : 'Create User Group' }}
+</h2>
+
+  <button mat-icon-button class="close-btn" (click)="onClose()">
+    <mat-icon>close</mat-icon>
+  </button>
+
+</div>
+
+<form [formGroup]="usergroupform" (ngSubmit)="onSubmit()" class="usergroup-form">
+  <div class="form-row">
+
+    <mat-form-field appearance="outline">
+      <mat-label>Usergroup</mat-label>
+      <input matInput formControlName="usergroupname" />
+      <mat-error *ngIf="usergroupform.get('usergroupname')?.hasError('required')">
+        Usergroup name is required
+      </mat-error>
+      <mat-error *ngIf="usergroupform?.get('usergroupname')?.hasError('duplicate')">
+        User group already exists
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="form-buttons justify-content-end">
+    <button mat-raised-button color="primary" type="button" style="background-color:#F5F7F8; color:black"
+      (click)="onClose()">Close</button>
+
+ <button mat-raised-button
+        color="primary"
+        style="background-color:var(--formbutton-color);color:var(--formcontent-color);"
+        class="formbutton"
+        type="submit">
+  {{ isEditMode ? 'Update' : 'Save' }}
+</button>
+
+
+
+  </div>
+</form>

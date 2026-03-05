@@ -1,0 +1,319 @@
+/* Parent scroll */
+.page-scroll-container {
+ 
+  overflow: hidden;
+  /* position: relative; */
+}
+
+.sticky-filter {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: #fff;
+
+}
+
+/* Table scroll */
+.table-wrapper {
+  max-height: calc(100vh - 200px);  
+  overflow-y: auto;
+  position: relative;
+  margin: 0;
+
+}
+.excel{
+  width:70px; height:70px; cursor:pointer; margin-bottom: 16px;
+}
+.pdf{
+  height:34px;
+  width:34px;
+  margin-bottom: 16px;
+}
+
+/* --- CONTAINER STYLES --- */
+
+.issueticket-table .mat-header-row,
+.issueticket-table .mat-row {
+  height: 30px;
+  min-height: 30px;
+
+}
+
+.issueticket-table .mat-header-row {
+  background-color: #916892;
+  top: 56px !important;
+  z-index: 30;
+  height: 40px !important;
+
+}
+
+.issueticket-table .mat-header-cell {
+  background-color: var(--tableheader-color);
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+  padding: 6px ;
+}
+
+.mainfilterdiv {
+  width: 100%;
+  /* Removing fixed height to allow flexible padding */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 16px;
+  /* padding: 10px 16px 10px 16px; */
+  /* Added padding to align content vertically */
+  box-sizing: border-box;
+}
+
+.issueticket-table {
+  width: 100%;
+}
+
+/* ===== COLUMN STYLES ONLY ===== */
+
+.mat-column-sno {
+  width: 50px;
+  justify-content: left;
+}
+
+.mat-column-ticket_number {
+  width: 140px;
+  justify-content: left;
+  padding-left: 20px;
+}
+
+.mat-column-created_by {
+  width: 140px;
+  padding-left: 10px;
+}
+
+.mat-column-user_id {
+  width: 140px;
+  padding-left: 10px;
+}
+
+.mat-column-tag_names {
+  width: 140px; padding-left: 10px;
+}
+.mat-column-tickettype{
+  width: 100px;
+  padding-left: 20px;
+}
+
+.mat-column-image_path {
+  width: 80px;
+  justify-content: center;
+  padding-left: 20px !important               ;
+}
+
+.mat-column-icons {
+  width: 80px;
+
+  padding-left: 20px;
+}
+
+.mat-column-created_at {
+  width: 120px;
+  padding-left:10px;
+}
+
+.mat-column-summary {
+  min-width: 200px;
+  max-width: 450px;
+  white-space: normal;
+  line-height: 1.4;
+}
+
+.mat-column-ticketstatus_id {
+  width: 140px;
+  gap: 6px;
+}
+
+.mat-column-edit,
+.mat-column-delete {
+  width: 70px;
+  justify-content: center;
+}
+
+
+.firstdiv {
+  background-color: var(--formheader-color);
+  color: var(--formcontent-color);
+  width: 100%;
+  height: 60px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  /* padding: 0 10px; */
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: white !important;
+}
+
+.search {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  /* Space between items */
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+/* --- HELPER CLASSES FOR WIDTHS --- */
+
+.search-fixed-small {
+  width: 180px;
+  /* Width for the search input */
+  min-width: 150px;
+}
+
+.search-small {
+  width: 90px;
+  /* Fixed width for dropdowns */
+}
+
+.inline-filter-group {
+  display: flex;
+  gap: 10px;
+}
+
+
+/* ===== Paginator Center ===== */
+mat-paginator {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0;
+}
+
+.filterbutton {
+  height: 34px !important;
+  background-color: #547562;
+  color: white;
+  line-height: 34px;
+  border-radius: 4px;
+  min-width: 80px;
+  margin-bottom: 15px;
+}
+
+/* --- COMPACT OVERRIDES (STRICTLY SCOPED TO .search) --- */
+
+
+/* 3. Force the small height for all fields in the .search row */
+::ng-deep .search .mat-form-field-appearance-outline .mat-form-field-flex {
+  height: 40px !important;
+  /* Fixed small height */
+  background-color:white;
+  align-items: center;
+}
+
+/* Your form-specific styles */
+.min-form {
+  width: 100%;
+  /* padding: 20px; */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+
+
+
+.view-container {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.view-row {
+  display: flex;
+  gap: 12px;
+}
+
+.label {
+  width: 120px;
+  font-weight: 600;
+  color: #555;
+}
+
+.value {
+  flex: 1;
+  color: #222;
+}
+
+.description {
+  white-space: pre-wrap;
+}
+
+
+.excel-btn {
+  background-color: #1d6f42;
+  color: white;
+  margin-left: 10px;
+}
+
+.right-container {
+  margin-right: 30px;
+  flex: 2;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* --- SEARCH BOX --- */
+
+.searchbox {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.25);
+
+  width: 250px;
+  /* Fixed width for search box */
+  height: 38px;
+  /* Match button height */
+  display: flex;
+  align-items: center;
+  /* Center items vertically */
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.searchbox mat-icon {
+  color: #584f4f;
+  font-size: 18px;
+  margin-right: 10px;
+
+  cursor: pointer;
+}
+
+.searchbox input {
+  height: 24px;
+  font-size: 14px;
+  margin-top: 10px;
+  border: none;
+  box-sizing: border-box;
+  width: 100%;
+  /* Ensure input takes the full width of the box */
+}
+
+.searchbox input::placeholder {
+  color: #584f4f;
+  font-size: 12px;
+}
+
+/* --- Hide Underline/Ripple Effect --- */
+.searchbox .mat-form-field-underline,
+.searchbox .mat-form-field-ripple {
+  display: none;
+}
+::ng-deep .custom-dialog .mat-dialog-container {
+  overflow: hidden !important;
+  padding: 0 !important;
+}      

@@ -1,0 +1,36 @@
+.toolbar-spacer {
+    /* This flex-grow property pushes the elements on either side to the edges */
+    flex: 1 1 auto;
+}
+
+mat-toolbar {
+    max-height: 50px;
+    margin-bottom: 15px;   
+    max-width: 100%;
+}
+
+
+/* Specific toolbar styling */
+.dialog-toolbar {
+    background-color: rgb(209, 209, 212);
+    max-height: 50px;
+}
+
+.group-box {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 12px;
+}
+
+.group-title {
+  font-weight: 600;
+  color: #6a1b9a;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.user-row {
+  padding-left: 50px;
+  margin: 4px 0;
+}

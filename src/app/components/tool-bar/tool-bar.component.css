@@ -1,0 +1,96 @@
+/* .icon-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 40px;
+  border-radius: 4px;
+  background-color: transparent;
+  transition: all 0.3s ease;
+}
+*/
+.app-toolbar {
+  height: auto !important;
+  padding: 5px;
+  border-radius: 20px;
+  background-color: var(--tableheader-color);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 1px;
+  gap: 15px;
+}
+/*
+mat-icon {
+  color: #333;
+  font-size: 24px;
+}
+
+.icon-container:hover {
+  background-color: #b2c7bd;
+  color: black;
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+}
+
+.icon-container:hover mat-icon {
+  color: white;
+} */
+
+/* The Toolbar Container
+.app-toolbar {
+  height: 100vh !important; 
+  width: 70px;
+  padding: 15px 5px;
+  border-radius: 0 20px 20px 0;
+  background-color: var(--tableheader-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+} */
+
+/* Base Icon Container */
+.icon-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  border-radius: 12px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  color: #555;
+}
+
+/* THE UNIQUE ACTIVE STYLE: Floating Pill & Indicator */
+.active-link {
+  background-color: #ffffff !important; /* White background for active */
+  color: #2e7d32 !important; /* Brand color for icon */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transform: translateX(5px); /* Pops out slightly */
+}
+
+/* Active Indicator Line (Optional) */
+.active-link::before {
+  content: "";
+  position: absolute;
+  left: -8px;
+  height: 25px;
+  width: 4px;
+  background-color: #2e7d32;
+  border-radius: 0 4px 4px 0;
+}
+
+.active-link mat-icon {
+  color: #2e7d32 !important;
+  font-variation-settings: 'FILL' 1; /* If using Material Symbols */
+}
+
+/* Hover State */
+.icon-container:hover:not(.active-link) {
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 15px;
+}

@@ -1,0 +1,115 @@
+<section class="fullsection">
+
+  <mat-toolbar class="topbar">
+    <!--     <button mat-icon-button (click)="toggleSidebar()" matTooltip="Menu">
+     <mat-icon>menu</mat-icon> 
+    </button>  Logo + Title together -->
+    <div class="brand-container">
+      <img src="/assets/bughopper.png" alt="Logo" class="logo" />
+      <span class="app-title">LutsTrack</span>
+    </div>
+    <span class="toolbar-spacer"></span>
+
+    <!-- SETTINGS ICON -->
+    <button mat-icon-button class="settings-btn" (click)="openSettings()" matTooltip="Ticket"
+      *ngIf="permissions?.settings">
+      <mat-icon>edit_note</mat-icon>
+    </button>
+    <!-- DROPDOWN -->
+    <mat-form-field class="project-dropdown">
+      <!-- <mat-label>{{Dropdowprojectvalue}}</mat-label> -->
+      <!-- <mat-label>
+        {{ Dropdowprojectvalue}}
+      </mat-label> -->
+
+      <mat-select [(value)]="selectedProject" [panelClass]="'custom-dropdown-panel'"
+        (selectionChange)="onProjectSelect($event.value)">
+        <!--ALL PROJECT  ARE SHOW -->
+        <mat-option [value]="0">
+          All Projects
+        </mat-option>
+
+        <mat-option *ngFor="let p of allocatedProjects" [value]="p.project_id">
+          {{ p.projectname }}
+        </mat-option>
+
+      </mat-select>
+    </mat-form-field>
+
+
+    <!-- <span class="text-end ">
+      <button mat-icon-button [matMenuTriggerFor]="logoutMenu" class="profile-btn" matTooltip="Profile">
+        <mat-icon style="color:white;font-size:40px;">account_circle</mat-icon>
+      </button>
+      <mat-menu #logoutMenu="matMenu">
+        <div class="px-3 py-2 ">{{ userName }}</div>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          Logout
+        </button>
+      </mat-menu>
+    </span> -->
+    <!-- <button mat-icon-button [matMenuTriggerFor]="logoutMenu" class="profile-btn" matTooltip="Profile">
+
+      <img *ngIf="user?.attachment_name; else defaultImg" [src]="apiUrl + 'attachment/download/' + user.attachment_name"
+        width="32" height="32" class="profile-img" />
+      <ng-template #defaultImg>
+        <img src="/assets/login.jpeg" alt="Profile" width="32" height="32" class="profile-img" />
+      </ng-template>
+    </button> -->
+
+    <button mat-icon-button [matMenuTriggerFor]="logoutMenu" class="profile-btn">
+      <img *ngIf="user?.attachment_name; else defaultImg" [src]="apiUrl + 'uploads/' + user.attachment_name" width="32"
+        height="32" class="profile-img" />
+    </button>
+    <ng-template #defaultImg>
+      <img src="/assets/login.jpeg" width="32" height="32" class="profile-img" />
+    </ng-template>
+
+    <mat-menu #logoutMenu="matMenu">
+      <div class="px-3 py-2 text-center">{{ userName }}</div>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        Logout
+      </button>
+    </mat-menu>
+  </mat-toolbar>
+
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav class="app-sidenav" mode="side" opened>
+
+
+      <div class="toolbar-div">
+
+        <app-tool-bar></app-tool-bar>
+      </div>
+
+
+
+    </mat-sidenav>
+
+    <mat-sidenav-content class="main-content">
+      <div class="content-inner">
+        <router-outlet></router-outlet>
+
+      </div>
+
+    </mat-sidenav-content>
+
+
+  </mat-sidenav-container>
+  <!-- <div class="endbar">
+              <app-tool-bar></app-tool-bar>
+
+  </div>
+ -->
+
+</section>
+
+
+
+
+
+<!-- ////////////////////////////////////////////////////////////////////////////////////////// -->

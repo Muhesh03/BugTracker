@@ -1,0 +1,65 @@
+/* Dialog Title */
+.dialog-title {
+  text-align: center;
+  font-weight: 600;
+}
+
+/* Dialog Content */
+.dialog-content {
+  min-width: 350px;
+  padding-top: 10px;
+}
+
+/* Master Section */
+.master-section {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+}
+
+.master-checkbox {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Permission List */
+.permission-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;            /* spacing between checkboxes */
+  padding: 15px 10px;
+  margin-left: 50px;
+}
+
+/* Checkbox hover */
+.permission-list mat-checkbox:hover {
+  background-color: #d3cdd6;
+  border-radius: 6px;
+  
+}
+
+/* Actions */
+.dialog-actions {
+  padding: 12px 20px;
+}
+.toolbar-spacer {
+    /* This flex-grow property pushes the elements on either side to the edges */
+    flex: 1 1 auto;
+
+}
+
+.permission-list mat-checkbox:hover {
+  background-color: #d3cdd6;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+  display: block; /* Ensures the background covers the full width */
+  padding: 4px 8px; 
+}
+.save-btn{
+  background-color: var(--formbutton-color);
+  color: var(--formcontent-color);
+}
+::ng-deep .custom-dialog .mat-dialog-container {
+    overflow: hidden !important;
+    padding: 0 !important;
+}

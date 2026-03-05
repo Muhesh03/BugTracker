@@ -1,0 +1,98 @@
+<div class="dashboard-container">
+    <div class="row g-4 aggressive-dashboard">
+        <!-- LEFT SIDEBAR: 2x2 GRID -->
+        <div class="col-xl-4 col-lg-5">
+            <h2 class="chart-title mt-2"> WELCOME TO<span class="highlight ms-2">DASHBOARD</span></h2>
+            <div class="row g-3 mt-5">
+                <!-- Card 1: Assigned -->
+                <div class="col-6">
+                    <mat-card class="stat-card ">
+                        <div class="card-glow"></div>
+                        <br>
+                        <mat-icon>person</mat-icon>
+                        <p class="massive-val">{{ assignedToMeCount }}</p>
+                        <span class="label">Assigned To Me</span>
+                    </mat-card>
+                </div>
+                <!-- Card 2: Important -->
+                <div class="col-6">
+                    <mat-card class="stat-card ">
+                        <div class="card-glow"></div>
+                        <br>
+                        <mat-icon>star</mat-icon>
+                        <p class="massive-val">{{ priorityhigh }}</p>
+                        <span class="label">Important</span>
+                    </mat-card>
+                </div>
+
+                <!-- Card 3: Pending -->
+                <div class="col-6 ">
+                    <mat-card class="stat-card ">
+                        <div class="card-glow"></div>
+                        <br>
+                        <mat-icon>schedule</mat-icon>
+                        <p class="massive-val">{{ pendingTickets }}</p>
+                        <span class="label">Pending Tickets</span>
+                    </mat-card>
+                </div>
+                <!-- Card 4: Closed -->
+                <div class="col-6">
+                    <mat-card class="stat-card ">
+                        <div class="card-glow"></div>
+                        <br>
+                        <mat-icon>check_circle</mat-icon>
+                        <p class="massive-val">{{ closedTickets }}</p>
+                        <span class="label">Closed Tickets</span>
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDE: THE MAIN CHART -->
+        <div class="col-xl-8 col-lg-7">
+            <div class="main-display">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2 class="chart-title mx-auto"> Total Ticket <span class="highlight ms-2">Status</span></h2>
+                    <mat-form-field appearance="outline" class="aggressive-select">
+                        <mat-select [(value)]="selectedMonth" (selectionChange)="onMonthChange()">
+                            <mat-option *ngFor="let m of months" [value]="m.value">{{ m.label }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <mat-card class="aggressive-chart-card">
+                    <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
+                        [legend]="barChartLegend" [chartType]="barChartType">
+                    </canvas>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="row">
+
+        <div class="col-12 mt-1">
+            <h2 class="chart-title"> TOTAL TICKETS <span class="highlight ms-2">PRIORITY</span></h2>
+            <div class="priority-section ">
+                <div *ngFor="let p of priorityStatusCharts" class="priority-card">
+
+                    <h3>
+                        {{ p.priority }} ({{ p.total }})
+                    </h3>
+
+                    <canvas baseChart [data]="p.data" [labels]="p.labels" [colors]="[{ backgroundColor: p.colors }]"
+                        [chartType]="'doughnut'" [legend]="false" [options]="donutOptions">
+                    </canvas>
+
+                </div>
+            </div>
+
+        </div>
+
+
+
+
+    </div>
+</div>

@@ -1,0 +1,203 @@
+.ticket-wrapper {
+  border: 1px solid #6b8e23;
+  font-family: Arial, sans-serif;
+
+
+}
+
+/* Header */
+.ticket-header {
+  background: var(--formheader-color);
+  color: #fff;
+  padding: 8px 12px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Ticket Info Table */
+.ticket-info-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px;
+ 
+}
+
+.ticket-info-table th {
+  background: var(--tableheader-color);
+  border: 1px solid #555;
+  padding: 6px;
+  font-size: 14px;
+}
+
+.ticket-info-table td {
+  border: 1px solid #555;
+  padding: 6px;
+  font-size: 14px;
+}
+
+.ticket-scroll {
+  flex: 1;
+  /* overflow-y: auto; */
+  padding-right: 6px;
+}
+
+/* Form Grid */
+.form-grid {
+  display: flex;
+  gap: 16px;
+  padding: 12px;
+}
+
+.form-column {
+  flex: 1;
+}
+
+/* Form Items */
+.form-item {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.form-label {
+  background: var(--tableheader-color);
+  padding: 16px;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* Read-only Boxes */
+.readonly-box {
+  border: 1px solid #dbdbdb;
+  background: #f2f2f2;
+  padding: 6px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.priority-box {
+  font-weight: bold;
+}
+
+/* Summary */
+.summary-grid {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 8px;
+  padding: 12px;
+}
+
+.summary-labels{
+/*  
+  display: grid;
+  grid-template-columns: 150px 1fr 1fr;
+  gap: 8px; */
+  margin-bottom: 8px;
+}
+
+.summary-values .readonly-box {
+  margin-bottom: 8px;
+  
+}
+
+.description-box {
+  height: 70px;
+}
+.summary{
+  height: 40px;
+}
+/* Footer */
+.footer-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 12px;
+}
+
+.note-section {
+  font-weight: bold;
+  margin-bottom: 8px;
+  padding: 10px;
+  background-color: var(--tableheader-color);
+}
+.button{
+  background-color: var(--formheader-color) !important;
+  color: white !important;
+}
+.note-section {
+  font-size: 15px;
+}
+
+.note-table th {
+  font-weight: 600;
+}
+
+.attachment-item {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.add-note-row {
+  background-color: #f9f9f9;
+}
+
+textarea {
+  resize: none;
+}
+
+.footer-actions button {
+  min-width: 100px;
+}
+.attachment-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  margin-bottom: 3px;
+}
+
+.attachment-thumb {
+  width: 20px;
+  height: 20px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.attachment-name {
+  font-size: 12px;
+  color: #464242;
+  word-break: break-all;
+}
+.scrollable-collapse {
+    max-height: 600px; /* Adjust height as needed */
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.activity-table {
+  width: 100%;
+  border-collapse: collapse; /* Prevents double borders */
+  margin-top: 10px;
+}
+
+.activity-table th, 
+.activity-table td {
+  border: 1px solid #dee2e6; /* Bootstrap-style light gray border */
+  padding: 8px;
+  text-align: left;
+}
+
+.activity-table thead {
+  background-color: #f8f9fa; /* Light header background */
+  font-weight: bold;
+}

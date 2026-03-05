@@ -1,0 +1,144 @@
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .stat-card {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .chart-card canvas {
+    max-height: 240px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .aggressive-chart-card canvas {
+    grid-template-columns: 1fr;
+  }
+}
+
+.priority-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 10px;
+
+ 
+} 
+
+.priority-card {
+  padding: 15px;
+  border-radius: 12px;
+  background: #fafafa;
+  text-align: center;
+  box-shadow: 40px 40px 60px rgba(0, 0, 0, 0.1);
+  /* max-height: 300px;
+  max-width: 400px; */
+   height: 250px;
+  width: 250px;
+
+}
+
+.priority-card canvas {
+ 
+  height: 150px !important;
+  width: 150px !important;
+  margin: auto;
+}
+/*///////////////////////////////////////////////////////////////////////////////////*/
+
+mat-icon {
+    /* font-size: 32px; */
+    color: var(--formheader-color);
+}
+.dashboard-container {
+ 
+  height: 100vh; 
+  overflow: auto;
+}
+
+
+/* Container Base */
+.aggressive-dashboard {
+    background: #f3f2f2;
+    margin-left: 5px;
+   padding-bottom: 20px;
+    min-height: auto;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Sidebar Stat Cards (The 2x2 Grid) */
+.stat-card {
+    background: #f7f6f6!important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border-radius: 10px !important; /* Sharp corners for aggressive look */
+    padding: 1.5rem !important;
+    text-align: center;
+    margin: auto;
+    position: relative;
+    overflow: hidden;
+    height: 180px;
+    width: 100%;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3) !important;
+}
+
+.stat-card:hover {
+    transform: translateY(-10px);
+    background: #e7e7e7 !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+   
+}
+
+
+.massive-val {
+    font-size: 2.8rem;
+    font-weight: 900;
+    margin: 0.5rem 0;
+    letter-spacing: -2px;
+   
+}
+
+.label {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--formheader-color);
+    opacity: 0.6;
+}
+
+/* Right Side Chart Display */
+.aggressive-chart-card {
+    background: #f3f2f2 !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border-radius: 8px !important;
+   
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2) !important;
+    min-height: 400px;
+    max-width: 1000px;
+    margin: auto;
+  
+}
+
+.chart-title {
+    color: #5f5d5d;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0%;
+    font-size: 15px;
+   
+}
+
+.highlight { color: #c55a7a; }
+
+.aggressive-select{
+    width: 150px;
+    margin-bottom: 1rem;
+}
+/* Custom Material Select Style */
+::ng-deep .aggressive-select .mat-form-field-outline {
+    color: rgba(0, 0, 0, 0.1) !important;
+}
+::ng-deep .mat-select-value {
+    color: #706969 !important;
+}

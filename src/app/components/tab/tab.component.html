@@ -1,0 +1,30 @@
+
+<div class="page-scroll-container">
+  <mat-tab-group
+    mat-align-tabs="center"
+    class="sticky-tab-group"
+    *ngIf="permissions.user">
+
+    <mat-tab label="USER">
+      <app-user></app-user>
+    </mat-tab>
+
+    <mat-tab label="USER GROUP" *ngIf="permissions.usergroup">
+      <app-usergroup></app-usergroup>
+    </mat-tab>
+
+  </mat-tab-group>
+</div>
+
+
+<!-- <mat-tab-group mat-align-tabs="center" *ngIf="permissions.user">
+    <mat-tab label="USER" >
+        <app-user></app-user>
+        
+    </mat-tab>
+    <mat-tab label="USER GROUP" *ngIf="permissions.usergroup">
+        <app-usergroup></app-usergroup>
+     
+    </mat-tab>
+  
+</mat-tab-group> -->
