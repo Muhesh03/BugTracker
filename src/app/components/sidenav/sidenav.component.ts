@@ -18,7 +18,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 })
 export class SideNavComponent implements OnInit {
-
   encodeURIComponent(arg0: any) {
     throw new Error('Method not implemented.');
   }

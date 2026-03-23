@@ -18,7 +18,6 @@ import { MatSort } from '@angular/material/sort';
   styleUrls: ['./usergroup.component.css'],
 })
 export class UsergroupComponent implements OnInit, AfterViewInit {
-
   openPermissionDialog(row: any) {
     this.dialog.open(PermissionDialogComponent, {
       width: '600px',

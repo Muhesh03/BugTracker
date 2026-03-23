@@ -52,7 +52,6 @@ export class ViewTicketComponent implements OnInit {
   // }
 
 
-
   constructor(
     private issueticketService: IssueTicketService,
     private dialog: MatDialog,
@@ -765,7 +764,6 @@ export class EditNoteComponent implements OnInit {
     };
 
     console.log('Ticket update payload:', ticketPayload);
-
 
     this.issueticketService
       .updateTicket(this.data.issueticket_id, ticketPayload)

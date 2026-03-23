@@ -1,6 +1,5 @@
 /* Parent scroll */
 .page-scroll-container {
-
   overflow: hidden;
   /* position: relative; */
 }
@@ -63,12 +62,10 @@
 
 .mainfilterdiv {
   width: 100%;
-
   display: flex;
   flex-direction: column;
   gap: 16px;
   margin-bottom: 16px;
-
   box-sizing: border-box;
 }
 

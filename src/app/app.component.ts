@@ -10,6 +10,7 @@ import { AutologoutService } from './services/autologout.service';
   styleUrls: ['./app.component.css'],
 
 
+
 })
 export class AppComponent {
   constructor(private usergroupService: UserGroupService,private autologoutService: AutologoutService) { }

@@ -58,7 +58,6 @@
   font-weight: bold !important;
   top: 14px !important;
 }
-
 .fullsection {
   height: 100vh;
   /* max-height: 100vh; */
@@ -149,7 +148,6 @@
   display: flex;
   align-items: center;
   overflow: hidden;
-
 }
 
 /* main content: animate margin so content shifts smoothly */
@@ -322,7 +320,6 @@
   height: 0 !important;
   width: 0 !important;
 }
-
 /* 4. Fix Label Position for Reduced Height */
 ::ng-deep .project-dropdown .mat-mdc-form-field-infix {
   padding-top: 0 !important;

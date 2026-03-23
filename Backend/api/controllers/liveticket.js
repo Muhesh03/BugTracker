@@ -74,7 +74,6 @@ router.use(function (req, res, next) {
                         console.log('Issue ticket saved in db', items);
                         res.status(200).send(items);
                     }
-
                     // res.status(200).send({
                     //     message: "Ticket priorities list",
                     //     data: output

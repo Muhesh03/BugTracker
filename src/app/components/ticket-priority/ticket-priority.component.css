@@ -1,7 +1,6 @@
 .icon-radio-group {
   display: flex;
   justify-content: space-between;
-
   margin: 10px 0;
 }
 
@@ -24,7 +23,6 @@
 
 .icon-radio mat-icon {
   margin-bottom: 5px;
-
   cursor: pointer;
 }
 
@@ -106,7 +104,6 @@
   text-align: center;
 }
 
-
 .project-table .remarks-cell {
   white-space: normal;
   word-break: break-word;
@@ -142,12 +139,10 @@
   min-height: 30px;
 }
 
-
 .project-table .mat-header-cell {
   height: 30px;
   line-height: 30px;
 }
-
 
 .project-table .mat-cell {
   height: 30px;
@@ -187,7 +182,6 @@ mat-paginator {
   top: 2px;
   right: 10px;
 }
-
 
 .min-form {
   width: 100%;
@@ -242,7 +236,6 @@ mat-paginator {
   margin-top: 16px;
 
 }
-
 .action-wrapper {
   display: inline-flex;
   align-items: center;

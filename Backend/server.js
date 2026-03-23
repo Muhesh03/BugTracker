@@ -25,7 +25,6 @@ app.use(bodyParser.urlencoded({
   extended: true,
   parameterLimit: 50000
 }));
-
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 let routes = require('./routes')(app);
 const distPath = path.join(__dirname, 'dist/test');

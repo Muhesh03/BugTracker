@@ -149,7 +149,6 @@ exports.updateuser = function (data, cb) {
 // 	  password: data.password,
 // 	  email: data.email,
 // 	  phonenumber: data.phonenumber,
-
 //     })
 //     .returning('*')
 //     .then(rows => cb(null, rows[0]))
