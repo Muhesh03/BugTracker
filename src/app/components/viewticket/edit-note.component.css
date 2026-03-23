@@ -1,0 +1,322 @@
+.ticket-wrapper {
+  border: 1px solid #6b8e23;
+  font-family: Arial, sans-serif;
+
+
+}
+
+/* Header */
+.ticket-header {
+  background: var(--formheader-color);
+  color: #fff;
+  padding: 8px 12px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Ticket Info Table */
+.ticket-info-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px;
+
+}
+
+.ticket-info-table th {
+  background: var(--tableheader-color);
+  border: 1px solid #555;
+  padding: 6px;
+  font-size: 14px;
+}
+
+.ticket-info-table td {
+  border: 1px solid #555;
+  padding: 6px;
+  font-size: 14px;
+}
+
+.ticket-scroll {
+  flex: 1;
+  /* overflow-y: auto; */
+  padding-right: 6px;
+}
+
+/* Form Grid */
+.form-grid {
+  display: flex;
+  gap: 16px;
+  padding: 12px;
+}
+
+.form-column {
+  flex: 1;
+}
+
+/* Form Items */
+.form-item {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.form-label {
+  background: var(--tableheader-color);
+  padding: 16px;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* Read-only Boxes */
+.readonly-box {
+  border: 1px solid #dbdbdb;
+  background: #f2f2f2;
+  padding: 6px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.priority-box {
+  font-weight: bold;
+}
+
+/* Summary */
+.summary-grid {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 8px;
+  padding: 12px;
+}
+
+.summary-labels {
+  /*  
+  display: grid;
+  grid-template-columns: 150px 1fr 1fr;
+  gap: 8px; */
+  margin-bottom: 8px;
+}
+
+.summary-values .readonly-box {
+  margin-bottom: 8px;
+
+}
+
+.description-box {
+  height: 70px;
+}
+
+.summary {
+  height: 40px;
+}
+
+/* Footer */
+.footer-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 12px;
+}
+
+.note-section {
+  font-weight: bold;
+  margin-bottom: 8px;
+  padding: 10px;
+  background-color: var(--tableheader-color);
+}
+
+.button {
+  background-color: var(--formheader-color) !important;
+  color: white !important;
+}
+
+.note-section {
+  font-size: 15px;
+}
+
+.note-table th {
+  font-weight: 600;
+}
+
+.attachment-item {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.add-note-row {
+  background-color: #f9f9f9;
+}
+
+textarea {
+  resize: none;
+}
+
+.footer-actions button {
+  min-width: 100px;
+}
+
+.attachment-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  margin-bottom: 3px;
+}
+
+.attachment-thumb {
+  width: 20px;
+  height: 20px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.attachment-name {
+  font-size: 12px;
+  color: #464242;
+  word-break: break-all;
+}
+
+.scrollable-collapse {
+  max-height: 600px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.activity-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.activity-table th,
+.activity-table td {
+  border: 1px solid #dee2e6;
+  padding: 8px;
+  text-align: left;
+}
+
+.activity-table thead {
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+
+  .note-table,
+  .note-table thead,
+  .note-table tbody,
+  .note-table th,
+  .note-table td,
+  .note-table tr {
+    display: block;
+    width: 100% !important;
+  }
+
+  .note-table thead {
+    display: none;
+  }
+
+  .note-table tr {
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+  }
+
+  .note-table td {
+    padding: 12px !important;
+    border: none !important;
+    border-bottom: 1px solid #eee !important;
+    position: relative;
+  }
+
+  .note-table td:first-child {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #547562 !important;
+  }
+
+
+  .note-table td:nth-of-type(2):before {
+    content: "Note: ";
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+    color: #547562;
+  }
+
+  .note-table td:nth-of-type(3):before {
+    content: "Attachments: ";
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+    color: #547562;
+  }
+
+  .add-note-row {
+    border: 2px dashed #547562 !important;
+  }
+
+  textarea.form-control {
+    font-size: 14px;
+    min-height: 100px;
+  }
+
+  .attachment-item {
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 8px;
+    background: #f0f0f0;
+    border-radius: 4px;
+    margin-bottom: 5px;
+  }
+
+  .attachment-name {
+    font-size: 11px;
+    word-break: break-all;
+  }
+
+   .form-grid {
+    flex-direction: column;
+    padding: 8px;
+    gap: 0;
+  }
+
+
+  .form-item, 
+  .summary-row {
+    grid-template-columns: 1fr; 
+    gap: 4px;
+    margin-bottom: 15px;
+  }
+
+   .summary-item {
+   
+    grid-template-columns: 1fr; 
+    gap: 5px;
+    margin-bottom: 10px;
+  }
+
+  .form-label {
+    width: 100%;
+    padding: 8px 12px !important;
+    background-color: var(--tableheader-color);
+    border-radius: 4px;
+    font-size: 13px;
+  }
+
+  .readonly-box {
+    width: 100%;
+    margin-bottom: 10px; /* Space between groups */
+  }
+}

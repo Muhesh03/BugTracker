@@ -1,0 +1,56 @@
+<div class="firstdiv" style="background-color: var(--formheader-color);color: var(--formcontent-color);">
+  <h2 class="firstdivheading" style="color: #F5F7F8;">
+    {{ isEditMode ? 'Update Ticket Tag' : 'Create Ticket Tag' }}
+  </h2>
+  <button mat-icon-button class="close-btn" (click)="onClose()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<form [formGroup]="tickettagform" class="min-form" (ngSubmit)="onSubmit()">
+
+  <mat-form-field appearance="outline" style="width:100%;">
+    <mat-label>Ticket Tag</mat-label>
+    <input matInput formControlName="tickettag" placeholder="Enter Ticket Tag">
+
+    <mat-error *ngIf="tickettagform.get('tickettag')?.hasError('required')">
+      Ticket Tag is required
+    </mat-error>
+
+    <mat-error *ngIf="tickettagform.get('tickettag')?.hasError('duplicate')">
+      Ticket Tag already exists
+    </mat-error>
+  </mat-form-field>
+
+
+
+
+
+  <!-- Status Field -->
+  <mat-form-field appearance="outline" style="width:100%;">
+    <mat-label>Status</mat-label>
+    <mat-select formControlName="status_id">
+      <mat-option [value]="1">Active</mat-option>
+      <mat-option [value]="2">Inactive</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+
+
+  <!-- Description Field -->
+  <mat-form-field appearance="outline" style="width:100%;">
+    <mat-label>Description</mat-label>
+    <textarea matInput formControlName="remarks" rows="4" placeholder="Enter description"></textarea>
+  </mat-form-field>
+
+  <!-- Buttons -->
+  <div class="projectbuttondiv" style="margin-top:15px;">
+    <button mat-raised-button color="primary" style="background-color:#F5F7F8; color:black"
+      (click)="onClose()">Close</button>
+    <button mat-raised-button color="primary"
+      style="background-color: var(--formbutton-color); color: var(--formcontent-color);" type="submit">
+      {{ isEditMode ? 'Update' : 'Save' }}
+    </button>
+  </div>
+
+</form>

@@ -1,0 +1,64 @@
+<div class="container">
+  <div class="left-main">
+    <div class="left-headings">
+      <h1 class="heading-text">
+        <span class="line">Test ,</span>
+        <span class="line">Improve ,</span>
+        <span class="line">Succeed ,</span>
+      </h1>
+    </div>
+
+    <div class="left-logo">
+        <img src="/assets/hoppertext.png" alt="logo" height="200" width="200" class="hopperlogo">
+
+    </div>
+
+  </div>
+
+
+
+  <div class="login-side">
+    <div class="glass-card">
+
+      <img src="/assets/lutsel-logo.png" alt="logo" height="30" width="100">
+
+      <h2 class="editable">Lutsel Ticket Management</h2>
+
+      <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+
+        <!-- EMAIL -->
+        <div class="input-group">
+          <input type="email" formControlName="email" placeholder="Email Address">
+        </div>
+
+        <small *ngIf="submitted && registrationForm.get('email')?.hasError('required')" class="error-text">
+          Email is required
+        </small>
+
+        <!-- PASSWORD -->
+        <div class="input-group">
+          <input type="password" formControlName="password" placeholder="Password">
+        </div>
+
+        <small *ngIf="submitted && registrationForm.get('password')?.hasError('required')" class="error-text">
+          Password is required
+        </small>
+
+        <!-- API ERROR -->
+        <p class="error-msg" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </p>
+
+        <!-- SUBMIT -->
+        <button type="submit" class="login-btn" (click)="onSubmit()">
+          Login
+        </button>
+
+        <a class="forgot-link" style="cursor: pointer;" (click)="openForgetPassword()">
+          Forgot Password?
+        </a>
+
+      </form>
+    </div>
+  </div>
+</div>

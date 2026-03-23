@@ -1,0 +1,42 @@
+<!-- <div class="maindiv">
+    <div class="sidebar-item">
+
+        <mat-icon class="icon" [matMenuTriggerFor]="menuItems" xPosition="before"
+            yPosition="below">arrow_circle_right</mat-icon>
+
+        <mat-menu #menuItems="matMenu" xPosition="before" yPosition="below" class="dropdown-menu-override">
+
+            <button mat-menu-item routerLink="/sidenav/dashboard" class="dropdown-item">
+                <mat-icon class="matListIcon">grid_view</mat-icon>
+                <span class="item-text">Dashboard</span>
+            </button>
+
+            <button mat-menu-item routerLink="/sidenav/tab"  *ngIf="permissions.users" class="dropdown-item">
+                <mat-icon class="matListIcon">person</mat-icon>
+                <span class="item-text">User</span>
+            </button>
+
+            <button mat-menu-item routerLink="/sidenav/mastertab"  *ngIf="permissions.masters" class="dropdown-item">
+                <mat-icon class="matListIcon">settings</mat-icon>
+                <span class="item-text">Masters</span>
+            </button>
+
+            <button mat-menu-item routerLink="/sidenav/ticketissue"  *ngIf="permissions.ticket" class="dropdown-item">
+                <mat-icon class="matListIcon">edit_note</mat-icon>
+                <span class="item-text">Ticket</span>
+            </button>
+
+            <button mat-menu-item routerLink="/sidenav/viewticketissue"  *ngIf="permissions.viewticket" class="dropdown-item">
+                <mat-icon class="matListIcon">add_task</mat-icon>
+                <span class="item-text">View Ticket</span>
+            </button>
+
+            <button mat-menu-item routerLink="/sidenav/liveticket"  *ngIf="permissions.clientTicketView" class="dropdown-item">
+                <mat-icon class="matListIcon">add_task</mat-icon>
+                <span class="item-text">Live Ticket</span>
+            </button>
+
+        </mat-menu>
+
+    </div>
+</div> -->

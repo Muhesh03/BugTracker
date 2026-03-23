@@ -1,0 +1,45 @@
+<div class="firstdiv" style="background-color: var(--formheader-color);color: var(--formcontent-color);">
+ <h2 class="firstdivheading" style="color: #F5F7F8;">
+  {{ isEditMode ? 'Update Project' : 'Create Project' }}
+</h2>
+
+  <button mat-icon-button class="close-btn" (click)="onClose()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<form [formGroup]="projectform" class="min-form">
+
+  <mat-form-field appearance="outline">
+    <mat-label>Project name</mat-label>
+    <input matInput formControlName="projectname">
+    <mat-error *ngIf="projectform.get('projectname')?.hasError('required')">
+      Project name is required
+    </mat-error>
+    <mat-error *ngIf="projectform?.get('projectname')?.hasError('duplicate')">
+      Project already exists
+    </mat-error>
+  </mat-form-field>
+  
+
+
+  <mat-form-field appearance="outline">
+    <mat-label>Description</mat-label>
+    <textarea matInput formControlName="remarks" rows="4"></textarea>
+  </mat-form-field>
+
+
+  <div class="projectbuttondiv">
+    <button mat-raised-button color="primary" style="background-color:#F5F7F8; color:black"
+      (click)="onClose()">Close</button>
+   <button mat-raised-button
+            color="primary"
+            style="background-color: var(--formbutton-color); color: var(--formcontent-color);"
+            type="submit" (click)="onProjectSubmit()">
+      {{ isEditMode ? 'Update' : 'Save' }}
+    </button>
+  </div>
+
+
+
+</form>

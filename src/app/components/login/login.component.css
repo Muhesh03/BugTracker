@@ -1,0 +1,253 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+
+
+
+/* MAIN CONTAINER */
+.container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  max-width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+
+
+.left-main{
+  width:50%;
+  display: flex;
+  flex-direction: column;
+  
+  }
+.left-headings{
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  width:100%;
+  height:700px;
+  background-color: white
+ 
+}
+.heading-text {
+  font-size: 5.1rem; 
+  
+}
+
+.line {
+  color:#6a9e7a;
+  letter-spacing: 2px; 
+  opacity: 0.7;
+  display: block;
+  margin-bottom: 70px; 
+  font-family: 'Anton', sans-serif;
+}
+
+.left-logo{
+  width:100%;
+    height:50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+ background-color: white;
+  
+}
+.hopperlogo{
+  width:400px;
+  height:190px;
+}
+
+
+
+
+
+
+.login-side {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* margin-top: 10px; */
+  
+}
+.loginlogo{
+  width: 400px;
+  height:300px;
+  justify-content:end;
+  align-items: end;
+}
+
+/* LEFT SIDE */
+.brand-side {
+  background-color: #ffffff;
+  flex-direction: column;
+}
+
+.logo {
+  width: 200px;
+  max-width: 80%;
+}
+
+.brand-side h1 {
+  color: #4a7c59;
+  letter-spacing: 2px;
+  font-size: 2rem;
+}
+
+/* RIGHT SIDE */
+.login-side {
+  background: linear-gradient(135deg, #7db391 0%, #4a7c59 100%);
+}
+
+/* GLASS CARD */
+.glass-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 40px;
+  border-radius: 20px;
+  width: 450px;
+  max-width: 90%;
+  text-align: center;
+  box-shadow: 5px 5px 12px rgba(14, 13, 13, 0.8);
+}
+
+.glass-card h2 {
+  color: rgb(80, 80, 80);
+  margin-top: 10px;
+  font-size: 1rem;
+}
+
+/* INPUT */
+.input-group {
+  background: rgba(202, 197, 197, 0.3);
+  margin-bottom: 15px;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.input-group input {
+  background: transparent;
+  border: none;
+  outline: none;
+  width: 100%;
+  color: #1a3a2a;
+}
+
+/* BUTTON */
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #4a7c59;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.3s;
+}
+
+.login-btn:hover {
+  background-color: #3d664a;
+}
+
+.forgot-link {
+  display: block;
+  margin-top: 15px;
+  color: #1a3a2a;
+  text-decoration: none;
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+.design-texts p{
+  font-size: 100px;
+}
+/* ========================= */
+/* 📱 MOBILE RESPONSIVE */
+/* ========================= */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    height: auto;
+  }
+ .left-main {
+    width: 100%;
+    min-height: auto;
+  }
+
+  .left-headings {
+    height: auto;
+    padding: 40px 20px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .line {
+    margin-bottom: 35px;
+    font-size: 55px;
+  }
+
+  .left-logo {
+    height: auto;
+    padding: 20px;
+  }
+
+  .login-side {
+    width: 100%;
+    min-height: 60vh;
+    padding: 40px 0;
+  }
+
+  .glass-card {
+    width: 92%;
+    padding: 25px;
+  }
+}
+
+/* ========================= */
+/* 📱 SMALL MOBILE */
+/* ========================= */
+@media (max-width: 480px) {
+  .brand-side {
+    display: none;
+    /* hide left section */
+  }
+
+  .login-side {
+    height: 100vh;
+  }
+
+  .glass-card {
+    width: 92%;
+    padding: 20px;
+  }
+}
+
+.error-text {
+  color: #d32f2f;
+  font-size: 12px;
+  margin-bottom: 8px;
+  display: block;
+  text-align: left;
+}
+
+.error-msg {
+  color: #d32f2f;
+  font-size: 13px;
+  margin: 10px 0;
+  text-align: center;
+}

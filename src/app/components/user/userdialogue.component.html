@@ -1,0 +1,180 @@
+<!-- Close Button (Top Right) -->
+<mat-toolbar style="background-color:var(--formheader-color); color:var(--formcontent-color);" class="dialog-toolbar">
+  <span>
+    <h2 class="text-center" mat-dialog-title>
+      {{ isEdit ? 'update user': 'User Registration' }}
+    </h2>
+  </span>
+  <!-- This span acts as a spacer, pushing the close button to the right -->
+  <span class="toolbar-spacer"></span>
+  <button mat-icon-button (click)="onClose()" aria-label="Close dialog">
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-toolbar>
+
+<mat-dialog-content class="dialog-content-scrollable  mx-auto">
+
+  <form [formGroup]="registrationForm" (ngSubmit)="submitForm()">
+
+    <!-- Full Name -->
+    <mat-form-field appearance="outline" class="full-width aggressive-field ms-4">
+      <mat-label>Full Name</mat-label>
+      <input matInput formControlName="fullname" required />
+
+      <!-- REQUIRED ERROR -->
+      <mat-error *ngIf="registrationForm.get('fullname')?.hasError('required')">
+        Full name is required
+      </mat-error>
+
+      <!-- DUPLICATE ERROR -->
+      <mat-error *ngIf="registrationForm?.get('fullname')?.hasError('duplicate')">
+        User already exists
+      </mat-error>
+
+    </mat-form-field>
+
+    <!-- User Status -->
+    <!-- <mat-form-field appearance="outline" class="full-width aggressive-field ms-4">
+      <mat-label>User Status</mat-label>
+      <input matInput formControlName="status" />
+    </mat-form-field> -->
+
+    <!-- Contact Number -->
+    <mat-form-field appearance="outline" class="full-width aggressive-field ms-4">
+      <mat-label>Contact Number</mat-label>
+      <input matInput formControlName="phonenumber" />
+    </mat-form-field>
+
+    <!-- Email -->
+    <mat-form-field appearance="outline" class="full-width aggressive-field ms-4">
+      <mat-label>Email Address</mat-label>
+      <input matInput formControlName="email" placeholder="pat@example.com" required autocomplete="email" />
+      <mat-error *ngIf="registrationForm.get('email')?.invalid && registrationForm.get('email')?.touched">
+        {{ getErrorMessage() }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Password -->
+    <!-- <mat-form-field appearance="outline" class="full-width aggressive-field ms-4">
+      <mat-label>Password</mat-label>
+      <input matInput type="password" formControlName="password" />
+      <mat-error *ngIf="registrationForm.get('password')?.hasError('minlength')">
+        Password must be at least 6 characters
+      </mat-error>
+    </mat-form-field> -->
+
+    <mat-form-field appearance="outline" class="full-width aggressive-field ms-4">
+      <mat-label>Password</mat-label>
+      <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" autocomplete="current-password">
+
+      <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="hide">
+        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+    </mat-form-field>
+
+
+    <!-- User Group -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>User Group</mat-label>
+      <mat-select formControlName="usergroup_id">
+        <mat-option *ngFor="let u of usergrouparray" [value]="u.usergroup_id">
+          {{ u.usergroupname }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- <div class="drop-zone" [class.dragging]="isDragging" (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)" (drop)="onDrop($event)">
+
+      <p *ngIf="selectedFiles.length === 0">
+        Drag & drop files here or
+        <label class="browse">
+          browse
+          <input type="file" hidden multiple (change)="onFileSelect($event)">
+        </label>
+      </p>
+
+      <ul *ngIf="selectedFiles.length > 0" class="file-list">
+        <li *ngFor="let file of selectedFiles; let i = index">
+          <span class="file-name">
+            {{ file.name }}
+            ({{ file.size / 1024 | number:'1.0-0' }} KB)
+          </span>
+
+          //remove file button
+          <button type="button" class="delete-btn" (click)="removeFile(i)" title="Remove file">
+            ✖
+          </button>
+        </li>
+      </ul>
+
+    </div> -->
+    <div class="drop-zone" [class.dragging]="isDragging" (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)" (drop)="onDrop($event)">
+
+      <!-- NO NEW FILE SELECTED -->
+      <p *ngIf="selectedFiles.length === 0 && !existingAttachmentName">
+        Drag & drop files here or
+        <label class="browse">
+          browse
+          <input type="file" hidden (change)="onFileSelect($event)">
+        </label>
+      </p>
+
+      <!-- EXISTING ATTACHMENT (EDIT MODE) -->
+      <ul *ngIf="existingAttachmentName && selectedFiles.length === 0" class="file-list">
+        <li>
+          <span class="file-name">
+            {{ existingAttachmentName }}
+          </span>
+          <button type="button" class="delete-btn" title="Replace file" (click)="clearExistingAttachment()">
+            ✖
+          </button>
+        </li>
+      </ul>
+
+      <!-- NEWLY SELECTED FILE -->
+      <ul *ngIf="selectedFiles.length >= 0" class="file-list">
+        <li *ngFor="let file of selectedFiles; let i = index">
+          <span class="file-name">
+            {{ file.name }} ({{ file.size / 1024 | number:'1.0-0' }} KB)
+          </span>
+
+          <button type="button" class="delete-btn" (click)="removeFile(i)" title="Remove file">
+            ✖
+          </button>
+        </li>
+      </ul>
+
+    </div>
+  </form>
+
+  <!-- <button class="upload-btn" [disabled]="selectedFiles.length === 0" (click)="upload()" >
+    Upload
+  </button -->
+
+  <hr>
+  <!-- 
+  <h4>Attachments</h4>
+  <ul class="attachment-list">
+    <li *ngFor="let att of attachments">
+      {{ att.file_name }}
+      <button (click)="download(att)">Download</button>
+    </li>
+  </ul> -->
+
+
+  <mat-dialog-actions class="dialog-actions">
+    <button mat-stroked-button mat-dialog-close class="cancel-btn">
+      Close
+    </button>
+    <!-- <button mat-raised-button class="save-btn me-3" (click)="submitForm(); upload()">
+      {{ isEdit ? 'Update' : 'Save' }}
+    </button> -->
+    <button mat-raised-button class="save-btn me-3" (click)="submitForm()">
+      {{ isEdit ? 'Update' : 'Save' }}
+    </button>
+  </mat-dialog-actions>
+
+</mat-dialog-content>

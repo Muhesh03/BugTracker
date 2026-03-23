@@ -1,0 +1,133 @@
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+:root {
+  --header-color: #d6e1db;
+  --tableheader-color: #d6e1db;
+  --tablecontent-color: black;
+  --tablebutton-color: #547562;
+  --formheader-color: #547562;
+  --formbutton-color: #547562;
+  --formcontent-color: white;
+}
+
+/* .no-scroller-dialog .mat-dialog-container {
+  padding: 0 !important;
+  overflow-y: hidden !important;
+  max-height: 90vh;
+  display: flex;
+
+  
+  flex-direction: column;
+} */
+
+.action-btn.edit {
+  color: #5a9eda;
+}
+
+.action-btn.delete {
+  color: #d63e3e;
+}
+
+
+/* Dialog animation */
+.mat-mdc-dialog-container {
+  border-radius: 18px !important;
+  animation: scaleFade 0.45s ease;
+  padding: 0;
+}
+
+@keyframes scaleFade {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Form Field common */
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+/* Button animation */
+.mat-mdc-raised-button {
+  transition: all 0.3s ease !important;
+}
+
+.mat-mdc-raised-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+  .dialog-wrapper {
+    padding: 20px !important;
+  }
+}
+
+.success-snackbar {
+  background-color: var(--formheader-color) !important;
+  color: white !important;
+  z-index: 9999 !important;
+}
+
+.custom-close-button {
+  color: #020202 !important;
+  background: transparent !important;
+}
+
+.custom-close-button:hover {
+  color: #cc0000 !important;
+  background: rgba(0, 0, 0, 0.1) !important;
+}
+
+.success-snackbar .mat-simple-snackbar {
+  color: white !important;
+}
+
+
+.success-snackbar .mat-simple-snackbar-action {
+  color: #ffeb3b !important;
+  /* Makes the "Close" button text yellow/visible */
+}
+
+
+/* Track and thumb when toggle is checked */
+/*button 33*/
+.button-33 {
+  background-color: #c2fbd7;
+  border-radius: 100px;
+  box-shadow: rgba(44, 187, 99, .2) 0 -25px 18px -14px inset, rgba(44, 187, 99, .15) 0 1px 2px, rgba(44, 187, 99, .15) 0 2px 4px, rgba(44, 187, 99, .15) 0 4px 8px, rgba(44, 187, 99, .15) 0 8px 16px, rgba(44, 187, 99, .15) 0 16px 32px;
+  color: green;
+  cursor: pointer;
+  display: inline-block;
+  font-family: CerebriSans-Regular, -apple-system, system-ui, Roboto, sans-serif;
+  padding: 7px 20px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 250ms;
+  border: 0;
+  font-size: 16px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button-33:hover {
+  box-shadow: rgba(44, 187, 99, .35) 0 -25px 18px -14px inset, rgba(44, 187, 99, .25) 0 1px 2px, rgba(44, 187, 99, .25) 0 2px 4px, rgba(44, 187, 99, .25) 0 4px 8px, rgba(44, 187, 99, .25) 0 8px 16px, rgba(44, 187, 99, .25) 0 16px 32px;
+  transform: scale(1.05) rotate(-1deg);
+}

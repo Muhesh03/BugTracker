@@ -1,0 +1,277 @@
+.icon-radio-group {
+  display: flex;
+  justify-content: space-between;
+
+  margin: 10px 0;
+}
+
+.icon-radio {
+  display: flex !important;
+  flex-direction: column;
+
+  align-items: center;
+}
+
+.status-btn{
+  background-color: var(--formbutton-color);
+   color: var(--formcontent-color);
+}
+.icon-radio .mat-radio-label-content {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+}
+
+.icon-radio mat-icon {
+  margin-bottom: 5px;
+
+  cursor: pointer;
+}
+
+.project-table {
+  width: 100%;
+}
+
+::ng-deep .custom-dialog .mat-dialog-container {
+  overflow: hidden !important;
+  padding: 0 !important;
+}
+
+
+
+
+.table-wrapper {
+  max-width: 100%;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.project-table {
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.project-table .mat-header-cell {
+  background: var(--tableheader-color);
+  color: var(--tablecontent-color);
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.project-table.sticky-header th.mat-header-cell {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.project-table .mat-row:hover {
+  background-color: #f1f5ff;
+  transition: 0.2s ease-in-out;
+}
+
+.mat-row:nth-child(even) {
+  background-color: #f7f8fa;
+}
+
+.project-table .mat-cell {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* Columns */
+.project-table .col-si-no {
+  width: 110px;
+  text-align: center;
+}
+
+.project-table .col-name {
+  min-width: 220px;
+  padding-left: 16px;
+}
+
+.project-table .col-remarks {
+  min-width: 260px;
+  padding-left: 16px;
+  text-align: left;
+}
+
+.project-table .col-status {
+  width: 140px;
+  text-align: center;
+}
+
+.project-table .col-actions {
+  width: 80px;
+  text-align: center;
+  text-align: center;
+}
+
+
+.project-table .remarks-cell {
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.4;
+}
+
+.project-table .status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85em;
+  font-weight: 500;
+}
+
+.project-table .status-badge mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+
+.action-btn.edit {
+  color: #5a9eda;
+}
+
+.action-btn.delete {
+  color: #d63e3e;
+}
+
+.project-table .mat-header-row,
+.project-table .mat-row {
+  height: 30px;
+  min-height: 30px;
+}
+
+
+.project-table .mat-header-cell {
+  height: 30px;
+  line-height: 30px;
+}
+
+
+.project-table .mat-cell {
+  height: 30px;
+
+}
+
+
+
+
+mat-paginator {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0;
+}
+
+
+
+.firstdiv {
+
+  width: 100%;
+  height: 44px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.firstdivheading {
+  margin-left: 10px;
+  margin-top: 10px;
+  font-size: 17px;
+
+}
+
+.close-btn {
+  position: absolute;
+  top: 2px;
+  right: 10px;
+}
+
+
+.min-form {
+  width: 100%;
+  max-width: 500px;
+  margin: 20px auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+
+.projectbuttondiv {
+  display: flex;
+  justify-content: end;
+  gap: 15px;
+  margin-top: 15px;
+  margin-left: 300px;
+}
+
+::ng-deep .custom-dialog .mat-dialog-container {
+  overflow: hidden !important;
+  padding: 0 !important;
+}
+
+.maindiv {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+
+.immediate,
+.urgent,
+.high {
+  color: red;
+}
+
+.null {
+  color: orange;
+}
+
+.low {
+  color: green;
+}
+
+.priority-icon {
+  font-size: 37px;
+}
+
+.prioritybutton {
+  margin-bottom: 16px;
+  margin-top: 16px;
+
+}
+
+.action-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-btn[disabled] {
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .icon-radio-group {
+    gap: 10px;
+  }
+  
+  .icon-radio {
+    min-width: 60px; 
+  }
+
+  .icon-radio mat-icon {
+    font-size: 20px;
+  }
+
+
+.projectbuttondiv {
+  
+  gap: 15px;
+  margin-top: 15px;
+  margin-left: 300px;
+}
+
+}

@@ -1,0 +1,271 @@
+<div class="ticket-wrapper ">
+
+  <!-- Header -->
+  <div class="ticket-header">
+    <span>Update Ticket Information</span>
+    <button mat-icon-button (click)="onclose()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div class="p-3 ticket-scroll scrollable-collapse">
+    <!-- Ticket Info Table -->
+    <table class="ticket-info-table ">
+      <thead>
+        <tr>
+          <th>Ticket ID</th>
+          <th>Project</th>
+          <th>Reporter</th>
+          <th>Date Submitted</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ data.ticket_number }}</td>
+          <td>{{ data.projectname }}</td>
+          <td>{{ data.created_by_name }}</td>
+          <td>{{ data.created_at | date:'dd-MM-yyyy HH:mm' }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <form [formGroup]="issueTicketForm">
+      <!-- Form Section -->
+      <div class="form-grid">
+
+        <!-- Left -->
+        <div class="form-column">
+          <div class="form-item">
+            <div class="form-label">Assigned To</div>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ data.assigned_to_name }}</mat-label>
+              <mat-select formControlName="assigned_user_id">
+                <mat-option *ngFor="let u of users" [value]="u.user_id">
+                  {{ u.fullname }}(ID: {{ u.user_id }})
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="form-item">
+            <div class="form-label">Status</div>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label> <span [ngStyle]="{'color': data.color}"> <mat-icon
+                    style="font-size: 15px;">circle</mat-icon></span>&nbsp; &nbsp;{{ data.statusname }}</mat-label>
+              <mat-select formControlName="ticketstatus_id">
+                <mat-option *ngFor="let s of statuses" [value]="s.ticketstatus_id">
+                  {{ s.statusname }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- Right -->
+        <div class="form-column">
+          <div class="form-item">
+            <div class="form-label">Priority</div>
+            <div class="readonly-box priority-box">
+              <mat-icon [style.color]="iconMap[data.icon]?.color || 'gray'">
+                {{ iconMap[data.icon]?.name || 'priority_high' }}
+              </mat-icon>
+              {{ data.priority }}
+            </div>
+          </div>
+
+          <div class="form-item">
+            <div class="form-label">Tag</div>
+            <div class="readonly-box">
+              {{ data.tag_names?.join(', ') || '—' }}
+            </div>
+          </div>
+          <div class="form-item">
+            <div class="form-label">Ticket Type</div>
+            <div class="readonly-box">
+              {{ data.ticket_type_name || '—' }}
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Summary & Description -->
+      <div class="summary-grid">
+        <div class="summary-labels">
+          <div class="form-label">Summary</div>
+          <div class="form-label">Description</div>
+          <div class="form-label">Steps to Reproduce</div>
+        </div>
+
+        <div class="summary-values">
+          <div class="readonly-box summary">{{ data.summary }}</div>
+          <div class="readonly-box description-box">
+            {{ data.description }}
+          </div>
+          <div class="readonly-box description-box">
+            {{ data.steps_to_reproduce || '—' }}</div>
+        </div>
+      </div>
+    </form>
+    <div class="row">
+      <div class="col-12">
+
+        <!-- Add Note Header -->
+        <div class="note-section d-flex align-items-center gap-2 mb-2">
+          <span class="fw-bold">Add Note</span>
+
+          <button class="btn btn-dark btn-sm" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+            aria-expanded="false">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+
+        <!-- Collapse -->
+        <div class="collapse" id="collapseExample">
+          <div class="card card-body">
+
+            <table class="table table-bordered align-middle note-table">
+              <thead class="table-light">
+                <tr>
+                  <th style="width: 20%">Last Updated By</th>
+                  <th style="width: 50%">Note</th>
+                  <th style="width: 30%">Attachment</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <!-- Existing notes (READ ONLY) -->
+                <tr *ngFor="let note of notes">
+                  <td>
+                    <strong>{{ note.username }}</strong><br>
+                    <small class="text-muted">
+                      {{ note.updated_at | date:'medium' }}
+                    </small>
+                  </td>
+
+                  <td>{{ note.note }}</td>
+
+                  <td>
+                    <!-- <div *ngFor="let file of note.attachments">
+                      📎 {{ file }}
+                    </div> -->
+
+                    <div *ngFor="let file of note.attachments" class="attachment-item" (click)="openImage(file)">
+                      <img [src]="imageBaseUrl + file" class="attachment-thumb" alt="attachment" />
+
+                      <span class="attachment-name">
+                        {{ file }}
+                      </span>
+                    </div>
+                  </td>
+
+                </tr>
+
+                <!-- ADD NEW NOTE ROW -->
+                <tr class="add-note-row">
+                  <td>
+                    <strong>{{ loggedInUser }}</strong><br />
+                    <small class="text-muted">
+                      {{ today | date:'medium' }}
+                    </small>
+                  </td>
+
+                  <td>
+                    <textarea class="form-control" rows="3" placeholder="Write note..." [(ngModel)]="newNoteText">
+                </textarea>
+                  </td>
+
+                  <td>
+                    <div>
+                      <!-- REAL file input (hidden) -->
+                      <input type="file" accept="image/*" hidden #fileInput multiple (change)="onFileSelect($event)">
+                      <!-- Icon button -->
+                      <button mat-icon-button type="button" (click)="fileInput.click()"> Add Files
+                        <mat-icon style="color:#547562;font-size:20px;">attach_file</mat-icon>
+                      </button>
+                      <div *ngFor="let name of selectedFileNames; let i = index">
+                        📎 {{ name }}
+                        <button mat-icon-button color="primary" (click)="removeFile(i)">
+                          <mat-icon>close</mat-icon>
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+
+        <div class="note-section d-flex align-items-center gap-2 mb-2">
+          <span class="fw-bold">Activities</span>
+
+          <a class="btn btn-primary" data-bs-toggle="collapse" href="#multiCollapseExample1" role="button"
+            aria-expanded="false" aria-controls="multiCollapseExample1"><mat-icon>history</mat-icon></a>
+
+
+        </div>
+        <div class="row">
+
+          <div class="collapse multi-collapse" id="multiCollapseExample1">
+            <div class="card card-body">
+              <table class="activity-table">
+                <thead>
+                  <tr>
+                    <th>Date Modified</th>
+                    <th>User Name</th>
+                    <th>Field</th>
+                    <th>Change</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+               
+
+                  <tr *ngFor="let act of activities">
+                    <td>{{ act.created_at | date:'dd-MM-yyyy HH:mm' }}</td>
+                    <td>{{ act.username }}</td>
+                    <td>{{ act.field_name }}</td>
+                    <td>
+                      <!-- NOTE ADDED -->
+                      <!-- <ng-container *ngIf="act.field_name === 'Note Added'">
+                        Note added
+                      </ng-container> -->
+
+                      <!-- STATUS / ASSIGNED -->
+                      <ng-container *ngIf="act.field_name !== 'Note Added'">
+
+                        <!-- <span *ngIf="act.field_name === 'New Ticket'">
+                          New ticket created
+                        </span> -->
+                        <span *ngIf="act.field_name === 'Status'">
+                          {{ act.old_status }} → {{ act.new_status }}
+                        </span>
+                        <span *ngIf="act.field_name === 'Assigned To'">
+                          {{ act.old_assigned_to_name }} → {{ act.new_assigned_to_name }}
+                        </span>
+                      </ng-container>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer-actions text-end mt-3">
+      <button mat-raised-button color="light" (click)="close()">Cancel</button>
+      <button mat-raised-button class="button ms-2" (click)="submitNote()">Update</button>
+    </div>
+
+    <!-- </form> -->
+  </div>
+</div>
+
+<!-- ///////////////////////////////////////////// -->

@@ -1,0 +1,49 @@
+<!-- Close Button (Top Right) -->
+<mat-toolbar class="dialog-toolbar">
+    <span>
+        <h2 class="text-center" mat-dialog-title >
+            {{ isEdit ? 'Update Ticket Type' : 'Create Ticket Type ' }}
+        </h2>
+    </span>
+    <!-- This span acts as a spacer, pushing the close button to the right -->
+    <span class="toolbar-spacer"></span>
+    <button mat-icon-button (click)="onClose()" aria-label="Close dialog" class="cl">
+        <mat-icon>close</mat-icon>
+    </button>
+</mat-toolbar>
+<form [formGroup]="registrationForm" (ngSubmit)="submitForm()">
+
+    <!-- New Name Textbox -->
+    <div class="form-row">
+        <!-- <label class="form-label">Name:</label> -->
+        <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name">
+            <mat-error *ngIf="registrationForm.get('name')?.hasError('required')">
+                Name is required
+            </mat-error>
+            <mat-error *ngIf="registrationForm?.get('name')?.hasError('duplicate')">
+                Name already exists
+            </mat-error>
+        </mat-form-field>
+    </div>
+
+    <!-- New Remarks Textarea -->
+    <div class="form-row">
+        <!-- <label class="form-label">Remarks:</label> -->
+        <mat-form-field appearance="outline">
+            <mat-label>Remarks</mat-label>
+            <textarea matInput formControlName="remarks" rows="3"></textarea>
+        </mat-form-field>
+    </div>
+</form>
+
+<mat-dialog-actions class="dialog-actions">
+    <button mat-stroked-button mat-dialog-close class="cancel-btn">
+        Close
+    </button>
+  <button mat-raised-button color="secondary" class="save-btn" (click)="submitForm()">
+    {{ isEdit ? 'Update' : 'Save' }}
+</button>
+
+</mat-dialog-actions>

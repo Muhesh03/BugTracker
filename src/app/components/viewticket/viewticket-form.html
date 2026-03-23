@@ -1,0 +1,55 @@
+<div class="firstdiv">
+  <h2 class="firstdivheading" style="color:white">
+    View Ticket
+  </h2>
+
+  <button mat-icon-button class="close-btn" (click)="onClose()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<div class="view-container">
+
+  <!-- Status -->
+  <div class="view-row">
+    <span class="label">Status</span>
+    <span class="value">
+      {{ data?.statusname || '-' }}
+    </span>
+  </div>
+
+  <!-- Priority -->
+  <div class="view-row">
+    <span class="label">Priority</span>
+    <span class="value">
+      <mat-icon [style.color]="iconMap[data?.icon]?.color" style="vertical-align: middle; margin-right: 6px;">
+        {{ iconMap[data?.icon]?.name }}
+      </mat-icon>
+      {{ data?.priority || '-' }}
+    </span>
+  </div>
+
+  <!-- Tags -->
+  <div class="view-row">
+    <span class="label">Tags</span>
+    <span class="value">
+      {{ data?.tag_names || '-' }}
+    </span>
+  </div>
+
+  <!-- Summary -->
+  <div class="view-row">
+    <span class="label">Summary</span>
+    <span class="value">
+      {{ data?.summary || '-' }}
+    </span>
+  </div>
+
+  <!-- Description -->
+  <div class="view-row">
+    <span class="label">Description</span>
+    <span class="value description">
+      {{ data?.description || '-' }}
+    </span>
+  </div>
+</div>
