@@ -1,15 +1,13 @@
 .app-toolbar {
-  height: auto !important;
+  height: fit-content;
+  background: transparent;
   padding: 5px;
-  border-radius: 20px;
-  background-color: var(--tableheader-color);
-
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-left: 1px;
   gap: 15px;
-}
+} 
+
 .icon-container {
   position: relative;
   display: flex;
