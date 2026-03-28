@@ -1,7 +1,17 @@
-<div class="mainfilterdiv sticky-filter">
-  <form [formGroup]="filterForm" class="min-form mb-2" style="width: 100%; padding: 0; max-width: none;">
+<div class="contentpage">
 
-    <div class="search">
+  <form [formGroup]="filterForm">
+
+    <div class="w-100 d-flex flex-wrap align-items-center justify-content-start mb-2 gap-3">
+      <div class="col-12 col-md-3 ml-auto fields">
+        <mat-form-field appearance="fill" class="searchbox">
+          <mat-icon matPrefix>search</mat-icon>
+          <input matInput placeholder="Search..." formControlName="searchtext" (keyup)="searchAll($event)">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="d-flex flex-wrap">
 
       <!-- 
       <mat-form-field appearance="outline" class="search-small">
@@ -16,12 +26,9 @@
         </mat-select>
       </mat-form-field> -->
 
-
-      <div class="inline-filter-group">
-        <mat-form-field appearance="outline" class="search-small">
+      <div class="col fields">
+        <mat-form-field appearance="outline">
           <mat-label>Priority</mat-label>
-
-
           <mat-select formControlName="filterValuePriority" placeholder="Select Priority">
             <mat-option value="0">please select</mat-option>
             <mat-option *ngFor="let p of priorities" [value]="p.priority_id">{{ p.priority }}</mat-option>
@@ -29,33 +36,28 @@
         </mat-form-field>
       </div>
 
-
-      <div class="inline-filter-group">
-        <mat-form-field appearance="outline" class="search-small">
+      <div class="col fields">
+        <mat-form-field appearance="outline">
           <mat-label>Types</mat-label>
-
           <mat-select formControlName="filterValueType" placeholder="Select Priority">
-
             <mat-option value="0">please select</mat-option>
             <mat-option *ngFor="let t of tickettypes" [value]="t.tickettype_id">{{ t.name }}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
 
-      <div class="inline-filter-group">
-        <mat-form-field appearance="outline" class="search-small">
+      <div class="col fields">
+        <mat-form-field appearance="outline">
           <mat-label>Status</mat-label>
-
           <mat-select formControlName="filterValueStatus" placeholder="Select Status">
-
             <mat-option value="0">please select</mat-option>
             <mat-option *ngFor="let s of statuses" [value]="s.ticketstatus_id">{{ s.statusname }}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
 
-      <div class="inline-filter-group">
-        <mat-form-field appearance="outline" class="search-small" floatLabel="always">
+      <div class="col fields">
+        <mat-form-field appearance="outline" floatLabel="always">
           <mat-label>Tags</mat-label>
           <mat-select formControlName="filterValueTag" multiple placeholder="Please select">
             <mat-option *ngFor="let t of tag" [value]="t.tickettag_id">
@@ -65,50 +67,51 @@
         </mat-form-field>
       </div>
 
-      <mat-form-field appearance="outline" class="search-small">
-        <mat-label style="color:#1d6f42;font-size:15px;">Date Between</mat-label>
-
-        <mat-select formControlName="filterValueDate" placeholder="Time">
-          <mat-option value="0">All Time</mat-option>
-          <mat-option value="Yesterday">Yesterday</mat-option>
-          <mat-option value="Between">Between</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <div *ngIf="filterForm.value.filterValueDate === 'Between'" class="inline-filter-group">
-        <mat-form-field appearance="outline" style="width: 110px;">
-          <input matInput [matDatepicker]="pickerFrom" formControlName="fromDate" placeholder="From">
-          <mat-datepicker-toggle matSuffix [for]="pickerFrom"
-            style="color:#547562; transform: scale(0.8);"></mat-datepicker-toggle>
-          <mat-datepicker #pickerFrom></mat-datepicker>
+      <div class="col fields">
+        <mat-form-field appearance="outline">
+          <mat-label style="color:#1d6f42;font-size:15px;">Date Between</mat-label>
+          <mat-select formControlName="filterValueDate" placeholder="Time">
+            <mat-option value="0">All Time</mat-option>
+            <mat-option value="Yesterday">Yesterday</mat-option>
+            <mat-option value="Between">Between</mat-option>
+          </mat-select>
         </mat-form-field>
-
-        <mat-form-field appearance="outline" style="width: 110px;">
-          <input matInput [matDatepicker]="pickerTo" formControlName="toDate" placeholder="To">
-          <mat-datepicker-toggle matSuffix [for]="pickerTo"
-            style="color:#547562; transform: scale(0.8);"></mat-datepicker-toggle>
-          <mat-datepicker #pickerTo></mat-datepicker>
-        </mat-form-field>
-
       </div>
 
-      <button mat-raised-button (click)="getFilter()" class="filterbutton">
+      <ng-container *ngIf="filterForm.value.filterValueDate === 'Between'">
+        <div class="col fields">
+          <mat-form-field appearance="outline">
+            <input matInput [matDatepicker]="pickerFrom" formControlName="fromDate" placeholder="From">
+            <mat-datepicker-toggle matSuffix [for]="pickerFrom"
+              style="color:#547562; transform: scale(0.8);"></mat-datepicker-toggle>
+            <mat-datepicker #pickerFrom></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="col fields">
+          <mat-form-field appearance="outline">
+            <input matInput [matDatepicker]="pickerTo" formControlName="toDate" placeholder="To">
+            <mat-datepicker-toggle matSuffix [for]="pickerTo"
+              style="color:#547562; transform: scale(0.8);"></mat-datepicker-toggle>
+            <mat-datepicker #pickerTo></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </ng-container>
+
+      <button mat-raised-button (click)="getFilter()" class="pbtn">
         Filter
       </button>
-      <!-- CREATE EXCEL BUTTON -->
-      <!-- <button mat-raised-button color="success" class="excel-btn" > -->
-      <div>
-        <img src="./assets/excel.png" alt="excel not found" (click)="downloadExcel()" class="excel"
-          title="Download Excel">
-        <img src="assets/pdf.png" (click)="downloadPdf()" class="pdf" title="Download Pdf">
-      </div>
 
-      <div class="right-container">
-        <mat-form-field appearance="none" class="searchbox">
-          <mat-icon matPrefix>search</mat-icon>
-          <input matInput placeholder="Search..." formControlName="searchtext" (keyup)="searchAll($event)">
-        </mat-form-field>
-      </div>
+      <button mat-raised-button (click)="downloadExcel()" class="sbtn">
+        <img src="./assets/excel.png" alt="excel not found" class="" title="Download Excel">
+      </button>
+
+      <button mat-raised-button (click)="downloadPdf()" class="sbtn">
+        <img src="assets/pdf.png" class="" title="Download Pdf">
+      </button>
+
+
+
       <!-- </button> -->
     </div>
   </form>

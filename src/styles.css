@@ -17,6 +17,7 @@ body {
 
   --secondary-bg: #ecf2ef;
   --accent: #547562;
+  --accent-light: #d6e1db;
 
   --header-color: #d6e1db;
   --tableheader-color: #d6e1db;
@@ -192,7 +193,7 @@ body {
   display: flex;
   justify-content: center;
   position: sticky;
-  bottom: 0;
+  bottom: -1px;
   left: 0;
   right: 0;
   width: 100%;
@@ -283,6 +284,22 @@ body {
   text-transform: none;
   letter-spacing: 0.9px;
 }
+
+.sbtn {
+  background-color: var(--accent-light);
+  color: white;
+  border-radius: 8px !important;
+  height: 39px;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0.9px;
+}
+
+.sbtn img{
+  width: 40px;
+  height: auto;
+}
+
 /* BUTTON END */
 
 

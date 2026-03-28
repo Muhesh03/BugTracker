@@ -265,54 +265,10 @@ mat-paginator {
   margin-left: 10px;
 }
 
-.right-container {
-  margin-right: 30px;
-  flex: 2;
-  display: flex;
-  justify-content: flex-end;
-}
 
-/* --- SEARCH BOX --- */
 
-.searchbox {
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.25);
 
-  width: 250px;
-  height: 38px;
-  display: flex;
-  align-items: center;
-  padding: 0 10px;
-  box-sizing: border-box;
-}
 
-.searchbox mat-icon {
-  color: #584f4f;
-  font-size: 18px;
-  margin-right: 10px;
-
-  cursor: pointer;
-}
-
-.searchbox input {
-  height: 24px;
-  font-size: 14px;
-  margin-top: 10px;
-  border: none;
-  box-sizing: border-box;
-  width: 100%;
-}
-
-.searchbox input::placeholder {
-  color: #584f4f;
-  font-size: 12px;
-}
-
-.searchbox .mat-form-field-underline,
-.searchbox .mat-form-field-ripple {
-  display: none;
-}
 
 ::ng-deep .custom-dialog .mat-dialog-container {
   overflow: hidden !important;
@@ -361,13 +317,6 @@ mat-paginator {
     align-items: center !important;
   }
 
-  .searchbox {
-    grid-column: span 2;
-    width: 150px !important;
-    height: 42px;
-    margin-bottom: 0% !important;
-    border-radius: 20px;
-  }
 
   /* 5. Export Icons */
   .export-container {

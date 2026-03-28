@@ -1,21 +1,19 @@
 <div class="contentpage">
 
-
   <form [formGroup]="filterForm">
 
-    <div class="w-100 d-flex flex-wrap align-items-center justify-content-start mb-2">
+    <div class="w-100 d-flex flex-wrap align-items-center justify-content-start mb-2 gap-3">
       <div class="pdiv">
         <button mat-raised-button class="pbtn" (click)="openLiveTicketDialog()">
           Create Client Ticket
         </button>
       </div>
-      <div class="col-12 col-md-4 ml-auto fields">
+      <div class="col-12 col-md-3 ml-auto fields">
         <mat-form-field appearance="fill" class="searchbox">
           <mat-icon matPrefix>search</mat-icon>
           <input matInput placeholder="Search..." formControlName="searchtext" (keyup)="searchAll($event)">
         </mat-form-field>
       </div>
-
     </div>
 
     <div class="d-flex flex-wrap">
@@ -23,7 +21,6 @@
       <div class="col-5 col-md-2 fields">
         <mat-form-field appearance="outline">
           <mat-label>Priority</mat-label>
-
           <mat-select formControlName="filterValuePriority">
             <mat-option value="0">please select</mat-option>
             <mat-option *ngFor="let p of priorities" [value]="p.priority_id">
