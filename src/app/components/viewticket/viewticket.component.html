@@ -98,182 +98,187 @@
         </div>
       </ng-container>
 
-      <button mat-raised-button (click)="getFilter()" class="pbtn">
-        Filter
-      </button>
+      <div class="pdiv">
+        <button mat-raised-button (click)="getFilter()" class="pbtn">
+          Filter
+        </button>
+      </div>
 
-      <button mat-raised-button (click)="downloadExcel()" class="sbtn">
-        <img src="./assets/excel.png" alt="excel not found" class="" title="Download Excel">
-      </button>
+      <div class="pdiv">
+        <button mat-raised-button (click)="downloadExcel()" class="filebtn">
+          <img src="./assets/excel.png" alt="excel not found" class="" title="Download Excel">
+        </button>
+      </div>
 
-      <button mat-raised-button (click)="downloadPdf()" class="sbtn">
-        <img src="assets/pdf.png" class="" title="Download Pdf">
-      </button>
+      <div class="pdiv">
+        <button mat-raised-button (click)="downloadPdf()" class="filebtn">
+          <img src="assets/pdf.png" class="" title="Download Pdf">
+        </button>
+      </div>
 
-
-
-      <!-- </button> -->
     </div>
   </form>
-</div>
 
-<div class="page-scroll-container">
+<div class="tablewrapper">
 
-  <div class="table-wrapper mat-elevation-z6">
-    <table mat-table [dataSource]="issueticketDataSource" class="mat-table issueticket-table ">
+  <table mat-table [dataSource]="issueticketDataSource" class="mat-table issueticket-table ">
 
-      <!-- S.No -->
-      <ng-container matColumnDef="sno">
-        <th mat-header-cell *matHeaderCellDef>S.No</th>
-        <td mat-cell *matCellDef="let row; let i = index">
-          {{ i + 1 }}
-        </td>
-      </ng-container>
+    <!-- S.No -->
+    <ng-container matColumnDef="sno">
+      <th mat-header-cell *matHeaderCellDef>S.No</th>
+      <td mat-cell *matCellDef="let row; let i = index">
+        {{ i + 1 }}
+      </td>
+    </ng-container>
 
 
-      <ng-container matColumnDef="tag_names">
-        <th mat-header-cell *matHeaderCellDef>Tags</th>
-        <td mat-cell *matCellDef="let row">
-          <span *ngIf="row.tag_names?.length; else noTags">
-            {{ row.tag_names.join(', ') }}
-          </span>
-          <ng-template #noTags>—</ng-template>
-        </td>
-      </ng-container>
+    <ng-container matColumnDef="tag_names">
+      <th mat-header-cell *matHeaderCellDef>Tags</th>
+      <td mat-cell *matCellDef="let row">
+        <span *ngIf="row.tag_names?.length; else noTags">
+          {{ row.tag_names.join(', ') }}
+        </span>
+        <ng-template #noTags>—</ng-template>
+      </td>
+    </ng-container>
 
 
 
-      <!-- Icon -->
-      <ng-container matColumnDef="icons">
-        <th mat-header-cell *matHeaderCellDef>Priority</th>
-        <td mat-cell *matCellDef="let row">
-          <mat-icon [style.color]="iconMap[row.icon]?.color || 'gray'">
-            {{ iconMap[row.icon]?.name || 'help' }}
+    <!-- Icon -->
+    <ng-container matColumnDef="icons">
+      <th mat-header-cell *matHeaderCellDef>Priority</th>
+      <td mat-cell *matCellDef="let row">
+        <mat-icon [style.color]="iconMap[row.icon]?.color || 'gray'">
+          {{ iconMap[row.icon]?.name || 'help' }}
+        </mat-icon>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="tickettype">
+      <th mat-header-cell *matHeaderCellDef>Ticket Type</th>
+      <td mat-cell *matCellDef="let row">
+        <span>
+          {{ row.ticket_type_name }}
+        </span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="created_by">
+      <th mat-header-cell *matHeaderCellDef>Reporter</th>
+      <td mat-cell *matCellDef="let row">
+        <span>
+          {{ row.created_by_name }}
+        </span>
+      </td>
+    </ng-container>
+
+
+
+
+    <ng-container matColumnDef="created_at">
+      <th mat-header-cell *matHeaderCellDef>Date Submitted</th>
+      <td mat-cell *matCellDef="let row">
+        <span>
+          <!-- Suppose ticket.created_at is your ISO string from backend -->
+          <span>{{ row.created_at | date:'dd/MM/yyyy' }}</span>
+
+        </span>
+      </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="user_id">
+      <th mat-header-cell *matHeaderCellDef>Assigned To</th>
+      <td mat-cell *matCellDef="let row">
+        <span>
+          {{ row.assigned_to_name }}
+        </span>
+      </td>
+    </ng-container>
+
+
+    <!-- Remarks -->
+    <ng-container matColumnDef="summary">
+      <th mat-header-cell *matHeaderCellDef>Summary</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.summary}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="image_path">
+      <th mat-header-cell *matHeaderCellDef>Attachment</th>
+
+      <td mat-cell *matCellDef="let row">
+
+        <!-- show icons equal to number of images -->
+        <ng-container *ngIf="row.image_path && row.image_path.length">
+          <mat-icon *ngFor="let img of row.image_path" class="image-icon" (click)="openImages([img])" title="View Image"
+            style="color:#547562;cursor:pointer">
+            image
           </mat-icon>
-        </td>
-      </ng-container>
+        </ng-container>
+        <span *ngIf="!row.image_path || row.image_path.length === 0">
+          —
+        </span>
+      </td>
+    </ng-container>
 
-      <ng-container matColumnDef="tickettype">
-        <th mat-header-cell *matHeaderCellDef>Ticket Type</th>
-        <td mat-cell *matCellDef="let row">
-          <span>
-            {{ row.ticket_type_name }}
-          </span>
-        </td>
-      </ng-container>
+    <ng-container matColumnDef="ticketstatus_id">
+      <th mat-header-cell *matHeaderCellDef> Status</th>
+      <td mat-cell *matCellDef="let row">
+        <span [ngStyle]="{'color': row.color}">
+          <mat-icon style="font-size: 15px;">circle</mat-icon>
+        </span>
+        {{ row.statusname }}
+      </td>
+    </ng-container>
 
-      <ng-container matColumnDef="created_by">
-        <th mat-header-cell *matHeaderCellDef>Reporter</th>
-        <td mat-cell *matCellDef="let row">
-          <span>
-            {{ row.created_by_name }}
-          </span>
-        </td>
-      </ng-container>
+    <ng-container matColumnDef="ticket_number">
+      <th mat-header-cell *matHeaderCellDef>Ticket Number</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.ticket_number}}
+      </td>
+    </ng-container>
 
+    <!-- Preview -->
+    <ng-container matColumnDef="preview">
+      <th mat-header-cell *matHeaderCellDef>Preview</th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-icon-button class="action-btn preview" (click)="previewIssue(row)">
+          <mat-icon>visibility</mat-icon>
+        </button>
+      </td>
+    </ng-container>
 
+    <!-- Edit -->
+    <ng-container matColumnDef="edit">
+      <th mat-header-cell *matHeaderCellDef>Update</th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-icon-button class="action-btn edit" (click)="editISSUE(row)">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </td>
+    </ng-container>
 
+    <!-- Delete -->
+    <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef>Delete</th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-icon-button class="action-btn delete" (click)="deleteIssue(row)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
 
-      <ng-container matColumnDef="created_at">
-        <th mat-header-cell *matHeaderCellDef>Date Submitted</th>
-        <td mat-cell *matCellDef="let row">
-          <span>
-            <!-- Suppose ticket.created_at is your ISO string from backend -->
-            <span>{{ row.created_at | date:'dd/MM/yyyy' }}</span>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns ;sticky:true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
-          </span>
-        </td>
-      </ng-container>
+  </table>
 
-
-      <ng-container matColumnDef="user_id">
-        <th mat-header-cell *matHeaderCellDef>Assigned To</th>
-        <td mat-cell *matCellDef="let row">
-          <span>
-            {{ row.assigned_to_name }}
-          </span>
-        </td>
-      </ng-container>
-
-
-      <!-- Remarks -->
-      <ng-container matColumnDef="summary">
-        <th mat-header-cell *matHeaderCellDef>Summary</th>
-        <td mat-cell *matCellDef="let row">
-          {{ row.summary}}
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="image_path">
-        <th mat-header-cell *matHeaderCellDef>Attachment</th>
-
-        <td mat-cell *matCellDef="let row">
-
-          <!-- show icons equal to number of images -->
-          <ng-container *ngIf="row.image_path && row.image_path.length">
-            <mat-icon *ngFor="let img of row.image_path" class="image-icon" (click)="openImages([img])"
-              title="View Image" style="color:#547562;cursor:pointer">
-              image
-            </mat-icon>
-          </ng-container>
-          <span *ngIf="!row.image_path || row.image_path.length === 0">
-            —
-          </span>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="ticketstatus_id">
-        <th mat-header-cell *matHeaderCellDef> Status</th>
-        <td mat-cell *matCellDef="let row">
-          <span [ngStyle]="{'color': row.color}">
-            <mat-icon style="font-size: 15px;">circle</mat-icon>
-          </span>
-          {{ row.statusname }}
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="ticket_number">
-        <th mat-header-cell *matHeaderCellDef>Ticket Number</th>
-        <td mat-cell *matCellDef="let row">
-          {{ row.ticket_number}}
-        </td>
-      </ng-container>
-
-      <!-- Preview -->
-      <ng-container matColumnDef="preview">
-        <th mat-header-cell *matHeaderCellDef>Preview</th>
-        <td mat-cell *matCellDef="let row">
-          <button mat-icon-button class="action-btn preview" (click)="previewIssue(row)">
-            <mat-icon>visibility</mat-icon>
-          </button>
-        </td>
-      </ng-container>
-
-      <!-- Edit -->
-      <ng-container matColumnDef="edit">
-        <th mat-header-cell *matHeaderCellDef>Update</th>
-        <td mat-cell *matCellDef="let row">
-          <button mat-icon-button class="action-btn edit" (click)="editISSUE(row)">
-            <mat-icon>edit</mat-icon>
-          </button>
-        </td>
-      </ng-container>
-
-      <!-- Delete -->
-      <ng-container matColumnDef="delete">
-        <th mat-header-cell *matHeaderCellDef>Delete</th>
-        <td mat-cell *matCellDef="let row">
-          <button mat-icon-button class="action-btn delete" (click)="deleteIssue(row)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns ;sticky:true"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-
-    </table>
+  <div class="paginator">
     <mat-paginator [pageSizeOptions]="[20,40,60]" [pageSize]="20" showFirstLastButtons>
     </mat-paginator>
   </div>
+
+</div>
 </div>

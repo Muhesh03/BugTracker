@@ -18,6 +18,7 @@ body {
   --secondary-bg: #ecf2ef;
   --accent: #547562;
   --accent-light: #d6e1db;
+  --filebtn-bg: #fafafa;
 
   --header-color: #d6e1db;
   --tableheader-color: #d6e1db;
@@ -28,22 +29,11 @@ body {
   --formcontent-color: white;
 }
 
-/* .no-scroller-dialog .mat-dialog-container {
-  padding: 0 !important;
-  overflow-y: hidden !important;
-  max-height: 90vh;
-  display: flex;
-
-  
-  flex-direction: column;
-} */
-
 
 .page {
   flex: 1;
   overflow: hidden;
 }
-
 
 .action-btn.edit {
   color: #5a9eda;
@@ -240,7 +230,7 @@ body {
   margin-left: auto !important;
 }
 
-.pdiv{
+.pdiv {
   padding-inline: 8px;
 }
 
@@ -278,10 +268,11 @@ body {
   border-top: none !important;
 }
 
-.mat-form-field-appearance-outline .mat-form-field-flex{
+.mat-form-field-appearance-outline .mat-form-field-flex {
   display: flex;
   align-items: center;
 }
+
 /* MAT FORM FIELD END  */
 
 /* BUTTON  */
@@ -293,6 +284,7 @@ body {
   font-weight: 500;
   text-transform: none;
   letter-spacing: 0.9px;
+  box-shadow: none !important;
 }
 
 .sbtn {
@@ -303,17 +295,33 @@ body {
   font-weight: 500;
   text-transform: none;
   letter-spacing: 0.9px;
+  box-shadow: none !important;
 }
 
-.sbtn img{
-  width: 40px;
+.filebtn {
+  background-color: var(--filebtn-bg);
+  color: white;
+  border-radius: 8px !important;
+  height: 39px;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0.9px;
+  box-shadow: none !important;
+  padding: 2px !important;
+  width: 42px !important;
+  max-width: 42px !important;
+  min-width: 42px !important;
+}
+
+.filebtn img {
+  width: 24px;
   height: auto;
 }
 
 /* BUTTON END */
 
 
-.searchbox {}
+
 
 .searchbox mat-icon {
   color: #584f4f;
@@ -325,7 +333,6 @@ body {
   cursor: pointer;
 }
 
-.searchbox input {}
 
 .searchbox input::placeholder {
   color: #584f4f;
