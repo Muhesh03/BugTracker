@@ -1,9 +1,49 @@
-/* layout */
-.sidenav-container {
-  height: 100vh;
-  display: block;
+.fullsection {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
+  background-color: var(--secondary-bg);
 }
+
+.sidenav-wrapper {
+  flex: 1;
+}
+
+.sidenav-container {
+  display: flex;
+  height: 100%;
+  background-color: transparent;
+}
+
+.app-sidenav {
+  display: flex;
+  flex-direction: column;
+  background-color: transparent;
+  border: none;
+  overflow: hidden;
+  position: unset;
+  width: 70px;
+  background-color: transparent;
+}
+
+.toolbar-div {
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow: auto;
+}
+
+.app-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+
+
+
 
 /* 1. Force the Form Field container to have a white background */
 ::ng-deep .project-dropdown .mat-mdc-form-field-flex {
@@ -58,23 +98,15 @@
   font-weight: bold !important;
   top: 14px !important;
 }
-.fullsection {
-  height: 100vh;
-  /* max-height: 100vh; */
-}
 
 /* toolbar */
 .topbar {
   align-items: center;
   justify-content: space-between;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
   z-index: 1000;
   display: flex;
   align-items: center;
-  background-color: #b2c7bb;
+  background-color: transparent;
   padding: 0px 0px 0px 10px;
   margin: 0;
 }
@@ -127,52 +159,13 @@
 }
 
 /* sidenav styling */
-.app-sidenav {
-  /* display:flex;
-  left:0;
-  box-sizing: border-box;
-  transition: width 220ms ease;
-  background-color: transparent;
-  border:none; */
 
-  background-color: transparent;
-  border: none;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
 
-}
-
-.toolbar-div {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-}
 
 /* main content: animate margin so content shifts smoothly */
-.main-content {
-  transition: margin-left 220ms ease, padding 220ms ease;
-  /* padding-top: 80px;
-  /* make space for toolbar */
-  /* min-height: calc(100vh - 80px);
-  box-sizing: border-box; */
-  height: 100vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding-top: 80px;
-  box-sizing: border-box;
-  position: relative;
-}
+
 
 /* optional: inner padding for content */
-.content-inner {
-  padding-left: 8px;
-
-
-  height: 100%;
-  overflow: hidden;
-}
 
 /* small aesthetic */
 .mat-list-item .mat-icon {
@@ -186,11 +179,7 @@
 
 @media (max-width: 768px) {
 
-  .app-sidenav {
-    position: fixed;
-    z-index: 1100;
-    transition: transform 0.3s ease;
-  }
+
 
 
   .main-content {
@@ -320,6 +309,7 @@
   height: 0 !important;
   width: 0 !important;
 }
+
 /* 4. Fix Label Position for Reduced Height */
 ::ng-deep .project-dropdown .mat-mdc-form-field-infix {
   padding-top: 0 !important;
@@ -357,11 +347,7 @@
   /* Pushes the dropdown and profile to the right */
 }
 
-.app-toolbar {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
+
 
 .toolbar-spacer {
   flex: 1 1 auto;

@@ -82,30 +82,23 @@
     </mat-menu>
   </mat-toolbar>
 
-  <mat-sidenav-container class="sidenav-container">
-    <mat-sidenav class="app-sidenav" mode="side" opened>
+  <div class="sidenav-wrapper">
+    <mat-sidenav-container class="sidenav-container">
 
+      <mat-sidenav class="app-sidenav" mode="side" opened>
+        <div class="toolbar-div">
+          <app-tool-bar></app-tool-bar>
+        </div>
+      </mat-sidenav>
 
-      <div class="toolbar-div">
+      <mat-sidenav-content class="main-content">
+        <div class="content-inner">
+          <router-outlet></router-outlet>
+        </div>
+      </mat-sidenav-content>
 
-        <app-tool-bar></app-tool-bar>
-      </div>
-
-
-
-    </mat-sidenav>
-
-    <mat-sidenav-content class="main-content">
-      <div class="content-inner">
-        <router-outlet></router-outlet>
-
-      </div>
-
-    </mat-sidenav-content>
-
-
-  </mat-sidenav-container>
- 
+    </mat-sidenav-container>
+  </div>
 
 </section>
 
