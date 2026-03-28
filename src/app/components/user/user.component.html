@@ -1,11 +1,11 @@
-<div class="page-scroll-container">
+<div class="">
   <div class="sticky-container">
     <button mat-raised-button style="background-color: var(--formheader-color);color: var(--formcontent-color);"
       (click)="openUserDialog()" class="mb-2 mt-2">
       Create User
     </button>
   </div>
-  <div class="table-wrapper mat-elevation-z6">
+  <div class="usertablewrapper mat-elevation-z6">
 
     <table mat-table [dataSource]="dataSource" matSort class="mat-table">
 
@@ -80,7 +80,7 @@
         <th mat-header-cell *matHeaderCellDef class="col-actions">Status</th>
         <td mat-cell *matCellDef="let row" class="col-actions">
           <mat-slide-toggle [checked]="row.status_id === 1" (change)="onStatusToggle(row, $event)"
-            [disabled]="row.user_id === 1 || row.user_id === 2"> 
+            [disabled]="row.user_id === 1 || row.user_id === 2">
           </mat-slide-toggle>
         </td>
       </ng-container>
@@ -114,8 +114,10 @@
 
     </table>
 
+  </div>
+
+  <div>
     <mat-paginator [pageSizeOptions]="[20, 40, 60]" [pageSize]="20" showFirstLastButtons>
     </mat-paginator>
-
   </div>
 </div>
