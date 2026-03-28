@@ -5,23 +5,8 @@
   min-height: 0;
 }
 
-.usertablewrapper{
-  flex: 1;
-    overflow: auto;
-}
 
-.page-scroll-container {
-  height: calc(100vh - 64px); /* subtract toolbar height */
-  overflow: hidden;
-  /* position: relative; */
-}
-.sticky-container {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  background: #fff;
-  
-}
+
 
 
 /* ===== Table Wrapper ===== */

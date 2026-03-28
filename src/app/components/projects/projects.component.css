@@ -1,26 +1,18 @@
-/* ===========================
-   PROJECT TABLE ONLY
-   =========================== */
+:host {
+  display: flex !important;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+
 .firstdivheading {
   margin-left: 30px;
   margin-top: 20px;
 
 }
 
-.page-scroll-container {
-  height: 400px;
-  /* Adjust this height as needed */
-  overflow: auto;
-  border: 1px solid #ddd;
-}
 
-.table-wrapper {
-  max-height: calc(100vh - 200px);
-  overflow-y: auto;
-  position: relative;
-  margin: 0;
-
-}
 
 .project-table {
   width: 100%;
@@ -167,11 +159,6 @@
   margin-left: 300px;
 }
 
-mat-paginator {
-  display: flex;
-  justify-content: center;
-  padding: 8px 0;
-}
 
 ::ng-deep .custom-dialog .mat-dialog-container {
   overflow: hidden !important;

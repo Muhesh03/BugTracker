@@ -1,22 +1,22 @@
-<div class="mainfilterdiv sticky-filter">
-  <!-- Left Flex Container for Create Ticket Button -->
-  <div class="left-container">
-    <button mat-raised-button class="filterbutton" (click)="openIssueTicketDialog()">
-      Create QCTicket
-    </button>
+<div class="contentpage">
+
+  <div class="w-100 d-flex flex-wrap align-items-start justify-content-start mb-2 gap-3">
+    <div class="pdiv">
+      <button mat-raised-button class="pbtn" (click)="openIssueTicketDialog()">
+        Create QCTicket
+      </button>
+    </div>
+
+    <div class="col-12 col-md-3 ml-auto fields">
+      <mat-form-field appearance="fill" class="searchbox">
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput placeholder="Search..." formControlName="searchtext" (keyup)="searchAll($event)">
+      </mat-form-field>
+    </div>
   </div>
 
-  <!-- Right Flex Container for Search Box -->
-  <div class="right-container">
-    <mat-form-field appearance="none" class="searchbox">
-      <mat-icon matPrefix>search</mat-icon>
-      <input matInput placeholder="Search..." formControlName="searchtext" (keyup)="searchAll($event)">
-    </mat-form-field>
-  </div>
-</div>
-<div class="page-scroll-container">
-  <div class="table-wrapper mat-elevation-z6">
-    <table mat-table [dataSource]="issueticketDataSource" class="mat-table issueticket-table sticky-header">
+  <div class="tablewrapper">
+    <table mat-table [dataSource]="issueticketDataSource" class="mat-table issueticket-table">
 
       <!-- S.No -->
       <ng-container matColumnDef="sno">
@@ -36,7 +36,7 @@
       </ng-container>
 
 
-       <ng-container matColumnDef="tickettype">
+      <ng-container matColumnDef="tickettype">
         <th mat-header-cell *matHeaderCellDef>Ticket Type</th>
         <td mat-cell *matCellDef="let row">
           <span>
@@ -45,7 +45,7 @@
         </td>
       </ng-container>
 
-       <ng-container matColumnDef="created_by">
+      <ng-container matColumnDef="created_by">
         <th mat-header-cell *matHeaderCellDef>Reporter</th>
         <td mat-cell *matCellDef="let row">
           <span>
@@ -66,7 +66,7 @@
         </td>
       </ng-container>
 
-      
+
       <ng-container matColumnDef="image_path">
         <th mat-header-cell *matHeaderCellDef>Attachment</th>
 
@@ -119,7 +119,7 @@
 
 
 
-         <ng-container matColumnDef="ticket_number">
+      <ng-container matColumnDef="ticket_number">
         <th mat-header-cell *matHeaderCellDef>Ticket Number</th>
         <td mat-cell *matCellDef="let row">
           {{ row.ticket_number}}
@@ -148,7 +148,7 @@
 
       <!-- Delete -->
       <ng-container matColumnDef="delete">
-        <th mat-header-cell *matHeaderCellDef>Delete</th>   
+        <th mat-header-cell *matHeaderCellDef>Delete</th>
 
         <td mat-cell *matCellDef="let row">
           <button mat-icon-button class="action-btn delete" (click)="deleteIssue(row)">
@@ -159,11 +159,14 @@
 
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns ;sticky: true"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr> 
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
     </table>
-    <mat-paginator [pageSizeOptions]="[5,20,40,60]" [pageSize]="20" showFirstLastButtons
-      style="display: flex; justify-content: center;">
-    </mat-paginator>
+    <div class="paginator">
+      <mat-paginator [pageSizeOptions]="[5,20,40,60]" [pageSize]="20" showFirstLastButtons
+        style="display: flex; justify-content: center;">
+      </mat-paginator>
+    </div>
   </div>
+
 </div>

@@ -15,10 +15,11 @@ body {
 
 :root {
 
+  --primary-bg: #fefefe;
   --secondary-bg: #ecf2ef;
   --accent: #547562;
   --accent-light: #d6e1db;
-  --filebtn-bg: #fafafa;
+  --filebtn-bg: #f2f2f2;
 
   --header-color: #d6e1db;
   --tableheader-color: #d6e1db;
@@ -200,32 +201,6 @@ body {
   background-color: #fff;
 }
 
-
-/* TABLE BORDER RADIUS  */
-.mat-header-row th:first-child {
-  border-top-left-radius: 12px;
-}
-
-.mat-header-row th:last-child {
-  border-top-right-radius: 12px;
-}
-
-/* TABLE BORDER RADIUS END */
-
-
-/* TABLE ROW BACKGROUND COLOR  */
-.mat-row:nth-child(even) {
-  background-color: #fafafa;
-}
-
-.mat-row:nth-child(odd) {
-  background-color: #ffffff;
-}
-
-/* TABLE ROW BACKGROUND COLOR END  */
-
-
-
 .ml-auto {
   margin-left: auto !important;
 }
@@ -234,11 +209,38 @@ body {
   padding-inline: 8px;
 }
 
+.fields {
+  padding-inline: 8px;
+}
+
+/* TABLE */
+.mat-header-row th:first-child {
+  border-top-left-radius: 12px;
+}
+
+.mat-header-row th:last-child {
+  border-top-right-radius: 12px;
+}
+
+.mat-row:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.mat-row:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+tr.mat-header-row {
+  background-color: #fefefe !important;
+}
+
+/* TABLE END  */
+
+
 
 /* MAT FORM FIELD  */
 .fields .mat-form-field {
   width: 100% !important;
-  padding-inline: 8px;
 }
 
 .fields .mat-form-field-wrapper {
@@ -275,6 +277,8 @@ body {
 
 /* MAT FORM FIELD END  */
 
+
+
 /* BUTTON  */
 .pbtn {
   background-color: var(--accent);
@@ -285,6 +289,7 @@ body {
   text-transform: none;
   letter-spacing: 0.9px;
   box-shadow: none !important;
+  margin-top: 3px !important;
 }
 
 .sbtn {
@@ -296,6 +301,7 @@ body {
   text-transform: none;
   letter-spacing: 0.9px;
   box-shadow: none !important;
+  margin-top: 3px !important;
 }
 
 .filebtn {
@@ -311,6 +317,7 @@ body {
   width: 42px !important;
   max-width: 42px !important;
   min-width: 42px !important;
+  margin-top: 3px !important;
 }
 
 .filebtn img {
@@ -322,7 +329,7 @@ body {
 
 
 
-
+/* SEARCH FIELD  */
 .searchbox mat-icon {
   color: #584f4f;
   display: flex;
@@ -332,7 +339,6 @@ body {
   margin-right: 10px;
   cursor: pointer;
 }
-
 
 .searchbox input::placeholder {
   color: #584f4f;
@@ -344,9 +350,24 @@ body {
   display: none;
 }
 
+/* SEARCH FIELD END  */
 
 
+.mat-tabgroup {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
 
-/* LIVE TICKETS PAGE  */
+.mat-tab-body-wrapper {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column;
 
-/* LIVE TICKETS PAGE END */
+}
+
+.mat-tab-body{
+  flex: 1;
+  display: flex !important;
+  flex-direction: column;
+}

@@ -1,19 +1,19 @@
-<mat-tab-group mat-align-tabs="center">
-    <mat-tab label="PROJECT"  *ngIf="permissions.project">
+<mat-tab-group mat-align-tabs="center" class="mat-tabgroup">
+    <mat-tab label="PROJECT" *ngIf="permissions.project">
         <app-projects></app-projects>
     </mat-tab>
 
-    <mat-tab label="TICKET TYPE"  *ngIf="permissions.tickettype">
+    <mat-tab label="TICKET TYPE" *ngIf="permissions.tickettype">
         <app-tickettype></app-tickettype>
     </mat-tab>
 
-    <mat-tab label="TICKET STATUS"  *ngIf="permissions.ticketstatus">
+    <mat-tab label="TICKET STATUS" *ngIf="permissions.ticketstatus">
         <app-ticketstatus></app-ticketstatus>
     </mat-tab>
-    <mat-tab label="TICKET PRIORITY"  *ngIf="permissions.ticketpriority">
+    <mat-tab label="TICKET PRIORITY" *ngIf="permissions.ticketpriority">
         <app-ticket-priority></app-ticket-priority>
     </mat-tab>
-    <mat-tab label="TICKET TAG"  *ngIf="permissions.tickettag">
+    <mat-tab label="TICKET TAG" *ngIf="permissions.tickettag">
         <app-ticket-Tag></app-ticket-Tag>
     </mat-tab>
 </mat-tab-group>

@@ -1,3 +1,11 @@
+:host {
+  display: flex !important;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+
 .project-table {
   width: 100%;
   border-radius: 10px;

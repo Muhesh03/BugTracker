@@ -1,11 +1,14 @@
-<div class="">
-  <div class="sticky-container">
-    <button mat-raised-button style="background-color: var(--formheader-color);color: var(--formcontent-color);"
-      (click)="openUserDialog()" class="mb-2 mt-2">
-      Create User
-    </button>
+<div class="contentpage">
+
+  <div class="w-100 d-flex flex-wrap align-items-start justify-content-start mt-2 mb-3 gap-3">
+    <div class="pdiv">
+      <button mat-raised-button (click)="openUserDialog()" class="pbtn">
+        Create User
+      </button>
+    </div>
   </div>
-  <div class="usertablewrapper mat-elevation-z6">
+
+  <div class="tablewrapper">
 
     <table mat-table [dataSource]="dataSource" matSort class="mat-table">
 
@@ -113,11 +116,11 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
     </table>
-
+    <div class="paginator">
+      <mat-paginator [pageSizeOptions]="[20, 40, 60]" [pageSize]="20" showFirstLastButtons>
+      </mat-paginator>
+    </div>
   </div>
 
-  <div>
-    <mat-paginator [pageSizeOptions]="[20, 40, 60]" [pageSize]="20" showFirstLastButtons>
-    </mat-paginator>
-  </div>
+
 </div>

@@ -2,7 +2,7 @@
 
   <form [formGroup]="filterForm">
 
-    <div class="w-100 d-flex flex-wrap align-items-center justify-content-start mb-2 gap-3">
+    <div class="w-100 d-flex flex-wrap align-items-start justify-content-start mb-2 gap-3">
       <div class="pdiv">
         <button mat-raised-button class="pbtn" (click)="openLiveTicketDialog()">
           Create Client Ticket
@@ -63,9 +63,11 @@
 
       </ng-container>
 
-      <button mat-raised-button (click)="getFilter()" class="pbtn">
-        Filter
-      </button>
+      <div class="pdiv">
+        <button mat-raised-button (click)="getFilter()" class="pbtn">
+          Filter
+        </button>
+      </div>
 
 
       <!-- 
