@@ -221,6 +221,7 @@
 .inline-filter-group {
   display: flex;
   flex-direction: row;
+  gap: 5px;
 }
 
 .right-container {
@@ -259,6 +260,7 @@
     color: white;
     margin-top: 5px;
 }
+
   .search-small {
     width: 100px;
     max-width: 150px;

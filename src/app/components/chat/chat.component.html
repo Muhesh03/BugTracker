@@ -1,0 +1,174 @@
+<!-- <div class="chat-container">
+
+
+  <div class="chat-header">
+    <span (click)="activeTab='bot'">🤖 Chat</span>
+    <span (click)="activeTab='team'">👥 Team</span>
+  </div>
+
+ 
+  <div class="chat-body">
+    <div *ngFor="let msg of messages"
+         [ngClass]="msg.type === 'sent' ? 'sent' : 'received'">
+      {{ msg.text }}
+    </div>
+  </div>
+
+
+  <div class="chat-input">
+    <input [(ngModel)]="newMessage" placeholder="Type message..." />
+    <button (click)="sendMessage()">Send</button>
+  </div>
+
+</div> -->
+
+<!-- <div class="chat-wrapper">
+
+  
+  <div class="chat-sidebar">
+
+    <div class="tab-buttons">
+      <button (click)="activeTab='personal'" style="  background-color: var(--tableheader-color);border: none;padding:5px">Personal</button>
+      <button (click)="activeTab='team'"style=  "background-color: var(--tableheader-color);border:none;padding:5px">team</button>
+    </div>
+
+ 
+
+    <div *ngIf="activeTab === 'personal'">
+      <div *ngFor="let user of users" class="user" [class.active]="user.user_id === selectedUserId"
+        (click)="loadPersonalMessages(user.user_id)">
+
+        {{ user.fullname }}
+      </div>
+    </div>
+
+
+     <div *ngIf="activeTab === 'team'">
+      <div *ngFor="let g of groups"
+           class="user"
+           [class.active]="g.usergroup_id === selectedGroupId"
+           (click)="loadGroupMessages(g.usergroup_id)">
+
+        {{ g.usergroupname }}
+      </div>
+    </div>
+    
+
+  </div>
+
+
+  <div class="chat-main">
+
+    <div class="chat-body">
+      <div *ngFor="let msg of messages" [ngClass]="msg.sender_id === currentUserId ? 'sent' : 'received'">
+
+        <span *ngIf="activeTab === 'team'" class="sender">
+          {{ msg.sender_fullname }}
+        </span>
+
+        {{ msg.message }}
+      </div>
+    </div>
+
+    <div class="chat-input">
+      <input [(ngModel)]="message" placeholder="Type message..."  (keyup.enter)="activeTab==='personal' ? sendPersonalMessage() : sendGroupMessage()" >
+    
+
+      <button *ngIf="activeTab === 'personal'" (click)="sendPersonalMessage()">Send</button>
+
+      <button *ngIf="activeTab === 'team'" (click)="sendGroupMessage()">Send</button>
+    </div>
+
+  </div>
+
+</div> -->
+<!-- FLOATING CHAT ICON -->
+<!-- <div class="chat-icon" (click)="toggleChat()">
+  <mat-icon>chat</mat-icon>
+</div> -->
+
+<!-- CHAT POPUP -->
+<div class="chat-wrapper" *ngIf="isChatOpen">
+
+  <!-- HEADER -->
+  <div class="chat-header">
+
+    <!-- BACK -->
+    <span *ngIf="selectedUserId || activeTab==='team'" class="back" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </span>
+
+    <span>
+      {{ selectedUserId ? 'Chat' : (activeTab === 'team' ? 'Team Chat' : 'Chats') }}
+    </span>
+
+    <span class="close" (click)="onclose()">✖</span>
+  </div>
+
+  <!-- TABS -->
+  <div class="tab-buttons" *ngIf="!selectedUserId">
+    <button (click)="switchTab('personal')">Chat</button>
+    <button (click)="switchTab('team')">Group</button>
+  </div>
+
+  <!-- USER LIST -->
+  <div *ngIf="activeTab === 'personal' && !selectedUserId" class="user-list">
+    <div *ngFor="let user of users" class="user" (click)="openChat(user.user_id)">
+      {{ user.fullname }}
+      <!-- 🔔 UNREAD COUNT -->
+      <!-- <span class="badge" *ngIf="unreadMap[user.user_id] > 0">
+        {{ unreadMap[user.user_id] }}
+      </span> -->
+      <span class="badge" *ngIf="unreadMap[user.user_id] > 0">
+        {{ unreadMap[user.user_id] }}
+      </span>
+
+
+    </div>
+  </div>
+
+  <!-- CHAT AREA -->
+  <div *ngIf="selectedUserId || activeTab==='team'" class="chat-main">
+
+    <div class="chat-body" #chatContainer (scroll)="onScroll()">
+
+      <div *ngFor="let msg of messages;let i=index">
+
+        <!-- DATE SEPARATOR -->
+        <div class="date-separator" *ngIf="i === 0 || !isSameDay(messages[i-1].created_at, msg.created_at)">
+          {{ formatDate(msg.created_at) }}
+        </div>
+        <div [ngClass]="msg.sender_id == currentUserId ? 'sent' : 'received'">
+
+          <div class="msg-header">
+
+            <span class="name" *ngIf="msg.sender_id !== currentUserId || activeTab==='team'">
+              {{ msg.sender_name }}
+            </span>
+
+            <span class="time">
+              {{ msg.created_at | date:'shortTime' }}
+            </span>
+
+          </div>
+
+          <div class="text">
+            {{ msg.message }}
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- INPUT -->
+      <div class="chat-input">
+        <input [(ngModel)]="message" placeholder="Type message..."
+          (keyup.enter)="activeTab==='personal' ? sendPersonalMessage() : sendGroupMessage()" />
+
+        <button *ngIf="activeTab==='personal'" (click)="sendPersonalMessage()"><mat-icon>send</mat-icon></button>
+        <button *ngIf="activeTab==='team'" (click)="sendGroupMessage()"><mat-icon>send</mat-icon></button>
+      </div>
+
+    </div>
+
+  </div>
