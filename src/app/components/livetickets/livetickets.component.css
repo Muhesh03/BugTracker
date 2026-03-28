@@ -53,13 +53,7 @@
   border-radius: 3px;
 }
 
-.min-form {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr !important;
-  gap: 16px 24px;
-  align-items: start;
-  padding: 0 !important;
-}
+
 
 .min-form .instance-field,
 .min-form .tags-field {
@@ -170,72 +164,6 @@
 
 }
 
-.mainsearch {
-  grid-column: 1 / -1;
-  /* ← span all 4 columns, take full width */
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-
-.searchbox {
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.25);
-  width: 250px;
-  height: 38px;
-  display: flex;
-  align-items: center;
-  padding: 0 10px;
-  box-sizing: border-box;
-}
-
-.searchbox mat-icon {
-  color: #584f4f;
-  font-size: 18px;
-  margin-right: 10px;
-  cursor: pointer;
-}
-
-.searchbox input {
-  height: 24px;
-  font-size: 14px;
-  margin-top: 10px;
-  border: none;
-  box-sizing: border-box;
-  width: 100%;
-}
-
-.searchbox input::placeholder {
-  color: #584f4f;
-  font-size: 12px;
-}
-
-.searchbox .mat-form-field-underline,
-.searchbox .mat-form-field-ripple {
-  display: none;
-}
-
-.inline-filter-group {
-  display: flex;
-  flex-direction: row;
-}
-
-.right-container {
-  display: flex;
-  justify-content: flex-end;
-  margin-left: auto;
-  /* ← pushes to far right */
-}
-
-.buttonfilter{
-    background-color: var(--formheader-color);
-    color: white;
-    width: 100px;
-  margin-bottom: 5px;
-}
 @media (max-width: 768px) {
   .search {
   
@@ -244,25 +172,13 @@
     /* Stack elements vertically */
   }
 
-  .right-container {
-    width: 30%;
-    justify-content: flex-end;
-    /* Move buttons to left on mobile */
-    margin-right: 0px;
-    margin-left: 0px;
-    margin-bottom: 3px;
-  
-  }
 
 .buttonfilter{
     background-color: var(--formheader-color);
     color: white;
     margin-top: 5px;
 }
-  .search-small {
-    width: 100px;
-    max-width: 150px;
-  }
+
 
   .searchbox {
     max-width: 100%;

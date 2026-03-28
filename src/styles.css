@@ -16,6 +16,7 @@ body {
 :root {
 
   --secondary-bg: #ecf2ef;
+  --accent: #547562;
 
   --header-color: #d6e1db;
   --tableheader-color: #d6e1db;
@@ -147,6 +148,9 @@ body {
 }
 
 /* ---------- */
+
+
+
 /* main layout content white box  */
 .main-content {
   flex: 1;
@@ -204,18 +208,108 @@ body {
 .mat-header-row th:last-child {
   border-top-right-radius: 12px;
 }
+
 /* TABLE BORDER RADIUS END */
 
 
 /* TABLE ROW BACKGROUND COLOR  */
 .mat-row:nth-child(even) {
-  background-color: #fafafa; 
+  background-color: #fafafa;
 }
 
 .mat-row:nth-child(odd) {
   background-color: #ffffff;
 }
+
 /* TABLE ROW BACKGROUND COLOR END  */
+
+
+
+.ml-auto {
+  margin-left: auto !important;
+}
+
+.pdiv{
+  padding-inline: 8px;
+}
+
+
+/* MAT FORM FIELD  */
+.fields .mat-form-field {
+  width: 100% !important;
+  padding-inline: 8px;
+}
+
+.fields .mat-form-field-wrapper {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 100% !important;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-infix {
+  padding: 8px 0px !important;
+}
+
+.mat-form-field-infix {
+  padding: 8px 0px !important;
+}
+
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  display: flex;
+  align-items: center;
+  padding: 0px 8px !important;
+  border-radius: 12px !important;
+  height: 42.75px;
+  background-color: #e9e9e9 !important;
+}
+
+.mat-form-field-appearance-fill .mat-form-field-infix {
+  border-top: none !important;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-flex{
+  display: flex;
+  align-items: center;
+}
+/* MAT FORM FIELD END  */
+
+/* BUTTON  */
+.pbtn {
+  background-color: var(--accent);
+  color: white;
+  border-radius: 8px !important;
+  height: 39px;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0.9px;
+}
+/* BUTTON END */
+
+
+.searchbox {}
+
+.searchbox mat-icon {
+  color: #584f4f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.searchbox input {}
+
+.searchbox input::placeholder {
+  color: #584f4f;
+  font-size: 12px;
+}
+
+.searchbox .mat-form-field-underline,
+.searchbox .mat-form-field-ripple {
+  display: none;
+}
+
 
 
 
