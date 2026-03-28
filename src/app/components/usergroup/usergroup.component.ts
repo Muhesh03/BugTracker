@@ -3,9 +3,11 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { UserGroupService } from '../../services/usergroup.service';
+
 import { HttpClientModule } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSelectChange } from '@angular/material/select';
+
 import Swal from 'sweetalert2';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -77,17 +79,18 @@ export class UsergroupComponent implements OnInit, AfterViewInit {
 
   deleteUserGroup(row: any): void {
     Swal.fire({
-      title: 'Are you sure?',
-      text: `You want to delete ${row.usergroupname}`,
-      icon: 'warning',
+title: `User Group Name: ${row.usergroupname}`,    
+      text: `Are you sure you want to delete this user group :${row.usergroupname}`,
+      // icon: 'warning',
       width: '350px',
       showCloseButton: true,
-      showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'Cancel',
+      // showCancelButton: true,
+      confirmButtonText: ' Delete ',
+      // cancelButtonText: 'Cancel',
       confirmButtonColor: 'var(--formbutton-color)',
-      cancelButtonColor: '#be9a9aff',
+      // cancelButtonColor: '#be9a9aff',
       background: 'var(--tableheader-color)',
+      // reverseButtons: true,
       customClass: {
         closeButton: 'custom-close-button'
       }
@@ -101,7 +104,7 @@ export class UsergroupComponent implements OnInit, AfterViewInit {
 
           //  SUCCESS DELETE
           if (res.success) {
-            this.snackBar.open(res.message, 'Close', {
+            this.snackBar.open(res.message, '', {
               duration: 2000,
               horizontalPosition: 'center',
               verticalPosition: 'top',
@@ -116,7 +119,7 @@ export class UsergroupComponent implements OnInit, AfterViewInit {
             Swal.fire({
               title: 'Cannot Delete',
               text: res.message,
-              icon: 'warning',
+              // icon: 'warning',
               confirmButtonColor: 'var(--formbutton-color)'
             });
           }
@@ -219,6 +222,7 @@ export class UsergroupFormComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<UsergroupFormComponent>,
     private userGroupService: UserGroupService,
+    private snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
 
@@ -244,49 +248,66 @@ export class UsergroupFormComponent implements OnInit {
     this.dialogRef.close(false);
   }
 
-  onSubmit(): void {
+ onSubmit(): void {
 
-    if (this.usergroupform.invalid) {
-      this.usergroupform.markAllAsTouched();
-      return;
-    }
+  if (this.usergroupform.invalid) {
+    this.usergroupform.markAllAsTouched();
+    return;
+  }
 
-    const formValue = this.usergroupform.value;
+  const formValue = this.usergroupform.value;
 
-    // ================= EDIT =================
-    if (this.data && this.data.usergroup_id) {
+  // ================= EDIT =================
+  if (this.data && this.data.usergroup_id) {
 
-      this.userGroupService.updateUsergroup(this.data.usergroup_id, formValue).subscribe({
-        next: () => this.dialogRef.close(true),
-        error: (err) => {
-          if (err.status === 409) {
-            this.usergroupform
-              .get('usergroupname')
-              ?.setErrors({ duplicate: true });
-          }
+    this.userGroupService.updateUsergroup(this.data.usergroup_id, formValue).subscribe({
+      next: () => {
+        this.snackBar.open('User group updated successfully', '', {
+          duration: 2000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['success-snackbar']
+        });
+
+        this.dialogRef.close(true);
+      },
+      error: (err) => {
+        if (err.status === 409) {
+          this.usergroupform
+            .get('usergroupname')
+            ?.setErrors({ duplicate: true });
         }
-      });
+      }
+    });
 
-    }
+  }
 
-    // ================= CREATE =================
-    else {
+  // ================= CREATE =================
+  else {
 
-      this.userGroupService.addUserGroup(formValue).subscribe({
-        next: () => this.dialogRef.close(true),
-        error: (err) => {
-          if (err.status === 409) {
-            this.usergroupform
-              .get('usergroupname')
-              ?.setErrors({ duplicate: true });
-          }
+    this.userGroupService.addUserGroup(formValue).subscribe({
+      next: () => {
+        this.snackBar.open('User group created successfully', '', {
+          duration: 2000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['success-snackbar']
+        });
+
+        this.dialogRef.close(true);
+      },
+      error: (err) => {
+        if (err.status === 409) {
+          this.usergroupform
+            .get('usergroupname')
+            ?.setErrors({ duplicate: true });
         }
-      });
+      }
+    });
 
-    }
   }
 }
-
+}
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
