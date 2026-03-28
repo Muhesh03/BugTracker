@@ -18,7 +18,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core'; 
+import { MatNativeDateModule } from '@angular/material/core';
 
 // Reusable combined material module (your custom module)
 import { MaterialModule } from './Modules/material.module';
@@ -27,7 +27,7 @@ import { MaterialModule } from './Modules/material.module';
 import { AppComponent } from './app.component';
 import { ChangePasswordComponent, SideNavComponent } from './components/sidenav/sidenav.component';
 import { TabComponent } from './components/tab/tab.component';
-import { ImagePreviewDialogComponent,UserComponent, UserDialogueComponent } from './components/user/user.component';
+import { ImagePreviewDialogComponent, UserComponent, UserDialogueComponent } from './components/user/user.component';
 
 // Your Project Components
 import { ProjectComponent, ProjectDialogComponent, ProjectFormComponent } from './components/projects/projects.component';
@@ -53,7 +53,8 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ChartsModule } from 'ng2-charts';
 import { CommonModule } from '@angular/common';
 import { ShowImageDialogComponent } from './components/image-preview-dialog/image-preview-dialog.component';
-import { LiveTicketsComponent,LiveTicketFormComponent,LiveTicketUpdateFormComponent, ViewImageDialogComponent } from './components/livetickets/livetickets.component';
+import { LiveTicketsComponent, LiveTicketFormComponent, LiveTicketUpdateFormComponent, ViewImageDialogComponent } from './components/livetickets/livetickets.component';
+import { ChatComponent } from './components/chat/chat.component';
 
 @NgModule({
   declarations: [
@@ -87,16 +88,16 @@ import { LiveTicketsComponent,LiveTicketFormComponent,LiveTicketUpdateFormCompon
     SidebarItemComponent,
     ToolBarComponent,
     ImagePreviewDialogComponent,
-    DashboardComponent,   
-    ShowImageDialogComponent, 
+    DashboardComponent,
+    ShowImageDialogComponent,
     LiveTicketsComponent,
     LiveTicketFormComponent,
     LiveTicketUpdateFormComponent,
     EditNoteComponent,
     NotePreviewDialogComponent,
     ViewImageDialogComponent,
+    ChatComponent
 
-    
   ],
 
   imports: [
@@ -112,7 +113,7 @@ import { LiveTicketsComponent,LiveTicketFormComponent,LiveTicketUpdateFormCompon
     MatSidenavModule,
     MatIconModule,
     MatMenuModule,
-    
+
     MatListModule,
     MatFormFieldModule,
     MatInputModule,

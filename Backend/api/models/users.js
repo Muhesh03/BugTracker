@@ -89,7 +89,20 @@ exports.getuser = function (cb) {
     // .whereIn('ug.status_id', [1, 2])
     .whereNot({ "ug.status_id": 3 })
     .orderBy('ug.user_id', 'asc') // Added orderBy here
-    .then(function (out) {
+    .then(async function (out) {
+      for (const user of out) {
+        const rows = await knex('messages')
+         
+          .count('* as unread_count')
+          .where('receiver_id', user.user_id)  // ✅ correct
+          .andWhere('chattype_id', 1)
+          .andWhere('is_read', false);
+        user.unread_count = Number(rows[0].unread_count);
+        console.log("🔥 USER:", user.user_id, "COUNT:", rows[0].unread_count);
+      }
+
+
+      console.log("out", out)
       cb(null, out);
     }).catch(function (e) {
       cb(e, 'error');
@@ -149,6 +162,7 @@ exports.updateuser = function (data, cb) {
 // 	  password: data.password,
 // 	  email: data.email,
 // 	  phonenumber: data.phonenumber,
+
 //     })
 //     .returning('*')
 //     .then(rows => cb(null, rows[0]))

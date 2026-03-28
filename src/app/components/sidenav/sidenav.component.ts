@@ -18,6 +18,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 })
 export class SideNavComponent implements OnInit {
+  isChatOpen: boolean;
+
   encodeURIComponent(arg0: any) {
     throw new Error('Method not implemented.');
   }
@@ -163,7 +165,9 @@ export class SideNavComponent implements OnInit {
 
 
   }
-
+ toggleChat() {
+    this.isChatOpen = !this.isChatOpen;
+  }
   openSettings() {
     if (this.permissions?.settings) {
       this.router.navigate(['/sidenav/ticketissue']);
@@ -198,7 +202,7 @@ export class ChangePasswordComponent {
   });
 
   constructor(
-    private snackBar:MatSnackBar,
+    private snackBar: MatSnackBar,
     private userservice: UserService,
     private dialogRef: MatDialogRef<ChangePasswordComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
@@ -247,5 +251,6 @@ export class ChangePasswordComponent {
 
   }
 
+ 
 }
 
