@@ -74,11 +74,14 @@
       <mat-divider></mat-divider>
 
       <!-- CHANGE PASSWORD -->
-      <button>
+      <button mat-menu-item (click)="changePassword()">
         <mat-icon>lock</mat-icon>
         Change Password
       </button>
-      <button mat-menu-item (click)="logout()"></button>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        Logout
+      </button>
     </mat-menu>
   </mat-toolbar>
 
@@ -98,14 +101,22 @@
     <mat-sidenav-content class="main-content">
       <div class="content-inner">
         <router-outlet></router-outlet>
+        <button class="chat-fab" (click)="toggleChat()">
+         <mat-icon>chat</mat-icon>
+        </button>
 
+        <app-chat *ngIf="isChatOpen"></app-chat>
       </div>
 
     </mat-sidenav-content>
 
 
   </mat-sidenav-container>
- 
+  <!-- <div class="endbar">
+              <app-tool-bar></app-tool-bar>
+
+  </div>
+ -->
 
 </section>
 

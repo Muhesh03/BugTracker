@@ -15,17 +15,19 @@ module.exports = function (app) {
   app.all('/tickettag/*', require("./api/controllers/tickettag.js").router);
   app.all('/issueticket/*', require("./api/controllers/issueticket.js").router);
   app.all('/dashboard/*', require("./api/controllers/dashboard.js").router);
-    app.all('/liveticket/*', require("./api/controllers/liveticket.js").router);
-app.all('/liveticket-note/*', require("./api/controllers/liveticket_notes.js").router);
-
+  app.all('/liveticket/*', require("./api/controllers/liveticket.js").router);
+  app.all('/liveticket-note/*', require("./api/controllers/liveticket_notes.js").router);
+  // app.all('/chat/*', require("./api/controllers/chat.js").router);
+  app.use('/chat', require("./api/controllers/chat.js").router);
 
   //app.all('/login/*', require("./api/controllers/login.js").router);
   app.use('/login', require("./api/controllers/login.js").router);
-  
+
 
   app.use('/attachment', require("./api/controllers/attachment.js").router);
   app.use('/note', require("./api/controllers/note.js").router);
   app.use('/issueticket', require("./api/controllers/issueticket.js").router);
   app.use('/ticket-activity', require("./api/controllers/ticketActivity.js").router);
+
 
 }
