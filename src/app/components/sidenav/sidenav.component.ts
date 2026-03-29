@@ -151,9 +151,7 @@ export class SideNavComponent implements OnInit {
 
     });
   }
-  toggleSidebar() {
-    this.isExpanded = !this.isExpanded; // here it means  if it is true make it false and if it is false make it true
-  }
+
   logout() {
     // Clear login data
 
