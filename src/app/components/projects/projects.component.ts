@@ -320,13 +320,17 @@ export class ProjectDialogComponent implements OnInit {
         next: (rows: any[] | null) => {
           rows = Array.isArray(rows) ? rows : [];                                  //user_id,fullname,is_active
           console.log('Team from DB:', rows);
-
+          const selectedUsers: any[] = [];
           // Reset selection
           this.groupList.forEach(group => {
             group.users.forEach((u: any) => {
               // u.selected = false
               u.selected = false;
-              u.originalState = false;  // ✅ track original DB state
+              u.originalState = false;
+              if (u.selected) {
+                selectedUsers.push(u);
+              }  //  track original DB state
+              return selectedUsers
             });
           });
 
@@ -340,7 +344,7 @@ export class ProjectDialogComponent implements OnInit {
               if (user) {
                 // user.selected = dbUser.is_active;
                 user.selected = dbUser.is_active;  // current checkbox state
-                user.originalState = dbUser.is_active;  // ✅ save original state
+                user.originalState = dbUser.is_active;  //  save original state
               }
             });
           });

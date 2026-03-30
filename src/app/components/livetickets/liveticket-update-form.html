@@ -96,9 +96,9 @@
     <!-- Add Note Section Header -->
     <div class="note-section d-flex align-items-center gap-2 mb-2">
       <span class="fw-bold">Add Note</span>
-      <button class="btn btn-dark btn-sm" data-bs-toggle="collapse" data-bs-target="#liveTicketNoteCollapse"
+      <button class="expand" data-bs-toggle="collapse" data-bs-target="#liveTicketNoteCollapse"
         aria-expanded="false">
-        <mat-icon>add</mat-icon>
+        <mat-icon>expand_more</mat-icon>
       </button>
     </div>
 
@@ -163,8 +163,8 @@
 
         <!-- Submit Note Button -->
         <div class="mt-2 text-end">
-          <button class="btn btn-success btn-sm" type="button" (click)="submitNote()" [disabled]="isAddingNote">
-            {{ isAddingNote ? 'Saving...' : 'Add Note' }}
+          <button class="note-btn" type="button" (click)="submitNote()" [disabled]="isAddingNote">
+            {{ isAddingNote ? 'Saving...' : 'Update' }}
           </button>
         </div>
 

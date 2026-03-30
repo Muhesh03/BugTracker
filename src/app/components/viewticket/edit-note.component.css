@@ -205,6 +205,15 @@ textarea {
   background-color: #f8f9fa;
   font-weight: bold;
 }
+.expand {
+  margin-left: auto;
+  cursor: pointer;
+  border: none;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 @media (max-width: 768px) {
 

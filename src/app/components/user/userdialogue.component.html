@@ -2,7 +2,7 @@
 <mat-toolbar style="background-color:var(--formheader-color); color:var(--formcontent-color);" class="dialog-toolbar">
   <span>
     <h2 class="text-center" mat-dialog-title>
-      {{ isEdit ? 'update user': 'User Registration' }}
+      {{ isEdit ? 'update user': 'Create User ' }}
     </h2>
   </span>
   <!-- This span acts as a spacer, pushing the close button to the right -->
@@ -115,7 +115,7 @@
 
       <!-- NO NEW FILE SELECTED -->
       <p *ngIf="selectedFiles.length === 0 && !existingAttachmentName">
-        Drag & drop files here or
+       Add Photo (Optional)
         <label class="browse">
           browse
           <input type="file" hidden (change)="onFileSelect($event)">
@@ -166,14 +166,14 @@
 
 
   <mat-dialog-actions class="dialog-actions">
-    <button mat-stroked-button mat-dialog-close class="cancel-btn">
+    <!-- <button mat-stroked-button mat-dialog-close class="cancel-btn">
       Close
-    </button>
+    </button> -->
     <!-- <button mat-raised-button class="save-btn me-3" (click)="submitForm(); upload()">
       {{ isEdit ? 'Update' : 'Save' }}
     </button> -->
     <button mat-raised-button class="save-btn me-3" (click)="submitForm()">
-      {{ isEdit ? 'Update' : 'Save' }}
+      {{ isEdit ? 'Update' : 'Create' }}
     </button>
   </mat-dialog-actions>
 

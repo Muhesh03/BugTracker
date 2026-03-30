@@ -196,7 +196,23 @@ textarea {
   max-height: 70vh;
   border-radius: 6px;
 }
-
+.expand {
+  margin-left: auto; /* Pushes the item to the right end */
+  cursor: pointer;
+  border: none;
+  background: none; /* Removes button background if needed */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+} 
+.note-btn{
+  background-color: var(--formheader-color) !important;
+  color: white !important;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
 @media (max-width: 768px) {
   
    .ticket-wrapper {
