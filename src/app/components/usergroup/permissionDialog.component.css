@@ -1,14 +1,3 @@
-/* Dialog Title */
-.dialog-title {
-  text-align: center;
-  font-weight: 600;
-}
-
-/* Dialog Content */
-.dialog-content {
-  min-width: 350px;
-  padding-top: 10px;
-}
 
 /* Master Section */
 .master-section {
@@ -38,28 +27,10 @@
   
 }
 
-/* Actions */
-.dialog-actions {
-  padding: 12px 20px;
-}
-.toolbar-spacer {
-    /* This flex-grow property pushes the elements on either side to the edges */
-    flex: 1 1 auto;
-
-}
-
 .permission-list mat-checkbox:hover {
   background-color: #d3cdd6;
   border-radius: 6px;
   transition: background 0.2s ease;
   display: block; /* Ensures the background covers the full width */
   padding: 4px 8px; 
-}
-.save-btn{
-  background-color: var(--formbutton-color);
-  color: var(--formcontent-color);
-}
-::ng-deep .custom-dialog .mat-dialog-container {
-    overflow: hidden !important;
-    padding: 0 !important;
 }

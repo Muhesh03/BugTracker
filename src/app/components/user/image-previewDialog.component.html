@@ -1,15 +1,14 @@
-<mat-toolbar>
-    <span>
-        <h2 class="text-center">
-            Attachment Preview
-        </h2>
-    </span>
-    <!-- This span acts as a spacer, pushing the close button to the right -->
-    <span class="toolbar-spacer"></span>
+<mat-toolbar class="dialog-toolbar">
+    <h2 class="text-center">
+        Attachment Preview
+    </h2>
     <button mat-icon-button (click)="close()" aria-label="Close dialog">
         <mat-icon>close</mat-icon>
     </button>
 </mat-toolbar>
-<mat-dialog-content class="dialog-content ">
-    <img [src]="data.imageUrl" alt="Attachment" />
+
+<mat-dialog-content>
+    <div class="popupimg-container">
+        <img [src]="data.imageUrl" alt="Attachment" />
+    </div>
 </mat-dialog-content>
