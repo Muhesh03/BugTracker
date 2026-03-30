@@ -33,7 +33,6 @@
       <div class="col-5 col-md-2 fields">
         <mat-form-field appearance="outline">
           <mat-label style="color:#1d6f42;font-size:15px;">Date Between</mat-label>
-
           <mat-select formControlName="filterValueDate" placeholder="Time">
             <mat-option value="0">All Time</mat-option>
             <mat-option value="Yesterday">Yesterday</mat-option>
@@ -60,7 +59,6 @@
             <mat-datepicker #pickerTo></mat-datepicker>
           </mat-form-field>
         </div>
-
       </ng-container>
 
       <div class="pdiv">
@@ -68,7 +66,6 @@
           Filter
         </button>
       </div>
-
 
       <!-- 
           <div class="inline-filter-group">
@@ -82,7 +79,6 @@
               </mat-select>
             </mat-form-field>
           </div> -->
-
 
       <!-- <div class="inline-filter-group">
             <mat-form-field appearance="outline" class="search-small">
@@ -99,8 +95,6 @@
     </div>
   </form>
 
-
-
   <div class="tablewrapper">
     <table mat-table [dataSource]="liveticketDataSource" class="liveticket-table mat-elevation-z8">
 
@@ -113,10 +107,8 @@
       </ng-container>
 
       <ng-container matColumnDef="image_path">
-        <th mat-header-cell *matHeaderCellDef>Attachment</th>
-
-        <td mat-cell *matCellDef="let row">
-
+        <th mat-header-cell *matHeaderCellDef class="text-center">Attachment</th>
+        <td mat-cell *matCellDef="let row" class="text-center"> 
           <!-- show icons equal to number of images -->
           <ng-container *ngIf="row.image_path && row.image_path.length">
             <mat-icon *ngFor="let img of row.image_path" class="image-icon" (click)="openImages([img])"
@@ -147,29 +139,21 @@
       </ng-container>
 
       <ng-container *ngIf="otherpermissions.clientTicketAction" matColumnDef="action">
-        <th mat-header-cell *matHeaderCellDef> Action </th>
-        <td mat-cell *matCellDef="let row">
-
+        <th mat-header-cell *matHeaderCellDef class="col-actions"> Convert </th>
+        <td mat-cell *matCellDef="let row" class="text-center">
           <button mat-icon-button color="primary" (click)="editLiveTicket(row)">
-
-            <mat-icon>edit_note</mat-icon>
-
+            <mat-icon>rotate_90_degrees_cw</mat-icon>
           </button>
-
         </td>
       </ng-container>
 
 
       <ng-container matColumnDef="update">
-        <th mat-header-cell *matHeaderCellDef> update</th>
-        <td mat-cell *matCellDef="let row">
-
+        <th mat-header-cell *matHeaderCellDef class="col-actions">Edit</th>
+        <td mat-cell *matCellDef="let row" class="text-center">
           <button mat-icon-button color="primary" (click)="updateLiveTicket(row)">
-
-            <mat-icon style="color:#5a9eda;">edit</mat-icon>
-
+            <mat-icon style="color:#5a9eda;">edit_note</mat-icon>
           </button>
-
         </td>
       </ng-container>
 

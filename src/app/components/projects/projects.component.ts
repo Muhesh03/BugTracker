@@ -73,7 +73,7 @@ export class ProjectComponent implements OnInit {
       icon: 'warning',
       width: '350px',
       showCloseButton: true,
-      background: 'var(--tableheader)',
+      background: 'var(--tableheader-color)',
       confirmButtonColor: 'var(--formbutton-color)',
       cancelButtonColor: '#be9a9aff',
       showCancelButton: true,

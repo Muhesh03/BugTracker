@@ -1,175 +1,181 @@
-<div class="ticket-wrapper">
+<mat-toolbar class="dialog-toolbar">
+  <h2>Update Ticket Information</h2>
+  <button mat-icon-button class="closebtn" [mat-dialog-close] type="button">
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-toolbar>
 
-  <!-- Header -->
-  <div class="ticket-header">
-    <span>Update Ticket Information</span>
-  </div>
+<mat-dialog-content>
 
-  <div class="p-3 ticket-scroll scrollable-collapse">
+  <!-- Ticket Info Table -->
+  <table class="minimaltable">
+    <thead>
+      <tr>
+        <th>Ticket ID</th>
+        <th>Project</th>
+        <th>Reporter</th>
+        <th>Date Submitted</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ data.ticket_number }}</td>
+        <td>{{ data.projectname }}</td>
+        <td>{{ data.created_by_name }}</td>
+        <td>{{ data.created_at | date:'dd-MM-yyyy HH:mm' }}</td>
+      </tr>
+    </tbody>
+  </table>
 
-    <!-- Ticket Info Table -->
-    <table class="ticket-info-table">
-      <thead>
-        <tr>
-          <th>Ticket ID</th>
-          <th>Project</th>
-          <th>Reporter</th>
-          <th>Date Submitted</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>{{ data.ticket_number }}</td>
-          <td>{{ data.projectname }}</td>
-          <td>{{ data.created_by_name }}</td>
-          <td>{{ data.created_at | date:'dd-MM-yyyy HH:mm' }}</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- Form Section -->
+  <!-- Form Section -->
+  <div class="formsection">
     <form [formGroup]="LiveTicketForm">
 
-      <!-- Left & Right Columns -->
-      <div class="form-grid">
-
-        <!-- Left Column -->
-        <div class="form-column">
-          <div class="form-item">
-            <div class="form-label">Status</div>
-            <div class="readonly-box">{{ data?.statusname || '-' }}</div>
-          </div>
-
-          <div class="form-item">
-            <div class="form-label">Instance</div>
-            <div class="readonly-box">{{ data?.instance || '-' }}</div>
-          </div>
-
-          <div class="form-item">
-            <div class="form-label">Unit</div>
-            <div class="readonly-box">{{ data?.unit || '-' }}</div>
-          </div>
+      <div class="col-12 col-md-12 d-flex flex-wrap">
+        <div class="col-12 col-md-6 px-2 form-grid-item">
+          <div class="form-grid-label">Status</div>
+          <div class="form-grid-readonly">{{ data?.statusname || '-' }}</div>
         </div>
 
-        <!-- Right Column -->
-        <div class="form-column">
-          <div class="form-item">
-            <div class="form-label">Priority</div>
-            <div class="readonly-box priority-box">
+        <div class="col-12 col-md-6 px-2 form-grid-item">
+          <div class="form-grid-label">Ticket Type</div>
+          <div class="form-grid-readonly">{{ data.ticket_type_name || '—' }}</div>
+        </div>
+
+        <div class="col-12 col-md-6 px-2 form-grid-item">
+          <div class="form-grid-label">Priority</div>
+          <div class="form-grid-readonly">
+            <span class="priority-box">
               <mat-icon [style.color]="iconMap[data.icon]?.color || 'gray'">
                 {{ iconMap[data.icon]?.name || 'priority_high' }}
               </mat-icon>
               {{ data.priority }}
-            </div>
+            </span>
           </div>
+        </div>
 
-          <div class="form-item">
-            <div class="form-label">Tag</div>
-            <div class="readonly-box">{{ data.tag_names?.join(', ') || '—' }}</div>
-          </div>
+        <div class="col-12 col-md-6 px-2 form-grid-item">
+          <div class="form-grid-label">Instance</div>
+          <div class="form-grid-readonly">{{ data?.instance || '-' }}</div>
+        </div>
 
-          <div class="form-item">
-            <div class="form-label">Ticket Type</div>
-            <div class="readonly-box">{{ data.ticket_type_name || '—' }}</div>
-          </div>
+        <div class="col-12 col-md-6 px-2 form-grid-item">
+          <div class="form-grid-label">Tag</div>
+          <div class="form-grid-readonly">{{ data.tag_names?.join(', ') || '—' }}</div>
+        </div>
+
+        <div class="col-12 col-md-6 px-2 form-grid-item">
+          <div class="form-grid-label">Unit</div>
+          <div class="form-grid-readonly">{{ data?.unit || '-' }}</div>
         </div>
 
       </div>
-
+      <hr>
       <!-- Summary & Description -->
       <div class="summary-grid">
-        <div class="summary-labels">
-          <div class="form-label">Summary</div>
-          <div class="form-label">Description</div>
-          <div class="form-label">Steps to Reproduce</div>
+        <div class="col-12 col-md-12 px-2 summary-grid-item">
+          <div class="form-grid-label">Summary</div>
+          <div class="form-grid-readonly">{{ data.summary }}</div>
         </div>
 
-        <div class="summary-values">
-          <div class="readonly-box">{{ data.summary }}</div>
-          <div class="readonly-box description-box">{{ data.description }}</div>
-          <div class="readonly-box description-box">{{ data.steps_to_reproduce || '—' }}</div>
+        <div class="col-12 col-md-12 px-2 summary-grid-item">
+          <div class="form-grid-label">Description</div>
+          <div class="form-grid-readonly description-box">{{ data.description }}</div>
         </div>
+
+        <div class="col-12 col-md-12 px-2 summary-grid-item">
+          <div class="form-grid-label">Steps to Reproduce</div>
+          <div class="form-grid-readonly description-box">{{ data.steps_to_reproduce || '—' }}</div>
+        </div>
+
       </div>
 
     </form>
+  </div>
 
-    <!-- Add Note Section Header -->
-    <div class="note-section d-flex align-items-center gap-2 mb-2">
-      <span class="fw-bold">Add Note</span>
-      <button class="btn btn-dark btn-sm" data-bs-toggle="collapse" data-bs-target="#liveTicketNoteCollapse"
-        aria-expanded="false">
-        <mat-icon>add</mat-icon>
-      </button>
-    </div>
 
-    <!-- Notes Collapse -->
-    <div class="collapse show" id="liveTicketNoteCollapse">
-      <div class="card card-body">
+  <!-- Add Note Section Header -->
+  <div class="note-section d-flex align-items-center gap-2 mb-2">
+    <span class="fw-bold">Add Note</span>
+    <button class="btn btn-dark btn-sm" data-bs-toggle="collapse" data-bs-target="#liveTicketNoteCollapse"
+      aria-expanded="false">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
 
-        <table class="table table-bordered align-middle note-table">
-          <thead class="table-light">
-            <tr>
-              <th style="width: 20%">Last Updated By</th>
-              <th style="width: 50%">Note</th>
-              <th style="width: 30%">Attachment</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Existing Notes (last 2 from backend) -->
-            <tr *ngFor="let note of notes">
-              <td>
+  <!-- Notes Collapse -->
+  <div class="collapse show" id="liveTicketNoteCollapse">
+    <div class="card card-body">
+
+      <table class="table table-bordered align-middle note-table">
+        <thead class="table-light">
+          <tr>
+            <th style="width: 20%">Last Updated By</th>
+            <th style="width: 50%">Note</th>
+            <th style="width: 30%">Attachment</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Existing Notes (last 2 from backend) -->
+          <tr *ngFor="let note of notes">
+            <td class="align-top text-left">
                 <strong>{{ note.username }}</strong><br>
                 <small class="text-muted">{{ note.created_at | date:'medium' }}</small>
-              </td>
-              <td>{{ note.note_text }}</td>
-              <td>
-                <div *ngFor="let file of note.attachments || []" class="attachment-item" (click)="openImages([file])">
-                  <img [src]="imageBaseUrl + file" class="attachment-thumb" alt="attachment" />
-                  <span class="attachment-name">{{ file }}</span>
-                </div>
-              </td>
-            </tr>
+            </td>
+            <td class="align-top text-left">{{ note.note_text }}</td>
+            <td class="align-top text-left">
+              <div *ngFor="let file of note.attachments || []" class="attachment-item" (click)="openImages([file])">
+                <img [src]="imageBaseUrl + file" class="attachment-thumb" alt="attachment" />
+                <span class="attachment-name">{{ file }}</span>
+              </div>
+            </td>
+          </tr>
 
-            <!-- Add New Note Row -->
-            <tr class="add-note-row">
-              <td>
-                <strong>{{ username }}</strong><br>
-                <small class="text-muted">{{ today | date:'medium' }}</small>
-              </td>
+          <!-- Add New Note Row -->
+          <tr class="add-note-row">
+            <td class="align-top text-left">
+              <strong>{{ username }}</strong><br>
+              <small class="text-muted">{{ today | date:'medium' }}</small>
+            </td>
 
-              <td>
-                <textarea class="form-control" rows="3" placeholder="Write note..." [(ngModel)]="newNoteText"
-                  [ngModelOptions]="{standalone:true}">
+            <td class="align-top text-left">
+              <textarea class="form-control" rows="3" placeholder="Write note..." [(ngModel)]="newNoteText"
+                [ngModelOptions]="{standalone:true}">
                 </textarea>
-              </td>
+            </td>
 
-              <td>
-                <input type="file" hidden #fileInput multiple accept="image/*" (change)="onFileSelect($event)">
-                <button mat-icon-button type="button" (click)="fileInput.click()">
-                  <mat-icon style="color:#547562;font-size:20px;">attach_file</mat-icon>
+            <td class="align-top text-left">
+              <input type="file" hidden #fileInput multiple accept="image/*" (change)="onFileSelect($event)">
+              <button mat-icon-button type="button" (click)="fileInput.click()">
+                <mat-icon style="color:#547562;font-size:20px;">attach_file</mat-icon>
+              </button>
+              <div *ngFor="let name of selectedFileNames; let i = index">
+                📎 {{ name }}
+                <button mat-icon-button color="primary" type="button" (click)="removeFile(i)">
+                  <mat-icon>close</mat-icon>
                 </button>
+              </div>
+            </td>
+          </tr>
 
-                <div *ngFor="let name of selectedFileNames; let i = index">
-                  📎 {{ name }}
-                  <button mat-icon-button color="primary" type="button" (click)="removeFile(i)">
-                    <mat-icon>close</mat-icon>
-                  </button>
-                </div>
-              </td>
-            </tr>
+        </tbody>
+      </table>
 
-          </tbody>
-        </table>
-
-        <!-- Submit Note Button -->
-        <div class="mt-2 text-end">
-          <button class="btn btn-success btn-sm" type="button" (click)="submitNote()" [disabled]="isAddingNote">
-            {{ isAddingNote ? 'Saving...' : 'Add Note' }}
-          </button>
-        </div>
-
+      <!-- Submit Note Button -->
+      <div class="mt-2 text-end">
+        <button class="btn btn-success btn-sm" type="button" (click)="submitNote()" [disabled]="isAddingNote">
+          {{ isAddingNote ? 'Saving...' : 'Add Note' }}
+        </button>
       </div>
-    </div>
 
+    </div>
   </div>
-</div>
+
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-raised-button type="submit" class="pbtn">
+    Save
+  </button>
+</mat-dialog-actions>

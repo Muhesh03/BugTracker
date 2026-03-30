@@ -1,115 +1,137 @@
-<div class="firstdiv" style="background-color: var(--formbutton-color); color: var(--formcontent-color);">
-  <h2 class="firstdivheading" style="color: hsl(200, 18%, 97%);">
+<mat-toolbar class="dialog-toolbar">
+  <h2>
     Create Client Ticket Information
   </h2>
-  <button mat-icon-button class="close-btn" (click)="onclose()" type="button">
+  <button mat-icon-button class="closebtn" (click)="onclose()" type="button">
     <mat-icon>close</mat-icon>
   </button>
-</div>
+</mat-toolbar>
 
-<div class="form-scroll-container">
-  <form class="min-form" [formGroup]="liveticketform" (ngSubmit)="onSubmit()">
+<mat-dialog-content>
+  <form class="min-form" [formGroup]="liveticketform" id="ticketForm" (ngSubmit)="onSubmit()" class="d-flex flex-wrap">
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Ticket No</mat-label>
-      <input matInput formControlName="ticket_number" readonly style="color: var(--formbutton-color)">
-    </mat-form-field>
+    <div class="col-6 col-md-3 fields">
+      <mat-form-field appearance="outline">
+        <mat-label>Ticket No</mat-label>
+        <input matInput formControlName="ticket_number" readonly style="color: var(--accent); font-weight: 600;">
+      </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Status</mat-label>
-      <mat-select formControlName="ticketstatus_id">
-        <mat-option *ngFor="let s of statuses" [value]="s.ticketstatus_id">
-          {{ s.statusname }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+    <div class="col-6 col-md-3 fields">
+      <mat-form-field appearance="outline">
+        <mat-label>Status</mat-label>
+        <mat-select formControlName="ticketstatus_id">
+          <mat-option *ngFor="let s of statuses" [value]="s.ticketstatus_id">
+            {{ s.statusname }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Type</mat-label>
-      <mat-select formControlName="tickettype_id">
-        <mat-option *ngFor="let t of tickettypes" [value]="t.tickettype_id">
-          {{ t.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+    <div class="col-6 col-md-3 fields">
+      <mat-form-field appearance="outline">
+        <mat-label>Type</mat-label>
+        <mat-select formControlName="tickettype_id">
+          <mat-option *ngFor="let t of tickettypes" [value]="t.tickettype_id">
+            {{ t.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Priority</mat-label>
-      <mat-select formControlName="priority_id">
-        <mat-select-trigger>
-          <mat-icon [style.color]="iconMap[selectedPriority?.icon]?.color"
-            style="margin-right:6px; vertical-align:middle;">
-            {{ iconMap[selectedPriority?.icon]?.name }}
-          </mat-icon>
-          {{ selectedPriority?.priority }}
-        </mat-select-trigger>
-        <mat-option *ngFor="let p of priorities" [value]="p.priority_id">
-          <mat-icon [style.color]="iconMap[p.icon]?.color" style="margin-right:6px; vertical-align:middle;">
-            {{ iconMap[p.icon]?.name }}
-          </mat-icon>
-          {{ p.priority }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+    <div class="col-6 col-md-3 fields">
+      <mat-form-field appearance="outline">
+        <mat-label>Priority</mat-label>
+        <mat-select formControlName="priority_id">
+          <mat-select-trigger>
+            <mat-icon [style.color]="iconMap[selectedPriority?.icon]?.color"
+              style="margin-right:6px; vertical-align:middle;">
+              {{ iconMap[selectedPriority?.icon]?.name }}
+            </mat-icon>
+            {{ selectedPriority?.priority }}
+          </mat-select-trigger>
+          <mat-option *ngFor="let p of priorities" [value]="p.priority_id">
+            <mat-icon [style.color]="iconMap[p.icon]?.color" style="margin-right:6px; vertical-align:middle;">
+              {{ iconMap[p.icon]?.name }}
+            </mat-icon>
+            {{ p.priority }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="outline" class="full-width instance-field">
-      <mat-label>Instance</mat-label>
-      <input matInput formControlName="instance">
-    </mat-form-field>
+    <div class="col-6 col-md-3 fields">
+      <mat-form-field appearance="outline">
+        <mat-label>Instance</mat-label>
+        <input matInput formControlName="instance">
+      </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="outline" class="full-width tags-field">
-      <mat-label>Tags</mat-label>
-      <mat-select formControlName="ticket_tag" multiple>
-        <mat-option *ngFor="let t of tags" [value]="t.tickettag_id">
-          {{ t.tickettag }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+    <div class="col-6 col-md-3 fields">
+      <mat-form-field appearance="outline">
+        <mat-label>Tags</mat-label>
+        <mat-select formControlName="ticket_tag" multiple>
+          <mat-option *ngFor="let t of tags" [value]="t.tickettag_id">
+            {{ t.tickettag }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="outline" class="full-width unit-field">
-      <mat-label>Unit</mat-label>
-      <input matInput formControlName="unit">
-    </mat-form-field>
+    <div class="col-6 col-md-6 fields">
+      <mat-form-field appearance="outline">
+        <mat-label>Unit</mat-label>
+        <input matInput formControlName="unit">
+      </mat-form-field>
+    </div>
 
+    <div class="col-12 col-md-12 fields">
+      <mat-form-field appearance="outline">
+        <mat-label>Summary</mat-label>
+        <input matInput formControlName="summary">
+      </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="outline" class="full-width summary-field">
-      <mat-label>Summary</mat-label>
-      <input matInput formControlName="summary">
-    </mat-form-field>
+    <div class="col-12 col-md-6 fields">
+      <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea matInput rows="4" formControlName="description"></textarea>
+      </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="outline" class="full-width description-field">
-      <mat-label>Description</mat-label>
-      <textarea matInput formControlName="description"></textarea>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" class="full-width steps-field">
-      <mat-label>Steps to Reproduce</mat-label>
-      <textarea matInput rows="4" placeholder="1. Go to...
+    <div class="col-12 col-md-6 fields">
+      <mat-form-field appearance="outline">
+        <mat-label>Steps to Reproduce</mat-label>
+        <textarea matInput rows="4" placeholder="1. Go to...
 2. Click on...
 3. Observe the issue..." formControlName="steps_to_reproduce">
       </textarea>
-    </mat-form-field>
+      </mat-form-field>
+    </div>
 
-    <div class="attachments-row">
+    <div class="col-12 col-md-12 fields">
       <input type="file" accept="image/*" hidden #fileInput multiple (change)="onFileSelect($event)">
-      <button mat-icon-button type="button" (click)="fileInput.click()">
-        <mat-icon style="color:#547562; font-size:30px;">attach_file</mat-icon>
+      <button mat-icon-button type="button" (click)="fileInput.click()" class="filebtn">
+        <mat-icon style="color: var(--accent);">attach_file</mat-icon>
       </button>
-      <div *ngFor="let name of selectedFileNames; let i = index">
-        📎 {{ name }}
-        <button mat-icon-button color="primary" type="button" (click)="removeFile(i)">
-          <mat-icon>close</mat-icon>
-        </button>
+      <div class="d-flex flex-wrap gap-2 mt-2">
+        <mat-chip *ngFor="let name of selectedFileNames; let i = index">
+          📎 {{ name }}
+          <button mat-icon-button class="closebtn" type="button" (click)="removeFile(i)">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-chip>
       </div>
     </div>
 
-    <div class="projectbuttondiv">
-      <button mat-stroked-button type="button" (click)="cancel()">Cancel</button>
-      <button mat-raised-button type="submit"
-        style="background-color: var(--formbutton-color); color: var(--formcontent-color);">
-        Save
-      </button>
-    </div>
-
   </form>
-</div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="dialog-actions">
+  <button mat-stroked-button type="button" (click)="cancel()" class="bbtn">
+    Cancel
+  </button>
+  <button mat-raised-button type="submit" form="ticketForm" class="pbtn">
+    Save
+  </button>
+</mat-dialog-actions>
