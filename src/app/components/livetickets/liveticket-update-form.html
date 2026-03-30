@@ -93,13 +93,11 @@
     </form>
   </div>
 
-
   <!-- Add Note Section Header -->
   <div class="note-section d-flex align-items-center gap-2 mb-2">
     <span class="fw-bold">Add Note</span>
-    <button class="btn btn-dark btn-sm" data-bs-toggle="collapse" data-bs-target="#liveTicketNoteCollapse"
-      aria-expanded="false">
-      <mat-icon>add</mat-icon>
+    <button class="expand" data-bs-toggle="collapse" data-bs-target="#liveTicketNoteCollapse" aria-expanded="false">
+      <mat-icon>expand_more</mat-icon>
     </button>
   </div>
 
@@ -119,8 +117,8 @@
           <!-- Existing Notes (last 2 from backend) -->
           <tr *ngFor="let note of notes">
             <td class="align-top text-left">
-                <strong>{{ note.username }}</strong><br>
-                <small class="text-muted">{{ note.created_at | date:'medium' }}</small>
+              <strong>{{ note.username }}</strong><br>
+              <small class="text-muted">{{ note.created_at | date:'medium' }}</small>
             </td>
             <td class="align-top text-left">{{ note.note_text }}</td>
             <td class="align-top text-left">
@@ -163,10 +161,11 @@
 
       <!-- Submit Note Button -->
       <div class="mt-2 text-end">
-        <button class="btn btn-success btn-sm" type="button" (click)="submitNote()" [disabled]="isAddingNote">
-          {{ isAddingNote ? 'Saving...' : 'Add Note' }}
+        <button class="note-btn" type="button" (click)="submitNote()" [disabled]="isAddingNote">
+          {{ isAddingNote ? 'Saving...' : 'Update' }}
         </button>
       </div>
+
 
     </div>
   </div>
@@ -174,8 +173,8 @@
 
 </mat-dialog-content>
 
-<mat-dialog-actions>
+<!-- <mat-dialog-actions>
   <button mat-raised-button type="submit" class="pbtn">
     Save
   </button>
-</mat-dialog-actions>
+</mat-dialog-actions> -->

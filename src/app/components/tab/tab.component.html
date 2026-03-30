@@ -1,6 +1,6 @@
-<mat-tab-group mat-align-tabs="center" class="mat-tabgroup" *ngIf="permissions.user">
+<mat-tab-group mat-align-tabs="center" class="mat-tabgroup">
 
-  <mat-tab label="User">
+  <mat-tab label="User" *ngIf="permissions.user">
     <app-user></app-user>
   </mat-tab>
 

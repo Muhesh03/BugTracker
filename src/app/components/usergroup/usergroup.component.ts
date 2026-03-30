@@ -79,7 +79,7 @@ export class UsergroupComponent implements OnInit, AfterViewInit {
 
   deleteUserGroup(row: any): void {
     Swal.fire({
-title: `User Group Name: ${row.usergroupname}`,    
+      title: `User Group Name: ${row.usergroupname}`,
       text: `Are you sure you want to delete this user group :${row.usergroupname}`,
       // icon: 'warning',
       width: '350px',
@@ -104,7 +104,7 @@ title: `User Group Name: ${row.usergroupname}`,
 
           //  SUCCESS DELETE
           if (res.success) {
-            this.snackBar.open(res.message, '', {
+            this.snackBar.open(res.message, 'OK', {
               duration: 2000,
               horizontalPosition: 'center',
               verticalPosition: 'top',
@@ -248,65 +248,65 @@ export class UsergroupFormComponent implements OnInit {
     this.dialogRef.close(false);
   }
 
- onSubmit(): void {
+  onSubmit(): void {
 
-  if (this.usergroupform.invalid) {
-    this.usergroupform.markAllAsTouched();
-    return;
-  }
+    if (this.usergroupform.invalid) {
+      this.usergroupform.markAllAsTouched();
+      return;
+    }
 
-  const formValue = this.usergroupform.value;
+    const formValue = this.usergroupform.value;
 
-  // ================= EDIT =================
-  if (this.data && this.data.usergroup_id) {
+    // ================= EDIT =================
+    if (this.data && this.data.usergroup_id) {
 
-    this.userGroupService.updateUsergroup(this.data.usergroup_id, formValue).subscribe({
-      next: () => {
-        this.snackBar.open('User group updated successfully', '', {
-          duration: 2000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top',
-          panelClass: ['success-snackbar']
-        });
+      this.userGroupService.updateUsergroup(this.data.usergroup_id, formValue).subscribe({
+        next: () => {
+          this.snackBar.open('User Group Updated Successfully', 'OK', {
+            duration: 2000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['success-snackbar']
+          });
 
-        this.dialogRef.close(true);
-      },
-      error: (err) => {
-        if (err.status === 409) {
-          this.usergroupform
-            .get('usergroupname')
-            ?.setErrors({ duplicate: true });
+          this.dialogRef.close(true);
+        },
+        error: (err) => {
+          if (err.status === 409) {
+            this.usergroupform
+              .get('usergroupname')
+              ?.setErrors({ duplicate: true });
+          }
         }
-      }
-    });
+      });
 
-  }
+    }
 
-  // ================= CREATE =================
-  else {
+    // ================= CREATE =================
+    else {
 
-    this.userGroupService.addUserGroup(formValue).subscribe({
-      next: () => {
-        this.snackBar.open('User group created successfully', '', {
-          duration: 2000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top',
-          panelClass: ['success-snackbar']
-        });
+      this.userGroupService.addUserGroup(formValue).subscribe({
+        next: () => {
+          this.snackBar.open('User Group Created Successfully', 'OK', {
+            duration: 2000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['success-snackbar']
+          });
 
-        this.dialogRef.close(true);
-      },
-      error: (err) => {
-        if (err.status === 409) {
-          this.usergroupform
-            .get('usergroupname')
-            ?.setErrors({ duplicate: true });
+          this.dialogRef.close(true);
+        },
+        error: (err) => {
+          if (err.status === 409) {
+            this.usergroupform
+              .get('usergroupname')
+              ?.setErrors({ duplicate: true });
+          }
         }
-      }
-    });
+      });
 
+    }
   }
-}
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -435,16 +435,20 @@ export class PermissionDialogComponent {
 
     this.usergroupService.savePermissions(payload).subscribe({
       next: () => {
-        this.snack.open('Permissions saved successfully', 'OK', {
+        this.snack.open('Permissions Saved Successfully', 'OK', {
           duration: 3000,
-          panelClass: ['snack-success']
+          panelClass: ['snack-success'],
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
         });
         this.dialogRef.close(true);
       },
       error: () => {
         this.snack.open('Failed to save permissions', 'Retry', {
           duration: 3000,
-          panelClass: ['snack-error']
+          panelClass: ['snack-error'],
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
         });
       }
     });
@@ -453,9 +457,6 @@ export class PermissionDialogComponent {
 
 
 }
-
-
-
 
 
 

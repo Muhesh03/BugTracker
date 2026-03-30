@@ -112,9 +112,9 @@
         <div class="note-section d-flex align-items-center gap-2 mb-2">
           <span class="fw-bold">Add Note</span>
 
-          <button class="btn btn-dark btn-sm" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+          <button class="expand" data-bs-toggle="collapse" data-bs-target="#collapseExample"
             aria-expanded="false">
-            <mat-icon>add</mat-icon>
+            <mat-icon>expand_more</mat-icon>
           </button>
         </div>
 
@@ -200,8 +200,8 @@
         <div class="note-section d-flex align-items-center gap-2 mb-2">
           <span class="fw-bold">Activities</span>
 
-          <a class="btn btn-primary" data-bs-toggle="collapse" href="#multiCollapseExample1" role="button"
-            aria-expanded="false" aria-controls="multiCollapseExample1"><mat-icon>history</mat-icon></a>
+          <button class="expand" data-bs-toggle="collapse" href="#multiCollapseExample1" role="button"
+            aria-expanded="false" aria-controls="multiCollapseExample1"><mat-icon>expand_more</mat-icon></button>
 
 
         </div>
@@ -260,7 +260,7 @@
 
     <!-- Footer -->
     <div class="footer-actions text-end mt-3">
-      <button mat-raised-button color="light" (click)="close()">Cancel</button>
+      <!-- <button mat-raised-button color="light" (click)="close()">Cancel</button> -->
       <button mat-raised-button class="button ms-2" (click)="submitNote()">Update</button>
     </div>
 

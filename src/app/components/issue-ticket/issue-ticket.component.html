@@ -3,7 +3,7 @@
   <div class="w-100 d-flex flex-wrap align-items-start justify-content-start mb-2 gap-3">
     <div class="pdiv">
       <button mat-raised-button class="pbtn" (click)="openIssueTicketDialog()">
-        Create QCTicket
+        Create QC Ticket
       </button>
     </div>
 
@@ -20,7 +20,7 @@
 
       <!-- S.No -->
       <ng-container matColumnDef="sno">
-        <th mat-header-cell *matHeaderCellDef>S.No</th>
+        <th mat-header-cell *matHeaderCellDef>SI.No</th>
         <td mat-cell *matCellDef="let row; let i = index">
           {{ i + 1 }}
         </td>

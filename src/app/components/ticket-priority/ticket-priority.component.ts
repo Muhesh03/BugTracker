@@ -197,7 +197,7 @@ export class TicketPriorityFormComponent implements OnInit {
       priority: new FormControl('', Validators.required),
       remarks: new FormControl(''),
       status_id: new FormControl(1, Validators.required),
-      icon: new FormControl('', Validators.required)
+      icon: new FormControl()
     });
 
          if (this.data && this.data.priority_id) {

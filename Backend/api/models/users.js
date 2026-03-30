@@ -39,6 +39,7 @@ exports.findByEmail = function (email) {
     )
     .where('u.email', email)
     .whereNot('u.status_id', 3)
+    .andWhereNot('u.status_id',2)
     .groupBy(
       'u.user_id',
       'u.fullname',

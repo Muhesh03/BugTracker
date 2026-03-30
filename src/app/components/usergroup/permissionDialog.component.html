@@ -35,25 +35,25 @@
     </div>
     <mat-divider class="my-2"></mat-divider>
     <div class="master-section">
-        <span class="master-checkbox text-secondary text-decoration-underline"> Settings</span>
+        <span class="master-checkbox text-secondary text-decoration-underline"> Qc Ticket Settings</span>
     </div>
     <div class="permission-list">
         <mat-checkbox [(ngModel)]="otherpermissions.settings">
-            Settings
+            Qc Ticket
         </mat-checkbox>
     </div>
     <mat-divider class="my-2"></mat-divider>
     <div class="master-section">
-        <span class="master-checkbox text-secondary text-decoration-underline"> QC Ticket</span>
+        <span class="master-checkbox text-secondary text-decoration-underline"> View Ticket Settings</span>
     </div>
     <div class="permission-list">
         <mat-checkbox [(ngModel)]="otherpermissions.view">
-            View
+            View Ticket
         </mat-checkbox>
     </div>
     <mat-divider class="my-2"></mat-divider>
     <div class="master-section">
-        <span class="master-checkbox text-secondary text-decoration-underline"> Client Ticket</span>
+        <span class="master-checkbox text-secondary text-decoration-underline"> Client Ticket Settings</span>
     </div>
     <div class="permission-list">
         <mat-checkbox [(ngModel)]="otherpermissions.clientTicketView">
@@ -69,6 +69,6 @@
 </mat-dialog-content>
 
 <mat-dialog-actions>
-    <button mat-raised-button class="bbtn" (click)="onClose()">Cancel</button>
+    <!-- <button mat-raised-button class="bbtn" (click)="onClose()">Cancel</button> -->
     <button mat-raised-button class="pbtn" (click)="save()">{{ isEdit ? 'Update' : 'Save' }}</button>
 </mat-dialog-actions>

@@ -40,7 +40,7 @@ export class UserComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private dialog: MatDialog, private userservice: UserService, private snackBar: MatSnackBar, private attachmentService: AttachmentService) { }
+  constructor(private dialog: MatDialog, private userservice: UserService, private snack: MatSnackBar, private attachmentService: AttachmentService) { }
 
   ngOnInit(): void {
     this.getuser();
@@ -62,14 +62,31 @@ export class UserComponent implements OnInit, AfterViewInit {
 
     this.userservice.updateuser(payload).subscribe({
       next: () => {
-        console.log('Status updated successfully');
-        row.status_id = payload.status_id; // update local state
+        if (payload.status_id === 2) {
+          this.snack.open('User Disabled Successfully', 'OK', {
+            duration: 3000,
+            panelClass: ['snack-success'],
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+          });
+        } else {
+          this.snack.open('User Enabled Successfully', 'OK', {
+            duration: 3000,
+            panelClass: ['snack-success'],
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+          });
+          console.log('Status updated successfully');
+          row.status_id = payload.status_id; // update local state
+        }
       },
       error: () => {
         // rollback UI
+
         row.status_id = event.checked ? 2 : 1;
         event.source.checked = row.status_id === 1;
       }
+
     });
   }
 
@@ -112,22 +129,22 @@ export class UserComponent implements OnInit, AfterViewInit {
   //     this.dataSource.data = resdata.data;
   //   });
   // }
-getuser() {
-  this.userservice.getuser().subscribe(resdata => {
+  getuser() {
+    this.userservice.getuser().subscribe(resdata => {
 
-    const users = resdata.data;
+      const users = resdata.data;
 
-    console.log('Users from API:', users);
+      console.log('Users from API:', users);
 
-    // APPLY FILTER HERE
-    this.dataSource.data = users.filter(
-      // (u: any) => u.status_id === 1 && !u.is_reactivated
-        (u: any) => u.status_id === 1 || u.status_id === 2 
-    );
+      // APPLY FILTER HERE
+      this.dataSource.data = users.filter(
+        // (u: any) => u.status_id === 1 && !u.is_reactivated
+        (u: any) => u.status_id === 1 || u.status_id === 2
+      );
 
-    console.log('Filtered Users:', this.dataSource.data);
-  });
-}
+      console.log('Filtered Users:', this.dataSource.data);
+    });
+  }
   deleteuser(element: any): void {
     Swal.fire({
       title: 'Are you sure?',
@@ -151,7 +168,7 @@ getuser() {
         this.userservice.deleteuser(params).subscribe({
           next: () => {
             //  Snackbar works
-            this.snackBar.open('User deleted successfully', 'Close', {
+            this.snack.open('User deleted successfully', 'Close', {
               duration: 2000,
               horizontalPosition: 'center',
               verticalPosition: 'top',
@@ -205,7 +222,7 @@ export class UserDialogueComponent implements OnInit {
     private attachmentService: AttachmentService,
     private route: ActivatedRoute,
     @Inject(MAT_DIALOG_DATA) public data: any,
-
+    private snackbar: MatSnackBar,
     private userservice: UserService
   ) { }
   onClose() {
@@ -226,7 +243,8 @@ export class UserDialogueComponent implements OnInit {
     this.selectedFiles = [];
 
     this.registrationForm = this.fb.group({
-      phonenumber: [this.editingUser?.phonenumber || '',],
+      phonenumber: [this.editingUser?.phonenumber || '', [Validators.pattern("^[0-9]{10}$")]
+      ],
       fullname: [this.editingUser?.fullname || '', Validators.required],
       usergroup_id: [this.editingUser?.usergroup_id || '', Validators.required],
 
@@ -332,6 +350,13 @@ export class UserDialogueComponent implements OnInit {
             this.uploadAttachments(userId);
           }
           // this.uploadAttachments(userId);
+
+          this.snackbar.open('User Updated Successfully', 'close', { // Fixed quotes here
+            duration: 2000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['success-snackbar']
+          });
           this.dialogRef.close(true);
 
         },
@@ -360,7 +385,12 @@ export class UserDialogueComponent implements OnInit {
           if (this.selectedFiles.length >= 0) {
             this.uploadAttachments(userId);
           }
-
+          this.snackbar.open('User Created Successfully', 'close', { // Fixed quotes here
+            duration: 2000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['success-snackbar']
+          });
           // this.uploadAttachments(userId);
           this.dialogRef.close(true);
         },
