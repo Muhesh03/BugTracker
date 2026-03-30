@@ -7,7 +7,7 @@
   </button>
 
   <!-- User -->
-  <button data-aos="fade-left" mat-icon-button routerLink="/sidenav/tab" routerLinkActive="active-link"
+  <button data-aos="fade-right" mat-icon-button routerLink="/sidenav/tab" routerLinkActive="active-link"
     class="icon-container" *ngIf="permissions?.user || permissions?.usergroup">
     <mat-icon matTooltip="User">person</mat-icon>
   </button>
@@ -25,7 +25,7 @@
   </button>
 
   <!-- Ticket -->
-  <button data-aos="fade-left" mat-icon-button routerLink="/sidenav/ticketissue" routerLinkActive="active-link"
+  <button data-aos="fade-right" mat-icon-button routerLink="/sidenav/ticketissue" routerLinkActive="active-link"
     class="icon-container" *ngIf="permissions?.settings">
     <mat-icon matTooltip="QC Ticket">edit_note</mat-icon>
   </button>

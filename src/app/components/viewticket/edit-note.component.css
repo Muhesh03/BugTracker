@@ -24,7 +24,7 @@
 }
 
 .ticket-info-table th {
-  background: var(--tableheader-color);
+  background: var(--tableheader);
   border: 1px solid #555;
   padding: 6px;
   font-size: 14px;
@@ -62,7 +62,7 @@
 }
 
 .form-label {
-  background: var(--tableheader-color);
+  background: var(--tableheader);
   padding: 16px;
   font-weight: bold;
   font-size: 13px;
@@ -127,7 +127,7 @@
   font-weight: bold;
   margin-bottom: 8px;
   padding: 10px;
-  background-color: var(--tableheader-color);
+  background-color: var(--tableheader);
 }
 
 .button {
@@ -307,7 +307,7 @@ textarea {
   .form-label {
     width: 100%;
     padding: 8px 12px !important;
-    background-color: var(--tableheader-color);
+    background-color: var(--tableheader);
     border-radius: 4px;
     font-size: 13px;
   }

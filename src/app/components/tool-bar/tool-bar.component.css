@@ -1,11 +1,12 @@
 .app-toolbar {
   height: fit-content;
   background: transparent;
-  padding: 5px;
+  padding-inline: 5px;
+  padding-block: 12px 5px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 15px;
+  gap: 12px;
 } 
 
 .icon-container {
@@ -22,7 +23,7 @@
 .active-link {
   background-color: #ffffff !important; 
   color: #2e7d32 !important;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.034);
   transform: translateX(5px); 
 }
 

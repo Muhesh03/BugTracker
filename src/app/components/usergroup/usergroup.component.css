@@ -145,7 +145,7 @@ body {
  
   color: var(--tablecontent-color);
   font-weight: 400;
-  background-color: var(--tableheader-color);
+  background-color: var(--tableheader);
   font-weight: 600;
   font-size: 14px;
   color: #333;

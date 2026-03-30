@@ -89,7 +89,7 @@ title: `User Group Name: ${row.usergroupname}`,
       // cancelButtonText: 'Cancel',
       confirmButtonColor: 'var(--formbutton-color)',
       // cancelButtonColor: '#be9a9aff',
-      background: 'var(--tableheader-color)',
+      background: 'var(--tableheader)',
       // reverseButtons: true,
       customClass: {
         closeButton: 'custom-close-button'

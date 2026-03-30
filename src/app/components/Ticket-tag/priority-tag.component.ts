@@ -94,7 +94,7 @@ export class PriorityTagComponent implements OnInit {
         cancelButtonText: 'Cancel',
         confirmButtonColor: 'var(--formbutton-color)',
         cancelButtonColor: '#be9a9aff',
-        background: 'var(--tableheader-color)',
+        background: 'var(--tableheader)',
         customClass: {
           closeButton: 'custom-close-button'
         }
