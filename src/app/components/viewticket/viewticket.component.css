@@ -61,7 +61,7 @@
 }
 
 .issueticket-table .mat-header-cell {
-  background-color: var(--tableheader-color);
+  background-color: var(--tableheader);
   font-weight: 600;
   font-size: 14px;
   color: #333;

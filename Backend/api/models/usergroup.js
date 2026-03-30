@@ -1,48 +1,42 @@
 
+exports.saveUserGroup = async function (data, cb) {
+    try {
+        console.log('usergroup in model=============data to save', data);
 
+        //Check existing (case-insensitive)
+        const existing = await knex('usergroup')
+            .whereRaw('LOWER(usergroupname) = LOWER(?)', [data.usergroupname])
+            .first();
 
-// exports.saveUserGroup = function (data, cb) {
-//     console.log('table data', data)
-//     knex('usergroup')
-//         .insert(data)
-//         .then(function (rows) {
-//             cb(null, rows);
-//         });
-// };
+        // Already exists and ACTIVE
+        if (existing && existing.status_id !== 3) {
+            return cb({ code: '23505' }, null); // trigger duplicate error
+        }
 
+        //Exists but DELETED → Reactivate
+        if (existing && existing.status_id === 3) {
+            const updated = await knex('usergroup')
+                .where('usergroup_id', existing.usergroup_id)
+                .update({
+                    status_id: 1,
+                    created_on: new Date()
+                })
+                .returning('*');
 
+            return cb(null, updated[0]);
+        }
 
-// exports.saveUserGroup = (params, callback) => {
+        //Completely new → Insert
+        const rows = await knex('usergroup')
+            .insert(data)
+            .returning('*');
 
-//     const query = `
-//         INSERT INTO usergroup (created_on, status_id, usergroupname)
-//         VALUES ($1, $2, $3)
-//         RETURNING *
-//     `;
+        return cb(null, rows[0]);
 
-//     const values = [
-//         params.created_on,
-//         params.status_id,
-//         params.usergroupname
-//     ];
-
-//     db.query(query, values)
-//         .then(result => {
-//             callback(null, result.rows[0]);
-//         })
-//         .catch(err => {
-//             callback(err);   //  VERY IMPORTANT
-//         });
-// };
-
-exports.saveUserGroup = function (data, cb) {
-    console.log('usergroup in model=============data to save', data);
-
-    knex('usergroup') // Change 'usergroup' to the correct table name if needed
-        .insert(data) // Insert the user group data
-        .returning('*') // Return the inserted data (typically returns the inserted rows)
-        .then(rows => cb(null, rows[0])) // Pass the inserted data to the callback
-        .catch(err => cb(err, null)); // Pass any error to the callback
+    } catch (err) {
+        console.error('Model error:', err);
+        return cb(err, null);
+    }
 };
 
 exports.getUserGroup = function (cb) {
@@ -84,8 +78,8 @@ exports.deleteUsergroup = function (usergroup_id, callback) {
             //  Block delete if users exist
             if (users.length > 0) {
                 const userNames = users.map(u => u.fullname).join(', ');
-                 console.log('User names string:', userNames);
-                
+                console.log('User names string:', userNames);
+
                 return callback(null, {
                     success: false,
                     message: `Cannot delete: user group is in use`
@@ -141,7 +135,7 @@ exports.savePermissions = function (data, cb) {
 
             if (!page) {
                 console.warn('Page not found:', perm.page_name);
-                continue; 
+                continue;
             }
 
             await trx('usergrouppermission')
@@ -152,7 +146,7 @@ exports.savePermissions = function (data, cb) {
                 })
                 .onConflict(['usergroup_id', 'page_id'])
                 .merge({
-                    permission:!!perm.permission,
+                    permission: !!perm.permission,
                     updated_on: trx.fn.now()
                 });
         }
@@ -160,7 +154,7 @@ exports.savePermissions = function (data, cb) {
     })
         .then(() => cb(null))
         .catch(err => cb(err));
-      
+
 };
 // exports.getPermissions = async function (usergroup_id) {
 //   if (!usergroup_id) {
@@ -173,14 +167,14 @@ exports.savePermissions = function (data, cb) {
 //     .where('ugp.usergroup_id', usergroup_id)
 // }
 exports.getPermissions = function (usergroup_id) {
-  return knex('page as p')
-    .leftJoin('usergrouppermission as ugp', function () {
-      this.on('p.page_id', '=', 'ugp.page_id')
-          .andOn('ugp.usergroup_id', '=', knex.raw('?', [usergroup_id]));
-    })
-    .select(
-      'p.page_name',
-      knex.raw('COALESCE(ugp.permission, false) as permission')
-    )
-    .orderBy('p.page_id')
+    return knex('page as p')
+        .leftJoin('usergrouppermission as ugp', function () {
+            this.on('p.page_id', '=', 'ugp.page_id')
+                .andOn('ugp.usergroup_id', '=', knex.raw('?', [usergroup_id]));
+        })
+        .select(
+            'p.page_name',
+            knex.raw('COALESCE(ugp.permission, false) as permission')
+        )
+        .orderBy('p.page_id')
 };

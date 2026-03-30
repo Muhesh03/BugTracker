@@ -79,15 +79,15 @@ export class UserComponent implements OnInit, AfterViewInit {
           console.log('Status updated successfully');
           row.status_id = payload.status_id; // update local state
         }
-        },
-        error: () => {
-          // rollback UI
+      },
+      error: () => {
+        // rollback UI
 
-          row.status_id = event.checked ? 2 : 1;
-          event.source.checked = row.status_id === 1;
-        }
-      
-      });
+        row.status_id = event.checked ? 2 : 1;
+        event.source.checked = row.status_id === 1;
+      }
+
+    });
   }
 
 
@@ -152,7 +152,7 @@ export class UserComponent implements OnInit, AfterViewInit {
       icon: 'warning',
       width: '350px',
       showCloseButton: true,
-      background: 'var(--tableheader-color)',
+      background: 'var(--tableheader)',
       confirmButtonColor: 'var(--formbutton-color)',
       cancelButtonColor: '#be9a9aff',
       showCancelButton: true,
@@ -243,7 +243,7 @@ export class UserDialogueComponent implements OnInit {
     this.selectedFiles = [];
 
     this.registrationForm = this.fb.group({
-      phonenumber: [this.editingUser?.phonenumber || '', [Validators.required, Validators.pattern("^[0-9]{10}$")]
+      phonenumber: [this.editingUser?.phonenumber || '', [Validators.pattern("^[0-9]{10}$")]
       ],
       fullname: [this.editingUser?.fullname || '', Validators.required],
       usergroup_id: [this.editingUser?.usergroup_id || '', Validators.required],

@@ -59,8 +59,8 @@
 }
 
 .project-table .mat-header-cell {
-  background: var(--tableheader-color);
-  color: var(--tablecontent-color);
+  background: var(--tableheader);
+  color: var(--tablecontent);
   font-weight: 400;
   font-size: 14px;
 }

@@ -115,7 +115,7 @@
 }
 
 .liveticket-table .mat-header-cell {
-  background: var(--tableheader-color);
+  background: var(--tableheader);
   color: #333;
   font-weight: 600;
   font-size: 14px;

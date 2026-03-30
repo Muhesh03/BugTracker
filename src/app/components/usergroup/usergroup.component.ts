@@ -89,7 +89,7 @@ export class UsergroupComponent implements OnInit, AfterViewInit {
       // cancelButtonText: 'Cancel',
       confirmButtonColor: 'var(--formbutton-color)',
       // cancelButtonColor: '#be9a9aff',
-      background: 'var(--tableheader-color)',
+      background: 'var(--tableheader)',
       // reverseButtons: true,
       customClass: {
         closeButton: 'custom-close-button'
@@ -104,7 +104,7 @@ export class UsergroupComponent implements OnInit, AfterViewInit {
 
           //  SUCCESS DELETE
           if (res.success) {
-            this.snackBar.open(res.message, '', {
+            this.snackBar.open(res.message, 'OK', {
               duration: 2000,
               horizontalPosition: 'center',
               verticalPosition: 'top',

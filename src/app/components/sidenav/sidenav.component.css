@@ -35,11 +35,7 @@
   overflow: auto;
 }
 
-.app-toolbar {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
+
 
 /* toolbar */
 .topbar {
@@ -65,7 +61,12 @@
   margin-left: 8px;
 }
 
-.profile-btn img{
+.profile-btn {
+  background: #cfcfcf;
+  padding: 2px;
+}
+
+.profile-btn img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -79,7 +80,7 @@
 }
 
 .profile-img:hover {
-  transform: scale(1.1);
+  transform: scale(0.9);
 }
 
 .brand-container {
@@ -88,26 +89,26 @@
   justify-content: center;
 }
 
-.brand-container img{
+.brand-container img {
   width: 60px;
   height: auto;
 }
 
-.nav-iconbtn{
+.nav-iconbtn {
   background-color: var(--accent);
-  color:  #fff;
+  color: #fff;
 }
 
-.nav-iconbtn:hover{
+.nav-iconbtn:hover {
   background-color: var(--accent-hover);
 }
 
-.nav-iconbtn:hover mat-icon{
-    transform: scale(1.1);
+.nav-iconbtn:hover mat-icon {
+  transform: scale(1.1);
 }
 
-.settings-btn {
-  background-color: var(--tableheader-color);
+/* .settings-btn {
+  background-color: var(--tableheader);
   color: var(--tablebutton-color);
   border-radius: 50%;
   width: 40px;
@@ -127,7 +128,7 @@
   background-color: var(--tablebutton-color);
   color: #ffffff;
   transform: rotate(360deg);
-}
+} */
 
 .chat-fab {
   position: fixed;

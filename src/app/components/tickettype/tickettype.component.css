@@ -20,7 +20,7 @@
 
 /* Header */
 .mat-header-cell {
-  background: var(--tableheader-color);
+  background: var(--tableheader);
   font-weight: 400;
   font-size: 14px;
   color: black;
@@ -28,7 +28,7 @@
 
 /* Sticky header */
 .sticky-header th.mat-header-cell {
-  background-color: var(--tableheader-color);
+  background-color: var(--tableheader);
   position: sticky;
   top: 0;
   z-index: 10;

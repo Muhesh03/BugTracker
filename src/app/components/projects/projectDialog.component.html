@@ -11,18 +11,21 @@
 <div class="m-3 p-3">
   <mat-dialog-content>
     <div *ngFor="let group of groupList" class="group-box">
-      
       <h3 class="group-title">{{ group.usergroup }}</h3>
       <div *ngFor="let user of group.users" class="user-row">
         <mat-checkbox [(ngModel)]="user.selected"  (change)="user.selected = $event.checked">
           {{ user.fullname }}
         </mat-checkbox>
+
+         <!-- <mat-checkbox [(ngModel)]="user.selected">
+        {{ user.fullname }}
+      </mat-checkbox> -->
       </div>
     </div>
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
-    <!-- <button mat-button mat-dialog-close>Cancel</button> -->
+    <button mat-button mat-dialog-close>Cancel</button>
     <button mat-raised-button class="project-btn" (click)="submitTeam()">
       Save
     </button>

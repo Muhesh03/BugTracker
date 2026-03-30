@@ -79,7 +79,7 @@ export class TicketPriorityComponent implements OnInit {
       cancelButtonText: 'Cancel',
       confirmButtonColor: 'var(--formbutton-color)',
       cancelButtonColor: '#be9a9aff',
-      background: 'var(--tableheader-color)',
+      background: 'var(--tableheader)',
       customClass: {
         closeButton: 'custom-close-button'
       }
@@ -197,7 +197,7 @@ export class TicketPriorityFormComponent implements OnInit {
       priority: new FormControl('', Validators.required),
       remarks: new FormControl(''),
       status_id: new FormControl(1, Validators.required),
-      icon: new FormControl('', Validators.required)
+      icon: new FormControl()
     });
 
          if (this.data && this.data.priority_id) {
