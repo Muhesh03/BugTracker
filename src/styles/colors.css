@@ -3,10 +3,25 @@
   --primary-bg: #fefefe;
   --secondary-bg: #ecf2ef;
   --gray-bg: #f2f2f2;
+  --graylight-bg: #fafafa;
 
   --accent-light: #d6e1db;
   --accent: #547562;
   --accent-hover: #455f51;
+
+  --s-accent-50: #f6f7f9;
+  --s-accent-100: #eceef2;
+  --s-accent-200: #d5dae2;
+  --s-accent-300: #b1bac8;
+  --s-accent-400: #8695aa;
+  --s-accent-500: #64748b;
+  --s-accent-600: #526077;
+  --s-accent-700: #434e61;
+  --s-accent-800: #3a4352;
+  --s-accent-900: #343a46;
+  --s-accent-950: #23272e;
+
+  
 
   --btn-border: #c5c5c5;
   --border: #d6e1db;
