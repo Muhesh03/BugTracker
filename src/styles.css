@@ -97,13 +97,6 @@ h6 {
 }
 
 
-/* Dialog animation */
-.mat-mdc-dialog-container {
-  border-radius: 18px !important;
-  animation: scaleFade 0.45s ease;
-  padding: 0;
-}
-
 @keyframes scaleFade {
   0% {
     opacity: 0;
@@ -116,30 +109,8 @@ h6 {
   }
 }
 
-/* Form Field common */
-.mat-mdc-form-field {
-  width: 100%;
-}
-
-/* Button animation */
-.mat-mdc-raised-button {
-  transition: all 0.3s ease !important;
-}
-
-.mat-mdc-raised-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-}
-
-/* Mobile responsiveness */
-@media (max-width: 480px) {
-  .dialog-wrapper {
-    padding: 20px !important;
-  }
-}
-
 .success-snackbar {
-  background-color: var(--formheader-color) !important;
+  background-color: var(--accent) !important;
   color: white !important;
   z-index: 9999 !important;
 }
@@ -158,40 +129,9 @@ h6 {
   color: white !important;
 }
 
-
 .success-snackbar .mat-simple-snackbar-action {
   color: #ffeb3b !important;
-  /* Makes the "Close" button text yellow/visible */
 }
-
-
-/* Track and thumb when toggle is checked */
-/*button 33*/
-.button-33 {
-  background-color: #c2fbd7;
-  border-radius: 100px;
-  box-shadow: rgba(44, 187, 99, .2) 0 -25px 18px -14px inset, rgba(44, 187, 99, .15) 0 1px 2px, rgba(44, 187, 99, .15) 0 2px 4px, rgba(44, 187, 99, .15) 0 4px 8px, rgba(44, 187, 99, .15) 0 8px 16px, rgba(44, 187, 99, .15) 0 16px 32px;
-  color: green;
-  cursor: pointer;
-  display: inline-block;
-  font-family: CerebriSans-Regular, -apple-system, system-ui, Roboto, sans-serif;
-  padding: 7px 20px;
-  text-align: center;
-  text-decoration: none;
-  transition: all 250ms;
-  border: 0;
-  font-size: 16px;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-}
-
-.button-33:hover {
-  box-shadow: rgba(44, 187, 99, .35) 0 -25px 18px -14px inset, rgba(44, 187, 99, .25) 0 1px 2px, rgba(44, 187, 99, .25) 0 2px 4px, rgba(44, 187, 99, .25) 0 4px 8px, rgba(44, 187, 99, .25) 0 8px 16px, rgba(44, 187, 99, .25) 0 16px 32px;
-  transform: scale(1.05) rotate(-1deg);
-}
-
-/* ---------- */
 
 
 /* TABLE */
@@ -604,7 +544,7 @@ td.mat-footer-cell:last-of-type {
 
 /* MAT CHIP  */
 .mat-chip.mat-standard-chip {
-  background-color: var(--accent2-light);
+  background-color: var(--s-accent-100);
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -837,6 +777,10 @@ td.mat-footer-cell:last-of-type {
   background-color: #fff;
 }
 
+.cursor-pointer{
+  cursor: pointer !important;
+}
+
 .ml-auto {
   margin-left: auto !important;
 }
@@ -878,7 +822,7 @@ td.mat-footer-cell:last-of-type {
 
 
 .formsection {
-  background-color: var(--gray-bg);
+  background-color: var(--graylight-bg);
   padding: 12px;
   border-radius: 20px;
   margin-block: 10px;
@@ -889,7 +833,7 @@ td.mat-footer-cell:last-of-type {
   display: grid;
   grid-template-columns: 0.8fr 1fr;
   margin-bottom: 8px;
-  gap: 8px;
+  /* gap: 8px; */
 }
 
 .form-grid-item.increate {
@@ -899,7 +843,7 @@ td.mat-footer-cell:last-of-type {
 .form-grid-label {
   text-align: left;
   vertical-align: middle;
-  background: var(--accent-light);
+  background: var(--s-accent-100);
   padding: 18px 12px;
   font-weight: 600;
   font-size: 14px;
@@ -943,7 +887,7 @@ td.mat-footer-cell:last-of-type {
   display: grid;
   grid-template-columns: 0.28fr 1fr;
   margin-bottom: 8px;
-  gap: 8px;
+  /* gap: 8px; */
 }
 
 .summary-grid-item.increate {
@@ -1001,9 +945,7 @@ td.mat-footer-cell:last-of-type {
   .form-grid-label {
     width: 100%;
     padding: 8px 12px !important;
-    background: var(--accent-light);
     border-radius: 8px 8px 0 0;
-    font-size: 13px;
   }
 
   .form-grid-readonly {
@@ -1028,9 +970,7 @@ td.mat-footer-cell:last-of-type {
   .form-grid-label {
     width: 100%;
     padding: 8px 12px !important;
-    background: var(--accent-light);
     border-radius: 8px 8px 0 0;
-    font-size: 13px;
   }
 
   .form-grid-readonly {
@@ -1055,9 +995,7 @@ td.mat-footer-cell:last-of-type {
   .form-grid-label {
     width: 100%;
     padding: 8px 12px !important;
-    background: var(--accent-light);
     border-radius: 8px 8px 0 0;
-    font-size: 13px;
   }
 
   .form-grid-readonly {
