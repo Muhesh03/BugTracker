@@ -8,123 +8,192 @@
 </mat-toolbar>
 
 <mat-dialog-content>
-  <form class="min-form" [formGroup]="liveticketform" id="ticketForm" (ngSubmit)="onSubmit()" class="d-flex flex-wrap">
 
-    <div class="col-6 col-md-3 fields">
-      <mat-form-field appearance="outline">
-        <mat-label>Ticket No</mat-label>
-        <input matInput formControlName="ticket_number" readonly style="color: var(--accent); font-weight: 600;">
-      </mat-form-field>
-    </div>
+  <!-- Form Section -->
+  <div class="formsection">
+    <form [formGroup]="liveticketform" id="ticketForm" (ngSubmit)="onSubmit()">
 
-    <div class="col-6 col-md-3 fields">
-      <mat-form-field appearance="outline">
-        <mat-label>Status</mat-label>
-        <mat-select formControlName="ticketstatus_id">
-          <mat-option *ngFor="let s of statuses" [value]="s.ticketstatus_id">
-            {{ s.statusname }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+      <div class="col-12 col-md-12 d-flex flex-wrap">
+        <div class="col-12 col-md-6 px-2 form-grid-item increate">
+          <div class="form-grid-label increate">Ticket No</div>
+          <div class="form-grid-readonly increate">
+            <div class="col-12 col-md-12 px-0">
+              <mat-form-field appearance="outline">
+                <mat-label>Ticket No</mat-label>
+                <input matInput formControlName="ticket_number" readonly
+                  style="color: var(--accent); font-weight: 600;">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
 
-    <div class="col-6 col-md-3 fields">
-      <mat-form-field appearance="outline">
-        <mat-label>Type</mat-label>
-        <mat-select formControlName="tickettype_id">
-          <mat-option *ngFor="let t of tickettypes" [value]="t.tickettype_id">
-            {{ t.name }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+        <div class="col-12 col-md-6 px-2 form-grid-item increate">
+          <div class="form-grid-label increate">Status</div>
+          <div class="form-grid-readonly increate">
+            <div class="col-12 col-md-12 px-0">
+              <mat-form-field appearance="outline">
+                <mat-label>Status</mat-label>
+                <mat-select formControlName="ticketstatus_id">
+                  <mat-option *ngFor="let s of statuses" [value]="s.ticketstatus_id">
+                    {{ s.statusname }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
 
-    <div class="col-6 col-md-3 fields">
-      <mat-form-field appearance="outline">
-        <mat-label>Priority</mat-label>
-        <mat-select formControlName="priority_id">
-          <mat-select-trigger>
-            <mat-icon [style.color]="iconMap[selectedPriority?.icon]?.color"
-              style="margin-right:6px; vertical-align:middle;">
-              {{ iconMap[selectedPriority?.icon]?.name }}
-            </mat-icon>
-            {{ selectedPriority?.priority }}
-          </mat-select-trigger>
-          <mat-option *ngFor="let p of priorities" [value]="p.priority_id">
-            <mat-icon [style.color]="iconMap[p.icon]?.color" style="margin-right:6px; vertical-align:middle;">
-              {{ iconMap[p.icon]?.name }}
-            </mat-icon>
-            {{ p.priority }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+        <div class="col-12 col-md-6 px-2 form-grid-item increate">
+          <div class="form-grid-label increate">Ticket Type</div>
+          <div class="form-grid-readonly increate">
+            <div class="col-12 col-md-12 px-0">
+              <mat-form-field appearance="outline">
+                <mat-label>Type</mat-label>
+                <mat-select formControlName="tickettype_id">
+                  <mat-option *ngFor="let t of tickettypes" [value]="t.tickettype_id">
+                    {{ t.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
 
-    <div class="col-6 col-md-3 fields">
-      <mat-form-field appearance="outline">
-        <mat-label>Instance</mat-label>
-        <input matInput formControlName="instance">
-      </mat-form-field>
-    </div>
+        <div class="col-12 col-md-6 px-2 form-grid-item increate">
+          <div class="form-grid-label increate">Priority</div>
+          <div class="form-grid-readonly increate">
+            <div class="col-12 col-md-12 px-0">
+              <mat-form-field appearance="outline">
+                <mat-label>Priority</mat-label>
+                <mat-select formControlName="priority_id">
+                  <mat-select-trigger>
+                    <mat-icon [style.color]="iconMap[selectedPriority?.icon]?.color"
+                      style="margin-right:6px; vertical-align:middle;">
+                      {{ iconMap[selectedPriority?.icon]?.name }}
+                    </mat-icon>
+                    {{ selectedPriority?.priority }}
+                  </mat-select-trigger>
+                  <mat-option *ngFor="let p of priorities" [value]="p.priority_id">
+                    <mat-icon [style.color]="iconMap[p.icon]?.color" style="margin-right:6px; vertical-align:middle;">
+                      {{ iconMap[p.icon]?.name }}
+                    </mat-icon>
+                    {{ p.priority }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
 
-    <div class="col-6 col-md-3 fields">
-      <mat-form-field appearance="outline">
-        <mat-label>Tags</mat-label>
-        <mat-select formControlName="ticket_tag" multiple>
-          <mat-option *ngFor="let t of tags" [value]="t.tickettag_id">
-            {{ t.tickettag }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+        <div class="col-12 col-md-6 px-2 form-grid-item increate">
+          <div class="form-grid-label increate">Instance</div>
+          <div class="form-grid-readonly increate">
+            <div class="col-12 col-md-12 px-0">
+              <mat-form-field appearance="outline">
+                <mat-label>Instance</mat-label>
+                <input matInput formControlName="instance">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
 
-    <div class="col-6 col-md-6 fields">
-      <mat-form-field appearance="outline">
-        <mat-label>Unit</mat-label>
-        <input matInput formControlName="unit">
-      </mat-form-field>
-    </div>
+        <div class="col-12 col-md-6 px-2 form-grid-item increate">
+          <div class="form-grid-label increate">Tag</div>
+          <div class="form-grid-readonly increate">
+            <div class="col-12 col-md-12 px-0">
+              <mat-form-field appearance="outline">
+                <mat-label>Tags</mat-label>
+                <mat-select formControlName="ticket_tag" multiple>
+                  <mat-option *ngFor="let t of tags" [value]="t.tickettag_id">
+                    {{ t.tickettag }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
 
-    <div class="col-12 col-md-12 fields">
-      <mat-form-field appearance="outline">
-        <mat-label>Summary</mat-label>
-        <input matInput formControlName="summary">
-      </mat-form-field>
-    </div>
+        <div class="col-12 col-md-6 px-2 form-grid-item increate">
+          <div class="form-grid-label increate">Unit</div>
+          <div class="form-grid-readonly increate">
+            <div class="col-12 col-md-12 px-0">
+              <mat-form-field appearance="outline">
+                <mat-label>Unit</mat-label>
+                <input matInput formControlName="unit">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
 
-    <div class="col-12 col-md-6 fields">
-      <mat-form-field appearance="outline">
-        <mat-label>Description</mat-label>
-        <textarea matInput rows="4" formControlName="description"></textarea>
-      </mat-form-field>
-    </div>
+      </div>
+      <hr>
+      <!-- Summary & Description -->
+      <div class="summary-grid">
+        <div class="col-12 col-md-12 px-2 summary-grid-item increate">
+          <div class="form-grid-label increate">Summary</div>
+          <div class="form-grid-readonly increate">
+            <div class="col-12 col-md-12 px-0 fields">
+              <mat-form-field appearance="outline">
+                <mat-label>Summary</mat-label>
+                <input matInput formControlName="summary">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
 
-    <div class="col-12 col-md-6 fields">
-      <mat-form-field appearance="outline">
-        <mat-label>Steps to Reproduce</mat-label>
-        <textarea matInput rows="4" placeholder="1. Go to...
+        <div class="col-12 col-md-12 px-2 summary-grid-item increate">
+          <div class="form-grid-label increate">Description</div>
+          <div class="form-grid-readonly increate description-box">
+            <div class="col-12 col-md-12 px-0 fields">
+              <mat-form-field appearance="outline">
+                <mat-label>Description</mat-label>
+                <textarea matInput rows="4" formControlName="description"></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-12 px-2 summary-grid-item increate">
+          <div class="form-grid-label increate">Steps to Reproduce</div>
+          <div class="form-grid-readonly increate description-box pb-3">
+            <div class="col-12 col-md-12 px-0 fields">
+              <mat-form-field appearance="outline">
+                <mat-label>Steps to Reproduce</mat-label>
+                <textarea matInput rows="4" placeholder="1. Go to...
 2. Click on...
 3. Observe the issue..." formControlName="steps_to_reproduce">
       </textarea>
-      </mat-form-field>
-    </div>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
 
-    <div class="col-12 col-md-12 fields">
-      <input type="file" accept="image/*" hidden #fileInput multiple (change)="onFileSelect($event)">
-      <button mat-icon-button type="button" (click)="fileInput.click()" class="filebtn">
-        <mat-icon style="color: var(--accent);">attach_file</mat-icon>
-      </button>
-      <div class="d-flex flex-wrap gap-2 mt-2">
-        <mat-chip *ngFor="let name of selectedFileNames; let i = index">
-          📎 {{ name }}
-          <button mat-icon-button class="closebtn" type="button" (click)="removeFile(i)">
-            <mat-icon>close</mat-icon>
-          </button>
-        </mat-chip>
+        <div class="col-12 col-md-12 px-2 summary-grid-item increate">
+          <div class="form-grid-label increate">Attachments</div>
+          <div class="form-grid-readonly increate description-box">
+            <div class="col-12 col-md-12 fields">
+              <input type="file" accept="image/*" hidden #fileInput multiple (change)="onFileSelect($event)">
+              <button mat-icon-button type="button" (click)="fileInput.click()" class="filebtn">
+                <mat-icon style="color: var(--accent);">attach_file</mat-icon>
+              </button>
+              <div class="d-flex flex-wrap gap-2 mt-2">
+                <mat-chip *ngFor="let name of selectedFileNames; let i = index">
+                  📎 {{ name }}
+                  <button mat-icon-button class="closebtn" type="button" (click)="removeFile(i)">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-chip>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
-    </div>
 
-  </form>
+    </form>
+  </div>
+
+
 </mat-dialog-content>
 
 <mat-dialog-actions class="dialog-actions">

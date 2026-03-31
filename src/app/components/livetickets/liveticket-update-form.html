@@ -94,9 +94,10 @@
   </div>
 
   <!-- Add Note Section Header -->
-  <div class="note-section d-flex align-items-center gap-2 mb-2">
+  <div class="note-section d-flex align-items-center gap-2 mb-2" data-bs-toggle="collapse"
+    data-bs-target="#liveTicketNoteCollapse" aria-expanded="false">
     <span class="fw-bold">Add Note</span>
-    <button class="expand" data-bs-toggle="collapse" data-bs-target="#liveTicketNoteCollapse" aria-expanded="false">
+    <button class="expand">
       <mat-icon>expand_more</mat-icon>
     </button>
   </div>
@@ -122,10 +123,10 @@
             </td>
             <td class="align-top text-left">{{ note.note_text }}</td>
             <td class="align-top text-left">
-              <div *ngFor="let file of note.attachments || []" class="attachment-item" (click)="openImages([file])">
-                <img [src]="imageBaseUrl + file" class="attachment-thumb" alt="attachment" />
-                <span class="attachment-name">{{ file }}</span>
-              </div>
+              <mat-chip *ngFor="let file of note.attachments || []" (click)="openImages([file])" class="m-1">
+                <img [src]="imageBaseUrl + file" />
+                <label class="chiplabel">{{ file }}</label>
+              </mat-chip>
             </td>
           </tr>
 
@@ -145,14 +146,14 @@
             <td class="align-top text-left">
               <input type="file" hidden #fileInput multiple accept="image/*" (change)="onFileSelect($event)">
               <button mat-icon-button type="button" (click)="fileInput.click()">
-                <mat-icon style="color:#547562;font-size:20px;">attach_file</mat-icon>
+                <mat-icon style="color: var(--accent);">attach_file</mat-icon>
               </button>
-              <div *ngFor="let name of selectedFileNames; let i = index">
-                📎 {{ name }}
+              <mat-chip *ngFor="let name of selectedFileNames; let i = index" class="m-1">
+                <label class="chiplabel">📎 {{ name }}</label>
                 <button mat-icon-button color="primary" type="button" (click)="removeFile(i)">
                   <mat-icon>close</mat-icon>
                 </button>
-              </div>
+              </mat-chip>
             </td>
           </tr>
 
@@ -161,7 +162,7 @@
 
       <!-- Submit Note Button -->
       <div class="mt-2 text-end">
-        <button class="note-btn" type="button" (click)="submitNote()" [disabled]="isAddingNote">
+        <button mat-raised-button class="pbtn" type="button" (click)="submitNote()" [disabled]="isAddingNote">
           {{ isAddingNote ? 'Saving...' : 'Update' }}
         </button>
       </div>
