@@ -137,7 +137,7 @@ router.use(function (req, res, next) {
                 .orderBy('issueticket_id', 'desc')
                 .first();
 
-            const ticket_number = lastTicket ? lastTicket.ticket_number : 'TCK/01';
+            const ticket_number = lastTicket ? lastTicket.ticket_number : 'QC/01';
 
             res.status(200).send({
                 data: { ticket_number }
