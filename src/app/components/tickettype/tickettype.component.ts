@@ -59,7 +59,6 @@ export class TicketTypeComponent implements OnInit, AfterViewInit {
 
     const dialogRef = this.dialog.open(TicketTypeDialogueComponent, {
       width: '500px',
-      height: '410px',
       data: editUser ? { user: editUser } : null,
       panelClass: 'custom-dialog',
       //disableClose: true

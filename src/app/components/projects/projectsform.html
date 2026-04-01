@@ -1,45 +1,42 @@
-<div class="firstdiv" style="background-color: var(--formheader-color);color: var(--formcontent-color);">
- <h2 class="firstdivheading" style="color: #F5F7F8;">
-  {{ isEditMode ? 'Update Project' : 'Create Project' }}
-</h2>
+<mat-toolbar class="dialog-toolbar">
+  <h2 class="text-center">
+    {{ isEditMode ? 'Update Project' : 'Create Project' }}
+  </h2>
 
-  <button mat-icon-button class="close-btn" (click)="onClose()">
+  <button mat-icon-button class="closebtn" (click)="onClose()" aria-label="Close dialog">
     <mat-icon>close</mat-icon>
   </button>
-</div>
+</mat-toolbar>
 
-<form [formGroup]="projectform" class="min-form">
+<mat-dialog-content>
+  <form [formGroup]="projectform" id="projectform">
 
-  <mat-form-field appearance="outline">
-    <mat-label>Project name</mat-label>
-    <input matInput formControlName="projectname">
-    <mat-error *ngIf="projectform.get('projectname')?.hasError('required')">
-      Project name is required
-    </mat-error>
-    <mat-error *ngIf="projectform?.get('projectname')?.hasError('duplicate')">
-      Project already exists
-    </mat-error>
-  </mat-form-field>
-  
+    <div class="col-12 col-md-12 mb-1 fields px-0">
+      <mat-form-field appearance="outline">
+        <mat-label>Project name</mat-label>
+        <input matInput formControlName="projectname">
+        <mat-error *ngIf="projectform.get('projectname')?.hasError('required')">
+          Project name is required
+        </mat-error>
+        <mat-error *ngIf="projectform?.get('projectname')?.hasError('duplicate')">
+          Project already exists
+        </mat-error>
+      </mat-form-field>
+    </div>
 
+    <div class="col-12 col-md-12 mb-1 fields px-0">
+      <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="remarks" rows="4"></textarea>
+      </mat-form-field>
+    </div>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Description</mat-label>
-    <textarea matInput formControlName="remarks" rows="4"></textarea>
-  </mat-form-field>
+  </form>
+</mat-dialog-content>
 
-
-  <div class="projectbuttondiv">
-    <button mat-raised-button color="primary" style="background-color:#F5F7F8; color:black"
-      (click)="onClose()">Close</button>
-   <button mat-raised-button
-            color="primary"
-            style="background-color: var(--formbutton-color); color: var(--formcontent-color);"
-            type="submit" (click)="onProjectSubmit()">
-      {{ isEditMode ? 'Update' : 'Create' }}
-    </button>
-  </div>
-
-
-
-</form>
+<mat-dialog-actions>
+  <button mat-raised-button class="bbtn" (click)="onClose()">Close</button>
+  <button mat-raised-button class="pbtn" id="projectform" type="submit" (click)="onProjectSubmit()">
+    {{ isEditMode ? 'Update' : 'Create' }}
+  </button>
+</mat-dialog-actions>

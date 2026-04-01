@@ -51,35 +51,29 @@
     overflow-y: hidden !important;
 }
 
+
+
 /* Styling for the menu items */
 ::ng-deep .dropdown-item {
     display: flex !important;
     align-items: center !important;
     text-decoration: none !important;
-    
-    /* Reduced vertical padding for smaller height */
     padding: 1px 15px;        
     height: auto !important; 
-    
-    /* ADDED: Transition for background/border-radius change */
     transition: background-color 0.3s ease, border-radius 0.3s ease; 
 }
 
 /* Icon styling for alignment and spacing */
 ::ng-deep .matListIcon {
   margin-right: 15px;
-  /* Increased size */
   font-size: 20px; 
-  /* ADDED: Transition for color change */
   transition: color 0.3s ease;
 }
 
 /* Text Styling */
 ::ng-deep .dropdown-item .item-text {
-    /* Increased size */
     font-size: 16px; 
     font-weight: 500;
-    /* ADDED: Transition for color change */
     transition: color 0.3s ease;
 }
 
@@ -91,16 +85,11 @@
 
 /* Hover Effect Override */
 ::ng-deep .mat-menu-item:hover {
-    /* Solid white background on hover with slight transparency */
     background-color: rgba(255, 255, 255, 0.9) !important; 
-    
-    /* Hover Shape Fix: Rounded corners on the hovered area */
     border-radius: 8px !important; 
 }
 
-/* Hover Text/Icon Color Change: Dark text/icon on White Background for readability */
 ::ng-deep .mat-menu-item:hover .item-text,
 ::ng-deep .mat-menu-item:hover .matListIcon {
-    /* Final color state (Dark Gray/Black) */
     color: #333 !important; 
 }

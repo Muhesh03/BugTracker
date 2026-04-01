@@ -71,9 +71,4 @@
   gap: 6px;
 }
 
-.mat-column-edit,
-.mat-column-delete {
-  width: 70px;
-  justify-content: center;
-}
 

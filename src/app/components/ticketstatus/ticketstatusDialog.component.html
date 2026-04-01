@@ -1,60 +1,51 @@
 <!-- Close Button (Top Right) -->
 <mat-toolbar class="dialog-toolbar">
-    <span>
-        <h2 class="text-center" mat-dialog-title>
-            {{ isEdit ? 'Update Ticket Status' : 'Create Ticket Status ' }}
-        </h2>
-    </span>
-    <!-- This span acts as a spacer, pushing the close button to the right -->
-    <span class="toolbar-spacer"></span>
-    <button mat-icon-button (click)="onClose()" aria-label="Close dialog">
+    <h2>
+        {{ isEdit ? 'Update Ticket Status' : 'Create Ticket Status ' }}
+    </h2>
+    <button mat-icon-button class="closebtn" (click)="onClose()" aria-label="Close dialog">
         <mat-icon>close</mat-icon>
     </button>
 </mat-toolbar>
-<form [formGroup]="registrationForm" (ngSubmit)="submitForm()">
 
-    <!-- Original Status Name Field -->
-    <div class="form-row">
-        <!-- <label class="form-label">Status Name:</label> -->
-        <mat-form-field appearance="outline">
-            <mat-label>Status Name</mat-label>
-            <input matInput formControlName="statusname">
-            <mat-error *ngIf="registrationForm.get('statusname')?.hasError('required')">
-                Status Name is required
-            </mat-error>
-            <mat-error *ngIf="registrationForm.get('statusname')?.hasError('duplicate')">
-                Status Name already exists
-            </mat-error>
-        </mat-form-field>
-    </div>
+<mat-dialog-content>
+    <form [formGroup]="registrationForm" (ngSubmit)="submitForm()">
 
-    <!-- New Remarks Textarea -->
-    <div class="form-row">
-        <!-- <label class="form-label">Remarks:</label> -->
-        <mat-form-field appearance="outline">
-            <mat-label>Remarks</mat-label>
-            <textarea matInput formControlName="remarks" rows="3"></textarea>
-        </mat-form-field>
-    </div>
+        <!-- Original Status Name Field -->
+        <div class="col-12 col-md-12 mb-1 fields px-0">
+            <mat-form-field appearance="outline">
+                <mat-label>Status Name</mat-label>
+                <input matInput formControlName="statusname">
+                <mat-error *ngIf="registrationForm.get('statusname')?.hasError('required')">
+                    Status Name is required
+                </mat-error>
+                <mat-error *ngIf="registrationForm.get('statusname')?.hasError('duplicate')">
+                    Status Name already exists
+                </mat-error>
+            </mat-form-field>
+        </div>
 
-    <!-- New Color Palette Picker (using input type="color") -->
-    <div class="form-row color-picker-row">
-        <label class="form-label">Choose Color Palette:</label>
-        <input type="color" formControlName="color" class="color-input">
-        <!-- Optional: Display selected color value -->
-        <span>{{ registrationForm.get('color')?.value }}</span>
-    </div>
+        <!-- New Remarks Textarea -->
+        <div class="col-12 col-md-12 mb-1 fields px-0">
+            <mat-form-field appearance="outline">
+                <mat-label>Remarks</mat-label>
+                <textarea matInput formControlName="remarks" rows="3"></textarea>
+            </mat-form-field>
+        </div>
 
-    <!-- New Active Checkbox -->
-    
+        <!-- New Color Palette Picker (using input type="color") -->
+        <div class="form-row color-picker-row">
+            <label class="form-label">Choose Color Palette:</label>
+            <input type="color" formControlName="color" class="color-input">
+            <!-- Optional: Display selected color value -->
+            <span>{{ registrationForm.get('color')?.value }}</span>
+        </div>
 
-</form>
+    </form>
+</mat-dialog-content>
 
-<mat-dialog-actions class="dialog-actions mb-3">
-    <!-- <button mat-stroked-button mat-dialog-close class="cancel-btn">
-        Close
-    </button> -->
-    <button mat-raised-button color="secondary" class="save-btn" (click)="submitForm()">
+<mat-dialog-actions>
+    <button mat-raised-button class="pbtn" (click)="submitForm()">
         {{ isEdit ? 'Update' : 'Create' }}
     </button>
 </mat-dialog-actions>
