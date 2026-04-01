@@ -65,6 +65,7 @@
                     <h2 class="chart-title mx-auto"> Total Ticket <span class="highlight ms-2">Status</span></h2>
                     <mat-form-field appearance="outline" class="aggressive-select">
                         <mat-select [(value)]="selectedMonth" (selectionChange)="onMonthChange()">
+                             <mat-option value="ALL">All </mat-option>
                             <mat-option *ngFor="let m of months" [value]="m.value">{{ m.label }}</mat-option>
                         </mat-select>
                     </mat-form-field>

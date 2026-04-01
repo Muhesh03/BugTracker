@@ -70,9 +70,21 @@ exports.getDashboardCounts = async function (params, cb) {
       const { projectid, userid, month } = params;
 
       if (projectid) q.where('project_id', projectid);
-      if (userid) q.where('user_id', userid);
+      // if (userid) q.where('user_id', userid);
+      if (userid) {
+        q.where(function () {
+          this.where('user_id', userid)
+            .orWhere('created_by', userid);
+        });
+      }
+      // if (month) {
+      //   q.whereRaw(
+      //     "TO_CHAR(created_at, 'YYYY-MM') = ?",
+      //     [month]
+      //   );
+      // }
 
-      if (month) {
+      if (month && month !== 'ALL') {
         q.whereRaw(
           "TO_CHAR(created_at, 'YYYY-MM') = ?",
           [month]
@@ -105,10 +117,10 @@ exports.getDashboardCounts = async function (params, cb) {
       .count('* as count')
       .where('created_by', params.userid)
       .modify(q => applyFilters(q, params));
-    
+
 
     const reported = Number(reportedRes?.[0]?.count ?? 0);
-  console.log("REPORTED RES:", reported);
+    console.log("REPORTED RES:", reported);
     // PRIORITY HIGH
     const priorityRes = await knex('issueticket')
       .count('* as count')
@@ -144,4 +156,4 @@ exports.getDashboardCounts = async function (params, cb) {
     console.error("=========>>>>>>>>><<<<<<<<<<========== MODEL ERROR:", err);
     cb(err, null);
   }
-};
+};  

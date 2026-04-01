@@ -31,7 +31,7 @@ export class DashboardComponent implements OnInit {
   loggedInUserId!: Number;
   pendingCount = 0;
   // closedCount = 0;
-  reportedTickets=0;
+  reportedTickets = 0;
   importantCount = 0;
   storedProjectId: string | null = null;
   projectId: number | null = null;
@@ -58,7 +58,7 @@ export class DashboardComponent implements OnInit {
     const userData = JSON.parse(localStorage.getItem('user') || '{}') as User;
     this.userId = userData.id;
     // const userId = userData.id;
-   this.storedProjectId = localStorage.getItem('selectedProject');
+    this.storedProjectId = localStorage.getItem('selectedProject');
     console.log("selected project in issue ticket", this.storedProjectId);
     this.projectId = this.storedProjectId ? Number(this.storedProjectId) : null;
     this.loadLastProject();
@@ -129,17 +129,18 @@ export class DashboardComponent implements OnInit {
         if (res?.last_project_id) {
           this.projectId = res.last_project_id;
           localStorage.setItem('selectedProject', res.last_project_id.toString());
-         
+
 
         } else {
           this.projectId = null;
         }
         this.loadStatusesAndTickets();
-        
+        this.getDashBoard();
       },
       error: err => {
         console.error(err);
         this.loadStatusesAndTickets();
+        this.getDashBoard();
       }
     });
   }
@@ -154,8 +155,8 @@ export class DashboardComponent implements OnInit {
         ;
         // this.prepareStatusBarChart();
         // this.prepareStatusDonutChart();
-this.loadPriorities();
-this.getDashBoard();
+        this.loadPriorities();
+        this.getDashBoard();
         // this.preparePriorityStatusCharts();
       });
     });
@@ -213,84 +214,85 @@ this.getDashBoard();
   //     });
 
   // }
-getDashBoard() {
-  const storedProject = localStorage.getItem('selectedProject');
-  this.projectId = storedProject ? Number(storedProject) : null;
+  getDashBoard() {
+    const storedProject = localStorage.getItem('selectedProject');
+    this.projectId = storedProject ? Number(storedProject) : null;
 
-  const dashboardparams = {
-    projectid: this.projectId ?? null,
-    userid: this.userId,
-    month:this.selectedMonth
-  };
+    const dashboardparams = {
+      projectid: this.projectId ?? null,
+      userid: this.userId,
+      // month: this.selectedMonth 
+      month: this.selectedMonth === 'ALL' ? null : this.selectedMonth
+    };
 
-  this.DashboardService.getDashboard(dashboardparams)
-    .subscribe((res: any) => {
+    this.DashboardService.getDashboard(dashboardparams)
+      .subscribe((res: any) => {
 
-      const data = res?.data || {};
+        const data = res?.data || {};
 
-      // ✅ SAFE COUNTS
-      this.assignedToMeCount = data.total || 0;
-      this.pendingTickets = data.pending || 0;
-      // this.closedTickets = data.closed || 0;
-      this.reportedTickets = data.reported || 0;
-      this.priorityhigh = data.priority || 0;
+        // ✅ SAFE COUNTS
+        this.assignedToMeCount = data.total || 0;
+        this.pendingTickets = data.pending || 0;
+        // this.closedTickets = data.closed || 0;
+        this.reportedTickets = data.reported || 0;
+        this.priorityhigh = data.priority || 0;
 
-      console.log("Dashboard Data:", data);
+        console.log("Dashboard Data:", data);
 
-      // ✅ SAFE BAR CHART
-      this.barChartLabels = [];
-      const counts: number[] = [];
+        // ✅ SAFE BAR CHART
+        this.barChartLabels = [];
+        const counts: number[] = [];
         const colors: string[] = [];
 
-      if (Array.isArray(data.statusChart )&& this.statuses?.length) {
-        data.statusChart.forEach((s: any) => {
+        if (Array.isArray(data.statusChart) && this.statuses?.length) {
+          data.statusChart.forEach((s: any) => {
 
-          const status = this.statuses.find(
-            st =>Number(st.ticketstatus_id) === Number(s.status_id)
-          );
+            const status = this.statuses.find(
+              st => Number(st.ticketstatus_id) === Number(s.status_id)
+            );
 
-          if (status) {
-            this.barChartLabels.push(status.statusname);
-            counts.push(Number(s.count));
-             colors.push(status.color || '#999');  
-          }
-           else {
-            console.warn("❌ Status not found for:", s.status_id);
-          }
-        });
-      }
+            if (status) {
+              this.barChartLabels.push(status.statusname);
+              counts.push(Number(s.count));
+              colors.push(status.color || '#999');
+            }
+            else {
+              console.warn("❌ Status not found for:", s.status_id);
+            }
+          });
+        }
 
-      this.barChartData = [{
-        data: counts,
-        backgroundColor: colors,
-      }];
+        this.barChartData = [{
+          data: counts,
+          backgroundColor: colors,
+        }];
 
-      // ✅ SAFE DONUT CHART
-      this.priorityStatusCharts = [];
+        // ✅ SAFE DONUT CHART
+        this.priorityStatusCharts = [];
 
-      if (Array.isArray(data.priorityChart) && this.priorities?.length) {
-        data.priorityChart.forEach((p: any) => {
+        if (Array.isArray(data.priorityChart) && this.priorities?.length) {
+          data.priorityChart.forEach((p: any) => {
 
-          const priority = this.priorities.find(
-            pr => Number(pr.priority_id) === Number(p.priority_id)
-          );
+            const priority = this.priorities.find(
+              pr => Number(pr.priority_id) === Number(p.priority_id)
+            );
 
-          if (priority) {
-            this.priorityStatusCharts.push({
-              priority: priority.priority,
-              total: Number(p.count),
-              labels: [priority.priority],
-              data: [Number(p.count)],
-              colors: ['#42A5F5']
-            });
-          }
-        });
-      }
+            if (priority) {
+              this.priorityStatusCharts.push({
+                priority: priority.priority,
+                total: Number(p.count),
+                labels: [priority.priority],
+                data: [Number(p.count)],
+                colors: ['#42A5F5']
+              });
+            }
+          });
+        }
 
-    }, err => {
-      console.error("❌ Dashboard API Error:", err);
-    });
-}
+      }, err => {
+        console.error("❌ Dashboard API Error:", err);
+      });
+  }
 
   prepareStatusBarChart() {
 
@@ -308,7 +310,7 @@ getDashBoard() {
     });
 
 
-    const filteredTickets = this.selectedMonth
+    const filteredTickets = this.selectedMonth && this.selectedMonth !== 'ALL'
       ? this.tickets.filter(t => {
         const d = new Date(t.created_at);
         const ticketMonth =
@@ -431,7 +433,7 @@ getDashBoard() {
 
     this.priorityStatusCharts = [];
 
-    const filteredTickets = this.selectedMonth
+    const filteredTickets = this.selectedMonth && this.selectedMonth !== 'ALL'
       ? this.tickets.filter(t => {
         const d = new Date(t.created_at);
         const month =
