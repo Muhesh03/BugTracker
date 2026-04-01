@@ -183,7 +183,7 @@
                     <!-- REAL file input (hidden) -->
                     <input type="file" accept="image/*" hidden #fileInput multiple (change)="onFileSelect($event)">
                     <!-- Icon button -->
-                    <button mat-icon-button type="button" (click)="fileInput.click()"> Add Files
+                    <button mat-icon-button type="button" (click)="fileInput.click()">
                       <mat-icon style="color:#547562;font-size:20px;">attach_file</mat-icon>
                     </button>
                     <div *ngFor="let name of selectedFileNames; let i = index">
@@ -202,7 +202,7 @@
         </div>
       </div>
 
-      <div class="note-section d-flex align-items-center gap-2 mb-2">
+      <div class="note-section d-flex align-items-center gap-2 mb-2 mt-2">
         <span class="fw-bold">Activities</span>
 
         <button class="expand" data-bs-toggle="collapse" href="#multiCollapseExample1" role="button"
@@ -263,14 +263,11 @@
     </div>
   </div>
 
-  <!-- Footer -->
-  <div class="footer-actions text-end mt-3">
-    <!-- <button mat-raised-button color="light" (click)="close()">Cancel</button> -->
-    <button mat-raised-button class="button ms-2" (click)="submitNote()">Update</button>
-  </div>
 
-  <!-- </form> -->
 
 </mat-dialog-content>
 
-<!-- ///////////////////////////////////////////// -->
+<mat-dialog-actions>
+    <button mat-raised-button class="pbtn" (click)="submitNote()">Update</button>
+
+</mat-dialog-actions>
