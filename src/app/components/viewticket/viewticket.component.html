@@ -125,12 +125,20 @@
 
       <!-- S.No -->
       <ng-container matColumnDef="sno">
-        <th mat-header-cell *matHeaderCellDef>S.No</th>
+        <th mat-header-cell *matHeaderCellDef class="col-slno">Sl.No</th>
         <td mat-cell *matCellDef="let row; let i = index">
           {{ i + 1 }}
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="icons">
+        <th mat-header-cell *matHeaderCellDef>Priority</th>
+        <td mat-cell *matCellDef="let row">
+          <mat-icon [style.color]="iconMap[row.icon]?.color || 'gray'">
+            {{ iconMap[row.icon]?.name || 'help' }}
+          </mat-icon>
+        </td>
+      </ng-container>
 
       <ng-container matColumnDef="tag_names">
         <th mat-header-cell *matHeaderCellDef>Tags</th>
@@ -142,15 +150,10 @@
         </td>
       </ng-container>
 
-
-
-      <!-- Icon -->
-      <ng-container matColumnDef="icons">
-        <th mat-header-cell *matHeaderCellDef>Priority</th>
+      <ng-container matColumnDef="ticket_number">
+        <th mat-header-cell *matHeaderCellDef>Ticket Number</th>
         <td mat-cell *matCellDef="let row">
-          <mat-icon [style.color]="iconMap[row.icon]?.color || 'gray'">
-            {{ iconMap[row.icon]?.name || 'help' }}
-          </mat-icon>
+          {{ row.ticket_number}}
         </td>
       </ng-container>
 
@@ -159,6 +162,17 @@
         <td mat-cell *matCellDef="let row">
           <span>
             {{ row.ticket_type_name }}
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="created_at">
+        <th mat-header-cell *matHeaderCellDef>Date Submitted</th>
+        <td mat-cell *matCellDef="let row">
+          <span>
+            <!-- Suppose ticket.created_at is your ISO string from backend -->
+            <span>{{ row.created_at | date:'dd/MM/yyyy' }}</span>
+
           </span>
         </td>
       </ng-container>
@@ -172,53 +186,11 @@
         </td>
       </ng-container>
 
-
-
-
-      <ng-container matColumnDef="created_at">
-        <th mat-header-cell *matHeaderCellDef>Date Submitted</th>
-        <td mat-cell *matCellDef="let row">
-          <span>
-            <!-- Suppose ticket.created_at is your ISO string from backend -->
-            <span>{{ row.created_at | date:'dd/MM/yyyy' }}</span>
-
-          </span>
-        </td>
-      </ng-container>
-
-
       <ng-container matColumnDef="user_id">
         <th mat-header-cell *matHeaderCellDef>Assigned To</th>
         <td mat-cell *matCellDef="let row">
           <span>
             {{ row.assigned_to_name }}
-          </span>
-        </td>
-      </ng-container>
-
-
-      <!-- Remarks -->
-      <ng-container matColumnDef="summary">
-        <th mat-header-cell *matHeaderCellDef>Summary</th>
-        <td mat-cell *matCellDef="let row">
-          {{ row.summary}}
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="image_path">
-        <th mat-header-cell *matHeaderCellDef>Attachment</th>
-
-        <td mat-cell *matCellDef="let row">
-
-          <!-- show icons equal to number of images -->
-          <ng-container *ngIf="row.image_path && row.image_path.length">
-            <mat-icon *ngFor="let img of row.image_path" class="image-icon" (click)="openImages([img])"
-              title="View Image" style="color:#547562;cursor:pointer">
-              image
-            </mat-icon>
-          </ng-container>
-          <span *ngIf="!row.image_path || row.image_path.length === 0">
-            —
           </span>
         </td>
       </ng-container>
@@ -233,10 +205,10 @@
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="ticket_number">
-        <th mat-header-cell *matHeaderCellDef>Ticket Number</th>
+      <ng-container matColumnDef="summary">
+        <th mat-header-cell *matHeaderCellDef>Summary</th>
         <td mat-cell *matCellDef="let row">
-          {{ row.ticket_number}}
+          {{ row.summary}}
         </td>
       </ng-container>
 
@@ -250,20 +222,36 @@
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="image_path">
+        <th mat-header-cell *matHeaderCellDef class="col-actions">Attachment</th>
+        <td mat-cell *matCellDef="let row" class="text-center">
+          <!-- show icons equal to number of images -->
+          <ng-container *ngIf="row.image_path && row.image_path.length">
+            <mat-icon *ngFor="let img of row.image_path" class="image-icon" (click)="openImages([img])"
+              title="View Image" style="color:#547562;cursor:pointer">
+              image
+            </mat-icon>
+          </ng-container>
+          <span *ngIf="!row.image_path || row.image_path.length === 0">
+            —
+          </span>
+        </td>
+      </ng-container>
+
       <!-- Edit -->
       <ng-container matColumnDef="edit">
-        <th mat-header-cell *matHeaderCellDef>Update</th>
-        <td mat-cell *matCellDef="let row">
+        <th mat-header-cell *matHeaderCellDef class="col-actions">Edit</th>
+        <td mat-cell *matCellDef="let row" class="text-center">
           <button mat-icon-button class="action-btn edit" (click)="editISSUE(row)">
-            <mat-icon>edit</mat-icon>
+            <mat-icon>edit_note</mat-icon>
           </button>
         </td>
       </ng-container>
 
       <!-- Delete -->
       <ng-container matColumnDef="delete">
-        <th mat-header-cell *matHeaderCellDef>Delete</th>
-        <td mat-cell *matCellDef="let row">
+        <th mat-header-cell *matHeaderCellDef class="col-actions">Delete</th>
+        <td mat-cell *matCellDef="let row" class="text-center">
           <button mat-icon-button class="action-btn delete" (click)="deleteIssue(row)">
             <mat-icon>delete</mat-icon>
           </button>

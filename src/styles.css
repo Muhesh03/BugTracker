@@ -840,6 +840,10 @@ td.mat-footer-cell:last-of-type {
   grid-template-columns: 1fr 1fr;
 }
 
+.form-grid-item.customgrid{
+      grid-template-columns: 0.74fr 1fr;
+}
+
 .form-grid-label {
   text-align: left;
   vertical-align: middle;

@@ -1,5 +1,5 @@
 <mat-toolbar class="dialog-toolbar">
-  <h2>Update Ticket Information</h2>
+  <h2>View & Update Ticket Information</h2>
   <button mat-icon-button class="closebtn" [mat-dialog-close] type="button">
     <mat-icon>close</mat-icon>
   </button>
@@ -32,6 +32,7 @@
     <form [formGroup]="LiveTicketForm">
 
       <div class="col-12 col-md-12 d-flex flex-wrap">
+        
         <div class="col-12 col-md-6 px-2 form-grid-item">
           <div class="form-grid-label">Status</div>
           <div class="form-grid-readonly">{{ data?.statusname || '-' }}</div>
