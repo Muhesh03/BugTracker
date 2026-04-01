@@ -149,7 +149,7 @@ export class PriorityTagComponent implements OnInit {
   edittickettag(row: any): void {
 
     const dialogRef = this.dialog.open(PriorityTagFormComponent, {
-      panelClass: 'custom-dialog',
+      width: '500px',
       data: row
     });
 
@@ -166,7 +166,7 @@ export class PriorityTagComponent implements OnInit {
 
   openTagDialog(): void {
     const dialogRef = this.dialog.open(PriorityTagFormComponent, {
-      panelClass: 'custom-dialog',
+      width: '500px',
 
       data: {}
     });

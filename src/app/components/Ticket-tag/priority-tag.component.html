@@ -9,12 +9,12 @@
   </div>
 
   <div class="tablewrapper">
-    <table mat-table [dataSource]="tagDataSource" class="mat-table project-table sticky-header">
+    <table mat-table [dataSource]="tagDataSource">
 
       <!-- S.No -->
       <ng-container matColumnDef="sno">
-        <th mat-header-cell *matHeaderCellDef class="col-si-no">SI.No</th>
-        <td mat-cell *matCellDef="let row; let i = index" class="col-si-no">
+        <th mat-header-cell *matHeaderCellDef class="col-slno">Sl.No</th>
+        <td mat-cell *matCellDef="let row; let i = index" class="text-center">
           {{ i + 1 }}
         </td>
       </ng-container>
@@ -38,7 +38,7 @@
       <ng-container matColumnDef="status">
         <th mat-header-cell *matHeaderCellDef class="col-actions">Status</th>
 
-        <td mat-cell *matCellDef="let row" class="col-actions">
+        <td mat-cell *matCellDef="let row" class="text-center">
           <mat-slide-toggle [checked]="row.status_id === 1" (change)="changeStatus(row, $event.checked)"
             [disabled]="row.status_id === 4">
           </mat-slide-toggle>
@@ -47,9 +47,9 @@
 
       <ng-container matColumnDef="edit">
         <th mat-header-cell *matHeaderCellDef class="col-actions">Edit</th>
-        <td mat-cell *matCellDef="let row" class="col-actions">
+        <td mat-cell *matCellDef="let row" class="text-center">
           <button mat-icon-button class="action-btn edit" (click)="edittickettag(row)" [disabled]="row.status_id === 4">
-            <mat-icon>edit</mat-icon>
+            <mat-icon>edit_note</mat-icon>
           </button>
         </td>
       </ng-container>
@@ -57,7 +57,7 @@
       <!-- Delete -->
       <ng-container matColumnDef="delete">
         <th mat-header-cell *matHeaderCellDef class="col-actions">Delete</th>
-        <td mat-cell *matCellDef="let row" class="col-actions">
+        <td mat-cell *matCellDef="let row" class="text-center">
           <button mat-icon-button class="action-btn delete" (click)="deletetag(row)" [disabled]="row.status_id === 4">
             <mat-icon>delete</mat-icon>
           </button>
@@ -70,7 +70,7 @@
     </table>
 
     <div class="paginator">
-      <mat-paginator [pageSizeOptions]="[5,10,20]" [pageSize]="10" showFirstLastButtons>
+      <mat-paginator [pageSizeOptions]="[10,50,100]" [pageSize]="50" showFirstLastButtons>
       </mat-paginator>
     </div>
   </div>

@@ -1,9 +1,16 @@
-<h2 mat-dialog-title>{{ data.filename }}</h2>
+<mat-toolbar class="dialog-toolbar">
+  <h2>{{ data.filename }}</h2>
+  <button mat-icon-button class="closebtn" [mat-dialog-close] type="button">
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-toolbar>
 
-<mat-dialog-content class="image-container">
-  <img [src]="data.imageUrl" alt="preview" />
+<mat-dialog-content>
+  <div class="popupimg-container">
+    <img [src]="data.imageUrl" alt="preview" />
+  </div>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button (click)="dialogRef.close()">Close</button>
+  <button mat-raised-button class="pbtn" (click)="dialogRef.close()">Close</button>
 </mat-dialog-actions>

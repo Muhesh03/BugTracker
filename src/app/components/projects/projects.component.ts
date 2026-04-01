@@ -73,7 +73,7 @@ export class ProjectComponent implements OnInit {
       icon: 'warning',
       width: '350px',
       showCloseButton: true,
-      background: 'var(--tableheader-color)',
+      background: 'var(--tableheader)',
       confirmButtonColor: 'var(--formbutton-color)',
       cancelButtonColor: '#be9a9aff',
       showCancelButton: true,
@@ -121,7 +121,7 @@ export class ProjectComponent implements OnInit {
     this.selectedProjectId = row.project_id;
 
     const DialogRef = this.dialog.open(ProjectFormComponent, {
-      panelClass: 'custom-dialog',
+      width: '500px',
       data: row
     });
 
@@ -152,7 +152,7 @@ export class ProjectComponent implements OnInit {
 
   openProjectDialog(): void {
     const dialogRef = this.dialog.open(ProjectFormComponent, {
-      panelClass: 'custom-dialog',
+      width: '500px',
       data: {}
     });
 
