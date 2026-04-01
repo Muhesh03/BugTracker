@@ -1,70 +1,77 @@
-<div class="firstdiv" style="background-color: var(--formheader-color);color: var(--formcontent-color);">
-  <h2 class="firstdivheading" style="color: #F5F7F8;">
+<mat-toolbar class="dialog-toolbar">
+  <h2>
     {{ isEditMode ? 'Update Ticket Priority' : 'Create Ticket Priority' }}
   </h2>
 
-  <button mat-icon-button class="close-btn" (click)="onClose()">
+  <button mat-icon-button class="closebtn" (click)="onClose()">
     <mat-icon>close</mat-icon>
   </button>
-</div>
+</mat-toolbar>
 
-<form [formGroup]="priorityform" class="min-form" (ngSubmit)="onSubmit()">
+<mat-dialog-content>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Priority Name</mat-label>
-    <input matInput formControlName="priority">
-    <mat-error *ngIf="priorityform.get('priority')?.hasError('required')">
-      Priority name is required
-    </mat-error>
-    <mat-error *ngIf="priorityform.get('priority')?.hasError('duplicate')">
-      Priority already exists
-    </mat-error>
-  </mat-form-field>
+  <form [formGroup]="priorityform" id="priorityform" (ngSubmit)="onSubmit()">
+
+    <div class="col-12 col-md-12 mb-1 fields px-0">
+      <mat-form-field appearance="outline">
+        <mat-label>Priority Name</mat-label>
+        <input matInput formControlName="priority">
+        <mat-error *ngIf="priorityform.get('priority')?.hasError('required')">
+          Priority name is required
+        </mat-error>
+        <mat-error *ngIf="priorityform.get('priority')?.hasError('duplicate')">
+          Priority already exists
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="col-12 col-md-12 mb-3 fields px-0">
+      <div class="mb-2">
+        <mat-label>Choose an Icon</mat-label>
+      </div>
+      <mat-radio-group formControlName="icon" class="icon-radio-group">
+
+        <mat-radio-button [value]="1" class="icon-radio">
+          <mat-icon class="priority-icon immediate">warning</mat-icon>
+        </mat-radio-button>
+
+        <mat-radio-button [value]="2" class="icon-radio">
+          <mat-icon class="priority-icon urgent">arrow_upward</mat-icon>
+        </mat-radio-button>
+
+        <mat-radio-button [value]="3" class="icon-radio">
+          <mat-icon class="priority-icon high">keyboard_arrow_up</mat-icon>
+        </mat-radio-button>
+        <mat-radio-button [value]="4" class="icon-radio">
+          <mat-icon class="priority-icon low">keyboard_arrow_down</mat-icon>
+        </mat-radio-button>
 
 
+        <mat-radio-button [value]="5" class="icon-radio">
+          <mat-icon class="priority-icon null">remove</mat-icon>
+        </mat-radio-button>
 
-  <mat-radio-group formControlName="icon" class="icon-radio-group">
+        <mat-radio-button [value]="6" class="icon-radio">
+          <mat-icon class="priority-icon immediate">keyboard_double_arrow_up</mat-icon>
+        </mat-radio-button>
 
-    <mat-radio-button [value]="1" class="icon-radio">
-      <mat-icon class="priority-icon immediate">warning</mat-icon>
-    </mat-radio-button>
+      </mat-radio-group>
+    </div>
 
-    <mat-radio-button [value]="2" class="icon-radio">
-      <mat-icon class="priority-icon urgent">arrow_upward</mat-icon>
-    </mat-radio-button>
+    <!-- Description Field -->
+    <div class="col-12 col-md-12 mb-1 fields px-0">
+      <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="remarks" rows="4" placeholder="Enter description"></textarea>
+      </mat-form-field>
+    </div>
 
-    <mat-radio-button [value]="3" class="icon-radio">
-      <mat-icon class="priority-icon high">keyboard_arrow_up</mat-icon>
-    </mat-radio-button>
-    <mat-radio-button [value]="4" class="icon-radio">
-      <mat-icon class="priority-icon low">keyboard_arrow_down</mat-icon>
-    </mat-radio-button>
+  </form>
 
+</mat-dialog-content>
 
-    <mat-radio-button [value]="5" class="icon-radio">
-      <mat-icon class="priority-icon null">remove</mat-icon>
-    </mat-radio-button>
-
-    <mat-radio-button [value]="6" class="icon-radio">
-      <mat-icon class="priority-icon immediate">keyboard_double_arrow_up</mat-icon>
-    </mat-radio-button>
-
-  </mat-radio-group>
-  <!-- Description Field -->
-  <mat-form-field appearance="outline" style="width:100%;">
-    <mat-label>Description</mat-label>
-    <textarea matInput formControlName="remarks" rows="4" placeholder="Enter description"></textarea>
-  </mat-form-field>
-
-  <!-- Buttons -->
-  <div class="projectbuttondiv" style="margin-top:15px;">
-    <!-- <button mat-raised-button color="primary" style="background-color:#F5F7F8; color:black"
-      (click)="onClose()">Close</button> -->
-    <button mat-raised-button color="primary"
-    class="status-btn" type="submit">
-      {{ isEditMode ? 'Update' : 'Create' }}
-    </button>
-
-  </div>
-
-</form>
+<mat-dialog-actions>
+  <button mat-raised-button class="pbtn" type="submit" form="priorityform">
+    {{ isEditMode ? 'Update' : 'Create' }}
+  </button>
+</mat-dialog-actions>

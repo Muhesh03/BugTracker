@@ -68,7 +68,6 @@ export class ViewTicketComponent implements OnInit {
     'user_id',
     'ticketstatus_id',
     'summary',
-    'preview',
     'image_path',
     'edit',
     'delete'

@@ -150,7 +150,7 @@ export class TicketPriorityComponent implements OnInit {
     this.priorityselectedId = row.priority_id;
 
     const dialogRef = this.dialog.open(TicketPriorityFormComponent, {
-      panelClass: 'custom-dialog',
+      width: '500px',
       data: row
     });
 
@@ -163,7 +163,8 @@ export class TicketPriorityComponent implements OnInit {
 
   openPriorityDialog(): void {
     const dialogRef = this.dialog.open(TicketPriorityFormComponent, {
-      panelClass: 'custom-dialog'
+           width: '500px',
+
     });
 
     dialogRef.afterClosed().subscribe(result => {

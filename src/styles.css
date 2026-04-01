@@ -745,7 +745,7 @@ td.mat-footer-cell:last-of-type {
 .content-inner {
   display: flex;
   flex-direction: column;
-  padding-inline: 16px 0px;
+  padding-inline: 16px 10px;
   padding-block: 20px 0px;
   height: 100%;
   overflow: hidden;
