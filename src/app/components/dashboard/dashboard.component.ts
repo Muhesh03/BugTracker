@@ -28,13 +28,10 @@ export class DashboardComponent implements OnInit {
   barChartType = 'bar';
   barChartLegend = false;
 
-  // STATUS_PENDING = 6;
-  // STATUS_CLOSED = 5;
-  // PRIORITY_IMPORTANT = 1;
-
   loggedInUserId!: Number;
   pendingCount = 0;
-  closedCount = 0;
+  // closedCount = 0;
+  reportedTickets = 0;
   importantCount = 0;
   storedProjectId: string | null = null;
   projectId: number | null = null;
@@ -42,7 +39,7 @@ export class DashboardComponent implements OnInit {
   userId: number | null = null;
   assignedToMeCount = 0;
   pendingTickets = 0;
-  closedTickets = 0;
+  reported = 0;
   priorityhigh = 0;
 
   ngOnInit() {
@@ -51,7 +48,6 @@ export class DashboardComponent implements OnInit {
     this.loadStatusesAndTickets();
     this.getMonths();
     this.loadPriorities();
-
     interface User {
       id: number;
       email: string;
@@ -62,14 +58,10 @@ export class DashboardComponent implements OnInit {
     const userData = JSON.parse(localStorage.getItem('user') || '{}') as User;
     this.userId = userData.id;
     // const userId = userData.id;
-
     this.storedProjectId = localStorage.getItem('selectedProject');
+    console.log("selected project in issue ticket", this.storedProjectId);
     this.projectId = this.storedProjectId ? Number(this.storedProjectId) : null;
-
-    console.log("haaaaaaaaaaaaaai  from dashbaord project", this.projectId)
-    console.log("haaaaaaaaaaaaaai from dashbaord id", this.userId)
     this.loadLastProject();
-    this.getDashBoard();
 
   }
 
@@ -135,16 +127,19 @@ export class DashboardComponent implements OnInit {
     this.userService.getLastProject(this.userId).subscribe({
       next: (res: any) => {
         if (res?.last_project_id) {
-          localStorage.setItem('selectedProject', res.last_project_id.toString());
           this.projectId = res.last_project_id;
+          localStorage.setItem('selectedProject', res.last_project_id.toString());
+
+
         } else {
           this.projectId = null;
         }
-
-        this.getDashBoard(); 
+        this.loadStatusesAndTickets();
+        this.getDashBoard();
       },
       error: err => {
         console.error(err);
+        this.loadStatusesAndTickets();
         this.getDashBoard();
       }
     });
@@ -158,31 +153,144 @@ export class DashboardComponent implements OnInit {
         this.tickets = ticketRes.data || [];
         console.log('ticket COLORS:', this.tickets);
         ;
-        this.prepareStatusBarChart();
+        // this.prepareStatusBarChart();
         // this.prepareStatusDonutChart();
-
-        this.preparePriorityStatusCharts();
-
+        this.loadPriorities();
+        this.getDashBoard();
+        // this.preparePriorityStatusCharts();
       });
     });
   }
+  //   getDashBoard() {
+  //   const storedProject = localStorage.getItem('selectedProject');
+  //   this.projectId = storedProject ? Number(storedProject) : null;
+  //   const dashboardparams = {
+  //     projectid: this.projectId ?? null,
+  //     userid: this.userId
+  //   };
+
+  //   this.DashboardService.getDashboard(dashboardparams)
+  //     .subscribe(res => {
+  //       const data = res.data || {};
+  //       this.assignedToMeCount = res.data.total;
+  //       this.pendingTickets = res.data.pending;
+  //       this.closedTickets = res.data.closed;
+  //       this.priorityhigh = res.data.priority;
+  //       console.log("high piroity working dashboard", this.priorityhigh);
+  //       console.log("Pending dashboard", this.pendingTickets)
+  //       this.barChartLabels = [];
+  //       const counts: number[] = [];
+
+  //       data.statusChart.forEach((s: any) => {
+  //         const status = this.statuses.find(st => st.ticketstatus_id === s.status_id);
+
+  //         if (status) {
+  //           this.barChartLabels.push(status.statusname);
+  //           counts.push(Number(s.count));
+  //         }
+  //       });
+
+  //       this.barChartData = [{
+  //         data: counts
+  //       }];
+
+  //       // ✅ DONUT CHART (PRIORITY)
+  //       this.priorityStatusCharts = [];
+
+  //       data.priorityChart.forEach((p: any) => {
+  //         const priority = this.priorities.find(pr => pr.priority_id === p.priority_id);
+
+  //         if (priority) {
+  //           this.priorityStatusCharts.push({
+  //             priority: priority.priority,
+  //             total: Number(p.count),
+  //             labels: [priority.priority],
+  //             data: [Number(p.count)],
+  //             colors: ['#42A5F5'] // you can map color
+  //           });
+  //         }
+  //       });
+
+  //     });
+
+  // }
   getDashBoard() {
     const storedProject = localStorage.getItem('selectedProject');
     this.projectId = storedProject ? Number(storedProject) : null;
+
     const dashboardparams = {
-      projectid: this.projectId,
-      userid: this.userId
+      projectid: this.projectId ?? null,
+      userid: this.userId,
+      // month: this.selectedMonth 
+      month: this.selectedMonth === 'ALL' ? null : this.selectedMonth
     };
 
     this.DashboardService.getDashboard(dashboardparams)
-      .subscribe(res => {
-        this.assignedToMeCount = res.data.total;
-        this.pendingTickets = res.data.pending;
-        this.closedTickets = res.data.closed;
-        this.priorityhigh = res.data.priority;
-        console.log("high piroity working dashboard", this.priorityhigh);
-        console.log("Pending dashboard", this.pendingTickets)
+      .subscribe((res: any) => {
 
+        const data = res?.data || {};
+
+        // ✅ SAFE COUNTS
+        this.assignedToMeCount = data.total || 0;
+        this.pendingTickets = data.pending || 0;
+        // this.closedTickets = data.closed || 0;
+        this.reportedTickets = data.reported || 0;
+        this.priorityhigh = data.priority || 0;
+
+        console.log("Dashboard Data:", data);
+
+        // ✅ SAFE BAR CHART
+        this.barChartLabels = [];
+        const counts: number[] = [];
+        const colors: string[] = [];
+
+        if (Array.isArray(data.statusChart) && this.statuses?.length) {
+          data.statusChart.forEach((s: any) => {
+
+            const status = this.statuses.find(
+              st => Number(st.ticketstatus_id) === Number(s.status_id)
+            );
+
+            if (status) {
+              this.barChartLabels.push(status.statusname);
+              counts.push(Number(s.count));
+              colors.push(status.color || '#999');
+            }
+            else {
+              console.warn("❌ Status not found for:", s.status_id);
+            }
+          });
+        }
+
+        this.barChartData = [{
+          data: counts,
+          backgroundColor: colors,
+        }];
+
+        // ✅ SAFE DONUT CHART
+        this.priorityStatusCharts = [];
+
+        if (Array.isArray(data.priorityChart) && this.priorities?.length) {
+          data.priorityChart.forEach((p: any) => {
+
+            const priority = this.priorities.find(
+              pr => Number(pr.priority_id) === Number(p.priority_id)
+            );
+
+            if (priority) {
+              this.priorityStatusCharts.push({
+                priority: priority.priority,
+                total: Number(p.count),
+                labels: [priority.priority],
+                data: [Number(p.count)],
+                colors: ['#42A5F5']
+              });
+            }
+          });
+        }
+
+      }, err => {
+        console.error("❌ Dashboard API Error:", err);
       });
   }
 
@@ -201,12 +309,8 @@ export class DashboardComponent implements OnInit {
       };
     });
 
-    // const filteredTickets = this.selectedMonth
-    //   ? this.tickets.filter(t =>
-    //     new Date(t.created_at).toISOString().slice(0, 7) === this.selectedMonth
-    //   )
-    //   : this.tickets; //jan 2026
-    const filteredTickets = this.selectedMonth
+
+    const filteredTickets = this.selectedMonth && this.selectedMonth !== 'ALL'
       ? this.tickets.filter(t => {
         const d = new Date(t.created_at);
         const ticketMonth =
@@ -268,42 +372,43 @@ export class DashboardComponent implements OnInit {
   //     now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
   // }
 
-getMonths() {
-  this.months = [];
+  getMonths() {
+    this.months = [];
 
-  const startYear = 2025;
+    const startYear = 2025;
 
-  const now = new Date();
-  const currentYear = now.getFullYear();
-  const currentMonth = now.getMonth(); // 0-based
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth(); // 0-based
 
-  for (let year = startYear; year <= currentYear; year++) {
+    for (let year = startYear; year <= currentYear; year++) {
 
-    const maxMonth = (year === currentYear) ? currentMonth : 11;
+      const maxMonth = (year === currentYear) ? currentMonth : 11;
 
-    for (let month = 0; month <= maxMonth; month++) {
-      const date = new Date(year, month, 1);
+      for (let month = 0; month <= maxMonth; month++) {
+        const date = new Date(year, month, 1);
 
-      this.months.push({
-        label: date.toLocaleString('en-US', {
-          month: 'short',
-          year: 'numeric'
-        }),
-        value: `${year}-${String(month + 1).padStart(2, '0')}`
-      });
+        this.months.push({
+          label: date.toLocaleString('en-US', {
+            month: 'short',
+            year: 'numeric'
+          }),
+          value: `${year}-${String(month + 1).padStart(2, '0')}`
+        });
+      }
     }
-  }
 
-  //*Default  current month*
-  this.selectedMonth =
-    currentYear + '-' + String(currentMonth + 1).padStart(2, '0');
-}
+    //*Default  current month*
+    this.selectedMonth =
+      currentYear + '-' + String(currentMonth + 1).padStart(2, '0');
+  }
 
 
 
   onMonthChange() {
     this.prepareStatusBarChart();
     this.preparePriorityStatusCharts();
+    this.getDashBoard();
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -317,6 +422,8 @@ getMonths() {
   loadPriorities() {
     this.issueTicketService.getTicketPriorities().subscribe(res => {
       this.priorities = res.data || [];
+      // this.getDashBoard();
+
     });
   }
 
@@ -326,7 +433,7 @@ getMonths() {
 
     this.priorityStatusCharts = [];
 
-    const filteredTickets = this.selectedMonth
+    const filteredTickets = this.selectedMonth && this.selectedMonth !== 'ALL'
       ? this.tickets.filter(t => {
         const d = new Date(t.created_at);
         const month =
