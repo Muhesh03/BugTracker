@@ -308,6 +308,19 @@ router.use(function (req, res, next) {
         });
     });
 
+
+
+    router.route('/liveticket/markconverted/:liveticket_id').put(function (req, res) {
+    liveticketdb.markAsConverted(req.params.liveticket_id, function (err, output) {
+        if (err) {
+            return res.status(500).send({ error: 'Something went wrong' });
+        }
+        res.status(200).send({ success: true, message: 'Marked as converted' });
+    });
+});
+
+next(); // this line already exists, add route BEFORE this
+
     next();
 });
 

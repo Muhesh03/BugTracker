@@ -161,36 +161,37 @@ export class LiveTicketsComponent implements OnInit, AfterViewInit {
   }
 
   editLiveTicket(row: any) {
-    this.issueticketService.getLatestTicketNumber().subscribe(res => {
-      const nextTicketNumber = res.data.ticket_number; // get next available issue ticket number
+  this.issueticketService.getLatestTicketNumber().subscribe(res => {
+    const nextTicketNumber = res.data.ticket_number;
 
-      const dialogRef = this.dialog.open(IssueTicketFormComponent, {
-        width: '900px',
-        maxWidth: '95vw',
-        panelClass: 'custom-dialog',
-        data: {
-          live_ticket_id: row.liveticket_id,
-          summary: row.summary,
-          user_id: row.assigned_user_id || row.created_by,
-          description: row.description,
-          priority_id: row.priority_id,
-          ticketstatus_id: row.ticketstatus_id,
-          ticket_tag: Array.isArray(row.tag_ids) ? row.tag_ids : [],
-          tickettype_id: row.tickettype_id,
-          image_path: Array.isArray(row.image_path) ? row.image_path : [],
-          ticket_number: nextTicketNumber,
-          steps_to_reproduce: row.steps_to_reproduce || ''
-        }
-      });
-
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          this.getLiveTicket(); // refresh table if needed
-        }
-      });
+    const dialogRef = this.dialog.open(IssueTicketFormComponent, {
+      width: '900px',
+      maxWidth: '95vw',
+      panelClass: 'custom-dialog',
+      data: {
+        live_ticket_id: row.liveticket_id,
+        summary: row.summary,
+        user_id: row.assigned_user_id || row.created_by,
+        description: row.description,
+        priority_id: row.priority_id,
+        ticketstatus_id: row.ticketstatus_id,
+        ticket_tag: Array.isArray(row.tag_ids) ? row.tag_ids : [],
+        tickettype_id: row.tickettype_id,
+        image_path: Array.isArray(row.image_path) ? row.image_path : [],
+        ticket_number: nextTicketNumber,
+        steps_to_reproduce: row.steps_to_reproduce || ''
+      }
     });
 
-  }
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        row.is_converted = true; 
+        this.getLiveTicket();   
+      }
+    });
+  });
+}
+
   getLiveTicket() {
     const projectparams: { userid: number | null; projectid?: number } = {
       userid: this.userId

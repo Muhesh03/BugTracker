@@ -12,6 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { ShowImageDialogComponent } from '../image-preview-dialog/image-preview-dialog.component';
 import { tick } from '@angular/core/testing';
+import { LiveticketService } from 'src/app/services/liveticket.service';
 
 interface User {
   id: number;
@@ -300,6 +301,7 @@ export class IssueTicketFormComponent implements OnInit {
   constructor(
     private issueticketService: IssueTicketService,
     private dialogRef: MatDialogRef<IssueTicketFormComponent>,
+    private  liveticketservice : LiveticketService ,
 
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
@@ -477,40 +479,46 @@ export class IssueTicketFormComponent implements OnInit {
     this.dialogRef.close(true);
   }
 
-  onSubmit(): void {
-    if (!this.issueTicketForm.valid) return;
+onSubmit(): void {
+  if (!this.issueTicketForm.valid) return;
 
-    const saveTicket = (uploadedImagePaths: string[]) => {
-      const finalImages = [...this.existingImages, ...uploadedImagePaths]; // combine
-      const payload = {
-        ...this.issueTicketForm.value,
-        
-        user_id: this.issueTicketForm.value.user_id || null,
-        steps_to_reproduce: this.issueTicketForm.value.steps_to_reproduce,
-        image_path: finalImages,
-        deleted_images: this.deletedImages,
-        reported_by: this.userId
-      };
-
-      if (this.isEditMode) {
-        this.issueticketService.updateIssueTicket(this.data.issueticket_id, payload)
-          .subscribe(() => this.dialogRef.close(true));
-      } else {
-        this.issueticketService.addIssueTicket(payload)
-          .subscribe(() => this.dialogRef.close(true));
-      }
+  const saveTicket = (uploadedImagePaths: string[]) => {
+    const finalImages = [...this.existingImages, ...uploadedImagePaths];
+    const payload = {
+      ...this.issueTicketForm.value,
+      user_id: this.issueTicketForm.value.user_id || null,
+      steps_to_reproduce: this.issueTicketForm.value.steps_to_reproduce,
+      image_path: finalImages,
+      deleted_images: this.deletedImages,
+      reported_by: this.userId
     };
 
-    if (this.selectedFiles.length > 0) {
-      const formData = new FormData();
-      this.selectedFiles.forEach(f => formData.append('images', f));
-
-      this.issueticketService.uploadImage(formData)
-        .subscribe(res => saveTicket(res.image_paths));
+    if (this.isEditMode) {
+      this.issueticketService.updateIssueTicket(this.data.issueticket_id, payload)
+        .subscribe(() => this.dialogRef.close(true));
     } else {
-      saveTicket([]);
+      this.issueticketService.addIssueTicket(payload)
+        .subscribe(() => {
+
+          // ✅ After saving issue ticket → mark live ticket as converted
+          if (this.data?.live_ticket_id) {
+            this.liveticketservice.markAsConverted(this.data.live_ticket_id).subscribe();
+          }
+
+          this.dialogRef.close(true);
+        });
     }
+  };
+
+  if (this.selectedFiles.length > 0) {
+    const formData = new FormData();
+    this.selectedFiles.forEach(f => formData.append('images', f));
+    this.issueticketService.uploadImage(formData)
+      .subscribe(res => saveTicket(res.image_paths));
+  } else {
+    saveTicket([]);
   }
+}
 
 
   onClose(): void {
