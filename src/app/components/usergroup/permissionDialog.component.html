@@ -1,13 +1,13 @@
 <!-- The custom-dialog class must be applied in your .open() config in TS -->
-<mat-toolbar style="background:var(--formheader-color);color:var(--formcontent-color)">
-    <span class="dialog-title">User Permissions</span>
-    <span class="toolbar-spacer"></span>
-    <button mat-icon-button (click)="onClose()">
+<mat-toolbar class="dialog-toolbar">
+    <h2>User Permissions</h2>
+
+    <button mat-icon-button (click)="onClose()" class="closebtn">
         <mat-icon>close</mat-icon>
     </button>
 </mat-toolbar>
 
-<mat-dialog-content class="dialog-content ">
+<mat-dialog-content>
     <div class="master-section">
         <span class="master-checkbox text-secondary text-decoration-underline">User Settings</span>
     </div>
@@ -35,25 +35,25 @@
     </div>
     <mat-divider class="my-2"></mat-divider>
     <div class="master-section">
-        <span class="master-checkbox text-secondary text-decoration-underline"> Settings</span>
+        <span class="master-checkbox text-secondary text-decoration-underline"> Qc Ticket Settings</span>
     </div>
     <div class="permission-list">
         <mat-checkbox [(ngModel)]="otherpermissions.settings">
-            Settings
+            Qc Ticket
         </mat-checkbox>
     </div>
     <mat-divider class="my-2"></mat-divider>
     <div class="master-section">
-        <span class="master-checkbox text-secondary text-decoration-underline"> QC Ticket</span>
+        <span class="master-checkbox text-secondary text-decoration-underline"> View Ticket Settings</span>
     </div>
     <div class="permission-list">
         <mat-checkbox [(ngModel)]="otherpermissions.view">
-            View
+            View Ticket
         </mat-checkbox>
     </div>
     <mat-divider class="my-2"></mat-divider>
     <div class="master-section">
-        <span class="master-checkbox text-secondary text-decoration-underline"> Client Ticket</span>
+        <span class="master-checkbox text-secondary text-decoration-underline"> Client Ticket Settings</span>
     </div>
     <div class="permission-list">
         <mat-checkbox [(ngModel)]="otherpermissions.clientTicketView">
@@ -68,7 +68,7 @@
     </div>
 </mat-dialog-content>
 
-<mat-dialog-actions align="end" class="dialog-actions mb-3">
-    <button mat-button (click)="onClose()">Cancel</button>
-    <button mat-raised-button class="save-btn" (click)="save()">{{ isEdit ? 'Update' : 'Save' }}</button>
+<mat-dialog-actions>
+    <!-- <button mat-raised-button class="bbtn" (click)="onClose()">Cancel</button> -->
+    <button mat-raised-button class="pbtn" (click)="save()">{{ isEdit ? 'Update' : 'Save' }}</button>
 </mat-dialog-actions>

@@ -1,7 +1,17 @@
-<div class="mainfilterdiv sticky-filter">
-  <form [formGroup]="filterForm" class="min-form mb-2" style="width: 100%; padding: 0; max-width: none;">
+<div class="contentpage">
 
-    <div class="search">
+  <form [formGroup]="filterForm">
+
+    <div class="w-100 d-flex flex-wrap align-items-center justify-content-start mb-2 gap-3">
+      <div class="col-12 col-md-3 ml-auto fields">
+        <mat-form-field appearance="fill" class="searchbox">
+          <mat-icon matPrefix>search</mat-icon>
+          <input matInput placeholder="Search..." formControlName="searchtext" (keyup)="searchAll($event)">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="d-flex flex-wrap">
 
       <!-- 
       <mat-form-field appearance="outline" class="search-small">
@@ -16,12 +26,9 @@
         </mat-select>
       </mat-form-field> -->
 
-
-      <div class="inline-filter-group">
-        <mat-form-field appearance="outline" class="search-small">
+      <div class="col-6 col-md-1 fields">
+        <mat-form-field appearance="outline">
           <mat-label>Priority</mat-label>
-
-
           <mat-select formControlName="filterValuePriority" placeholder="Select Priority">
             <mat-option value="0">please select</mat-option>
             <mat-option *ngFor="let p of priorities" [value]="p.priority_id">{{ p.priority }}</mat-option>
@@ -29,33 +36,28 @@
         </mat-form-field>
       </div>
 
-
-      <div class="inline-filter-group">
-        <mat-form-field appearance="outline" class="search-small">
+      <div class="col-6 col-md-1 fields">
+        <mat-form-field appearance="outline">
           <mat-label>Types</mat-label>
-
           <mat-select formControlName="filterValueType" placeholder="Select Priority">
-
             <mat-option value="0">please select</mat-option>
             <mat-option *ngFor="let t of tickettypes" [value]="t.tickettype_id">{{ t.name }}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
 
-      <div class="inline-filter-group">
-        <mat-form-field appearance="outline" class="search-small">
+      <div class="col-6 col-md-1 fields">
+        <mat-form-field appearance="outline">
           <mat-label>Status</mat-label>
-
           <mat-select formControlName="filterValueStatus" placeholder="Select Status">
-
             <mat-option value="0">please select</mat-option>
             <mat-option *ngFor="let s of statuses" [value]="s.ticketstatus_id">{{ s.statusname }}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
 
-      <div class="inline-filter-group">
-        <mat-form-field appearance="outline" class="search-small" floatLabel="always">
+      <div class="col-6 col-md-1 fields">
+        <mat-form-field appearance="outline" floatLabel="always">
           <mat-label>Tags</mat-label>
           <mat-select formControlName="filterValueTag" multiple placeholder="Please select">
             <mat-option *ngFor="let t of tag" [value]="t.tickettag_id">
@@ -65,68 +67,78 @@
         </mat-form-field>
       </div>
 
-      <mat-form-field appearance="outline" class="search-small">
-        <mat-label style="color:#1d6f42;font-size:15px;">Date Between</mat-label>
-
-        <mat-select formControlName="filterValueDate" placeholder="Time">
-          <mat-option value="0">All Time</mat-option>
-          <mat-option value="Yesterday">Yesterday</mat-option>
-          <mat-option value="Between">Between</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <div *ngIf="filterForm.value.filterValueDate === 'Between'" class="inline-filter-group">
-        <mat-form-field appearance="outline" style="width: 110px;">
-          <input matInput [matDatepicker]="pickerFrom" formControlName="fromDate" placeholder="From">
-          <mat-datepicker-toggle matSuffix [for]="pickerFrom"
-            style="color:#547562; transform: scale(0.8);"></mat-datepicker-toggle>
-          <mat-datepicker #pickerFrom></mat-datepicker>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" style="width: 110px;">
-          <input matInput [matDatepicker]="pickerTo" formControlName="toDate" placeholder="To">
-          <mat-datepicker-toggle matSuffix [for]="pickerTo"
-            style="color:#547562; transform: scale(0.8);"></mat-datepicker-toggle>
-          <mat-datepicker #pickerTo></mat-datepicker>
-        </mat-form-field>
-
-      </div>
-
-      <button mat-raised-button (click)="getFilter()" class="filterbutton">
-        Filter
-      </button>
-      <!-- CREATE EXCEL BUTTON -->
-      <!-- <button mat-raised-button color="success" class="excel-btn" > -->
-      <div>
-        <img src="./assets/excel.png" alt="excel not found" (click)="downloadExcel()" class="excel"
-          title="Download Excel">
-        <img src="assets/pdf.png" (click)="downloadPdf()" class="pdf" title="Download Pdf">
-      </div>
-
-      <div class="right-container">
-        <mat-form-field appearance="none" class="searchbox">
-          <mat-icon matPrefix>search</mat-icon>
-          <input matInput placeholder="Search..." formControlName="searchtext" (keyup)="searchAll($event)">
+      <div class="col-6 col-md-1 fields">
+        <mat-form-field appearance="outline">
+          <mat-label style="color:#1d6f42;font-size:15px;">Date Between</mat-label>
+          <mat-select formControlName="filterValueDate" placeholder="Time">
+            <mat-option value="0">All Time</mat-option>
+            <mat-option value="Yesterday">Yesterday</mat-option>
+            <mat-option value="Between">Between</mat-option>
+          </mat-select>
         </mat-form-field>
       </div>
-      <!-- </button> -->
+
+      <ng-container *ngIf="filterForm.value.filterValueDate === 'Between'">
+        <div class="col-6 col-md-2 fields">
+          <mat-form-field appearance="outline">
+            <input matInput [matDatepicker]="pickerFrom" formControlName="fromDate" placeholder="From">
+            <mat-datepicker-toggle matSuffix [for]="pickerFrom"
+              style="color:#547562; transform: scale(0.8);"></mat-datepicker-toggle>
+            <mat-datepicker #pickerFrom></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="col-6 col-md-2 fields">
+          <mat-form-field appearance="outline">
+            <input matInput [matDatepicker]="pickerTo" formControlName="toDate" placeholder="To">
+            <mat-datepicker-toggle matSuffix [for]="pickerTo"
+              style="color:#547562; transform: scale(0.8);"></mat-datepicker-toggle>
+            <mat-datepicker #pickerTo></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </ng-container>
+
+      <div class="pdiv">
+        <button mat-raised-button (click)="getFilter()" class="pbtn">
+          Filter
+        </button>
+      </div>
+
+      <div class="pdiv">
+        <button mat-raised-button (click)="downloadExcel()" class="filebtn">
+          <img src="./assets/excel.png" alt="excel not found" class="" title="Download Excel">
+        </button>
+      </div>
+
+      <div class="pdiv">
+        <button mat-raised-button (click)="downloadPdf()" class="filebtn">
+          <img src="assets/pdf.png" class="" title="Download Pdf">
+        </button>
+      </div>
+
     </div>
   </form>
-</div>
 
-<div class="page-scroll-container">
+  <div class="tablewrapper">
 
-  <div class="table-wrapper mat-elevation-z6">
     <table mat-table [dataSource]="issueticketDataSource" class="mat-table issueticket-table ">
 
       <!-- S.No -->
       <ng-container matColumnDef="sno">
-        <th mat-header-cell *matHeaderCellDef>S.No</th>
+        <th mat-header-cell *matHeaderCellDef class="col-slno">Sl.No</th>
         <td mat-cell *matCellDef="let row; let i = index">
           {{ i + 1 }}
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="icons">
+        <th mat-header-cell *matHeaderCellDef>Priority</th>
+        <td mat-cell *matCellDef="let row">
+          <mat-icon [style.color]="iconMap[row.icon]?.color || 'gray'">
+            {{ iconMap[row.icon]?.name || 'help' }}
+          </mat-icon>
+        </td>
+      </ng-container>
 
       <ng-container matColumnDef="tag_names">
         <th mat-header-cell *matHeaderCellDef>Tags</th>
@@ -138,15 +150,10 @@
         </td>
       </ng-container>
 
-
-
-      <!-- Icon -->
-      <ng-container matColumnDef="icons">
-        <th mat-header-cell *matHeaderCellDef>Priority</th>
+      <ng-container matColumnDef="ticket_number">
+        <th mat-header-cell *matHeaderCellDef>Ticket Number</th>
         <td mat-cell *matCellDef="let row">
-          <mat-icon [style.color]="iconMap[row.icon]?.color || 'gray'">
-            {{ iconMap[row.icon]?.name || 'help' }}
-          </mat-icon>
+          {{ row.ticket_number}}
         </td>
       </ng-container>
 
@@ -155,6 +162,17 @@
         <td mat-cell *matCellDef="let row">
           <span>
             {{ row.ticket_type_name }}
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="created_at">
+        <th mat-header-cell *matHeaderCellDef>Date Submitted</th>
+        <td mat-cell *matCellDef="let row">
+          <span>
+            <!-- Suppose ticket.created_at is your ISO string from backend -->
+            <span>{{ row.created_at | date:'dd/MM/yyyy' }}</span>
+
           </span>
         </td>
       </ng-container>
@@ -168,53 +186,11 @@
         </td>
       </ng-container>
 
-
-
-
-      <ng-container matColumnDef="created_at">
-        <th mat-header-cell *matHeaderCellDef>Date Submitted</th>
-        <td mat-cell *matCellDef="let row">
-          <span>
-            <!-- Suppose ticket.created_at is your ISO string from backend -->
-            <span>{{ row.created_at | date:'dd/MM/yyyy' }}</span>
-
-          </span>
-        </td>
-      </ng-container>
-
-
       <ng-container matColumnDef="user_id">
         <th mat-header-cell *matHeaderCellDef>Assigned To</th>
         <td mat-cell *matCellDef="let row">
           <span>
             {{ row.assigned_to_name }}
-          </span>
-        </td>
-      </ng-container>
-
-
-      <!-- Remarks -->
-      <ng-container matColumnDef="summary">
-        <th mat-header-cell *matHeaderCellDef>Summary</th>
-        <td mat-cell *matCellDef="let row">
-          {{ row.summary}}
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="image_path">
-        <th mat-header-cell *matHeaderCellDef>Attachment</th>
-
-        <td mat-cell *matCellDef="let row">
-
-          <!-- show icons equal to number of images -->
-          <ng-container *ngIf="row.image_path && row.image_path.length">
-            <mat-icon *ngFor="let img of row.image_path" class="image-icon" (click)="openImages([img])"
-              title="View Image" style="color:#547562;cursor:pointer">
-              image
-            </mat-icon>
-          </ng-container>
-          <span *ngIf="!row.image_path || row.image_path.length === 0">
-            —
           </span>
         </td>
       </ng-container>
@@ -229,10 +205,10 @@
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="ticket_number">
-        <th mat-header-cell *matHeaderCellDef>Ticket Number</th>
+      <ng-container matColumnDef="summary">
+        <th mat-header-cell *matHeaderCellDef>Summary</th>
         <td mat-cell *matCellDef="let row">
-          {{ row.ticket_number}}
+          {{ row.summary}}
         </td>
       </ng-container>
 
@@ -246,20 +222,36 @@
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="image_path">
+        <th mat-header-cell *matHeaderCellDef class="col-actions">Attachment</th>
+        <td mat-cell *matCellDef="let row" class="text-center">
+          <!-- show icons equal to number of images -->
+          <ng-container *ngIf="row.image_path && row.image_path.length">
+            <mat-icon *ngFor="let img of row.image_path" class="image-icon" (click)="openImages([img])"
+              title="View Image" style="color:#547562;cursor:pointer">
+              image
+            </mat-icon>
+          </ng-container>
+          <span *ngIf="!row.image_path || row.image_path.length === 0">
+            —
+          </span>
+        </td>
+      </ng-container>
+
       <!-- Edit -->
       <ng-container matColumnDef="edit">
-        <th mat-header-cell *matHeaderCellDef>Update</th>
-        <td mat-cell *matCellDef="let row">
+        <th mat-header-cell *matHeaderCellDef class="col-actions">Edit</th>
+        <td mat-cell *matCellDef="let row" class="text-center">
           <button mat-icon-button class="action-btn edit" (click)="editISSUE(row)">
-            <mat-icon>edit</mat-icon>
+            <mat-icon>edit_note</mat-icon>
           </button>
         </td>
       </ng-container>
 
       <!-- Delete -->
       <ng-container matColumnDef="delete">
-        <th mat-header-cell *matHeaderCellDef>Delete</th>
-        <td mat-cell *matCellDef="let row">
+        <th mat-header-cell *matHeaderCellDef class="col-actions">Delete</th>
+        <td mat-cell *matCellDef="let row" class="text-center">
           <button mat-icon-button class="action-btn delete" (click)="deleteIssue(row)">
             <mat-icon>delete</mat-icon>
           </button>
@@ -270,7 +262,11 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
     </table>
-    <mat-paginator [pageSizeOptions]="[20,40,60]" [pageSize]="20" showFirstLastButtons>
-    </mat-paginator>
+
+    <div class="paginator">
+      <mat-paginator [pageSizeOptions]="[20,40,60]" [pageSize]="20" showFirstLastButtons>
+      </mat-paginator>
+    </div>
+
   </div>
 </div>

@@ -32,6 +32,7 @@ exports.getProjects = function (cb) {
   knex('projects')
     .select('*')
     .whereNot({ status_id: 3 })
+    
     .orderBy('project_id')
     .then(function (out) {
       console.log('projects DATA SENDED', out);
@@ -94,6 +95,7 @@ exports.getProjectsByUser = (userId) => {
     .where('pt.user_id', userId)
     .where('pt.is_active', true)
     .whereNot('p.status_id', 3)
+    .andWhereNot({'p.status_id': 2 })
     .select('p.project_id', 'p.projectname')
     .distinct()
     .orderBy('p.project_id', 'asc');

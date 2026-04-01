@@ -1,14 +1,11 @@
-/* Wrapper */
-.table-wrapper {
-  max-width: 100%;
-  border-radius: 12px;
-  background: #ffffff;
+:host {
+  display: flex !important;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
 }
-.maindiv {
-  padding-left: 16px;
-  padding-right: 16px;
 
-}
+
 /* Table */
 .compact-table {
   width: 100%;
@@ -23,7 +20,7 @@
 
 /* Header */
 .mat-header-cell {
-  background: var(--tableheader-color);
+  background: var(--tableheader);
   font-weight: 400;
   font-size: 14px;
   color: black;
@@ -31,7 +28,7 @@
 
 /* Sticky header */
 .sticky-header th.mat-header-cell {
-  background-color: var(--tableheader-color);
+  background-color: var(--tableheader);
   position: sticky;
   top: 0;
   z-index: 10;

@@ -1,16 +1,19 @@
-<div class="maindiv">
-  <button mat-raised-button style="background-color:var(--tablebutton-color);
- color:white;" (click)="openPriorityDialog()" class="prioritybutton mb-2 mt-2">
-    Create Priority
-  </button>
+<div class="contentpage">
 
+  <div class="w-100 d-flex flex-wrap align-items-start justify-content-start mt-2 mb-3 gap-3">
+    <div class="pdiv">
+      <button mat-raised-button (click)="openPriorityDialog()" class="pbtn">
+        Create Priority
+      </button>
+    </div>
+  </div>
 
-  <div class="table-wrapper mat-elevation-z6">
+  <div class="tablewrapper">
     <table mat-table [dataSource]="priorityDataSource" class="mat-table project-table sticky-header">
 
       <!-- S.No -->
       <ng-container matColumnDef="sno">
-        <th mat-header-cell *matHeaderCellDef class="col-si-no">S.No</th>
+        <th mat-header-cell *matHeaderCellDef class="col-si-no">SI.No</th>
         <td mat-cell *matCellDef="let row; let i = index" class="col-si-no">
           {{ i + 1 }}
         </td>
@@ -65,20 +68,16 @@
 
 
       <!-- Delete -->
-<ng-container matColumnDef="actions">
-  <th mat-header-cell *matHeaderCellDef class="col-actions">Delete</th>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef class="col-actions">Delete</th>
 
-  <td mat-cell *matCellDef="let row" class="col-actions">
-    <button
-      mat-icon-button
-      class="action-btn delete"
-      [disabled]="row.disabled === 4"
-      (click)="deleteticketpriority(row)"
-    >
-      <mat-icon>delete</mat-icon>
-    </button>
-  </td>
-</ng-container>
+        <td mat-cell *matCellDef="let row" class="col-actions">
+          <button mat-icon-button class="action-btn delete" [disabled]="row.disabled === 4"
+            (click)="deleteticketpriority(row)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
 
 
 
@@ -87,8 +86,11 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
     </table>
-    <mat-paginator [pageSizeOptions]="[5,10,20]" [pageSize]="10" showFirstLastButtons>
-    </mat-paginator>
- </div>
-  
+
+    <div class="paginator">
+      <mat-paginator [pageSizeOptions]="[5,10,20]" [pageSize]="10" showFirstLastButtons>
+      </mat-paginator>
+    </div>
+  </div>
+
 </div>

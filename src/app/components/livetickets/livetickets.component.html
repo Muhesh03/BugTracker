@@ -1,21 +1,19 @@
 <div class="contentpage">
 
-
   <form [formGroup]="filterForm">
 
-    <div class="w-100 d-flex flex-wrap align-items-center justify-content-start mb-2">
+    <div class="w-100 d-flex flex-wrap align-items-start justify-content-start mb-2 gap-3">
       <div class="pdiv">
         <button mat-raised-button class="pbtn" (click)="openLiveTicketDialog()">
           Create Client Ticket
         </button>
       </div>
-      <div class="col-12 col-md-4 ml-auto fields">
+      <div class="col-12 col-md-3 ml-auto fields">
         <mat-form-field appearance="fill" class="searchbox">
           <mat-icon matPrefix>search</mat-icon>
           <input matInput placeholder="Search..." formControlName="searchtext" (keyup)="searchAll($event)">
         </mat-form-field>
       </div>
-
     </div>
 
     <div class="d-flex flex-wrap">
@@ -23,7 +21,6 @@
       <div class="col-5 col-md-2 fields">
         <mat-form-field appearance="outline">
           <mat-label>Priority</mat-label>
-
           <mat-select formControlName="filterValuePriority">
             <mat-option value="0">please select</mat-option>
             <mat-option *ngFor="let p of priorities" [value]="p.priority_id">
@@ -36,7 +33,6 @@
       <div class="col-5 col-md-2 fields">
         <mat-form-field appearance="outline">
           <mat-label style="color:#1d6f42;font-size:15px;">Date Between</mat-label>
-
           <mat-select formControlName="filterValueDate" placeholder="Time">
             <mat-option value="0">All Time</mat-option>
             <mat-option value="Yesterday">Yesterday</mat-option>
@@ -63,13 +59,13 @@
             <mat-datepicker #pickerTo></mat-datepicker>
           </mat-form-field>
         </div>
-
       </ng-container>
 
-      <button mat-raised-button (click)="getFilter()" class="pbtn">
-        Filter
-      </button>
-
+      <div class="pdiv">
+        <button mat-raised-button (click)="getFilter()" class="pbtn">
+          Filter
+        </button>
+      </div>
 
       <!-- 
           <div class="inline-filter-group">
@@ -83,7 +79,6 @@
               </mat-select>
             </mat-form-field>
           </div> -->
-
 
       <!-- <div class="inline-filter-group">
             <mat-form-field appearance="outline" class="search-small">
@@ -100,8 +95,6 @@
     </div>
   </form>
 
-
-
   <div class="tablewrapper">
     <table mat-table [dataSource]="liveticketDataSource" class="liveticket-table mat-elevation-z8">
 
@@ -113,21 +106,11 @@
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="image_path">
-        <th mat-header-cell *matHeaderCellDef>Attachment</th>
-
+      <!-- Priority -->
+      <ng-container matColumnDef="priority_id">
+        <th mat-header-cell *matHeaderCellDef> Priority </th>
         <td mat-cell *matCellDef="let row">
-
-          <!-- show icons equal to number of images -->
-          <ng-container *ngIf="row.image_path && row.image_path.length">
-            <mat-icon *ngFor="let img of row.image_path" class="image-icon" (click)="openImages([img])"
-              title="View Image" style="color:#547562;cursor: pointer;">
-              image
-            </mat-icon>
-          </ng-container>
-          <span *ngIf="!row.image_path || row.image_path.length === 0">
-            —
-          </span>
+          {{ row.priority }}
         </td>
       </ng-container>
 
@@ -147,33 +130,6 @@
         </td>
       </ng-container>
 
-      <ng-container *ngIf="otherpermissions.clientTicketAction" matColumnDef="action">
-        <th mat-header-cell *matHeaderCellDef> Action </th>
-        <td mat-cell *matCellDef="let row">
-
-          <button mat-icon-button color="primary" (click)="editLiveTicket(row)">
-
-            <mat-icon>edit_note</mat-icon>
-
-          </button>
-
-        </td>
-      </ng-container>
-
-
-      <ng-container matColumnDef="update">
-        <th mat-header-cell *matHeaderCellDef> update</th>
-        <td mat-cell *matCellDef="let row">
-
-          <button mat-icon-button color="primary" (click)="updateLiveTicket(row)">
-
-            <mat-icon style="color:#5a9eda;">edit</mat-icon>
-
-          </button>
-
-        </td>
-      </ng-container>
-
       <!-- Instance -->
       <ng-container matColumnDef="instance">
         <th mat-header-cell *matHeaderCellDef> Instance </th>
@@ -190,6 +146,39 @@
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="image_path">
+        <th mat-header-cell *matHeaderCellDef class="text-center">Attachment</th>
+        <td mat-cell *matCellDef="let row" class="text-center">
+          <!-- show icons equal to number of images -->
+          <ng-container *ngIf="row.image_path && row.image_path.length">
+            <mat-icon *ngFor="let img of row.image_path" class="image-icon" (click)="openImages([img])"
+              title="View Image" style="color:#547562;cursor: pointer;">
+              image
+            </mat-icon>
+          </ng-container>
+          <span *ngIf="!row.image_path || row.image_path.length === 0">
+            —
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="update">
+        <th mat-header-cell *matHeaderCellDef class="col-actions">View</th>
+        <td mat-cell *matCellDef="let row" class="text-center">
+          <button mat-icon-button color="primary" (click)="updateLiveTicket(row)">
+            <mat-icon style="color:#5a9eda;">visibility</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <ng-container *ngIf="otherpermissions.clientTicketAction" matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef class="col-actions"> Convert </th>
+        <td mat-cell *matCellDef="let row" class="text-center">
+          <button mat-icon-button color="primary" (click)="editLiveTicket(row)">
+            <mat-icon>rotate_90_degrees_cw</mat-icon>
+          </button>
+        </td>
+      </ng-container>
 
       <ng-container matColumnDef="tag_names">
         <th mat-header-cell *matHeaderCellDef>Tags</th>
@@ -201,14 +190,6 @@
         </td>
       </ng-container>
 
-
-      <!-- Priority -->
-      <ng-container matColumnDef="priority_id">
-        <th mat-header-cell *matHeaderCellDef> Priority </th>
-        <td mat-cell *matCellDef="let row">
-          {{ row.priority }}
-        </td>
-      </ng-container>
 
       <!-- Status -->
       <ng-container matColumnDef="status_id">

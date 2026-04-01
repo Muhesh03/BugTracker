@@ -1,18 +1,21 @@
-<div class="">
-  <div class="sticky-container">
-    <button mat-raised-button style="background-color: var(--formheader-color);color: var(--formcontent-color);"
-      (click)="openUserDialog()" class="mb-2 mt-2">
-      Create User
-    </button>
-  </div>
-  <div class="usertablewrapper mat-elevation-z6">
+<div class="contentpage">
 
-    <table mat-table [dataSource]="dataSource" matSort class="mat-table">
+  <div class="w-100 d-flex flex-wrap align-items-start justify-content-start mt-2 mb-3 gap-3">
+    <div class="pdiv">
+      <button mat-raised-button (click)="openUserDialog()" class="pbtn">
+        Create User
+      </button>
+    </div>
+  </div>
+
+  <div class="tablewrapper">
+
+    <table mat-table [dataSource]="dataSource" matSort>
 
       <!-- SI.No -->
       <ng-container matColumnDef="position">
-        <th mat-header-cell *matHeaderCellDef class="col-si-no">SI.No</th>
-        <td mat-cell *matCellDef="let row; let i = index" class="col-si-no">
+        <th mat-header-cell *matHeaderCellDef class="col-slno">SI.No</th>
+        <td mat-cell *matCellDef="let row; let i = index" class="text-center">
           {{ i + 1 }}
         </td>
       </ng-container>
@@ -24,8 +27,8 @@
           {{ row.fullname }}
         </td>
       </ng-container>
-      <!-- Attachment -->
 
+      <!-- Attachment -->
       <!-- <ng-container matColumnDef="attachment">
       <th mat-header-cell *matHeaderCellDef class="col-group">Attachment</th>
       <td mat-cell *matCellDef="let row" class="col-group">
@@ -41,22 +44,18 @@
             visibility
           </mat-icon>
         </ng-container>
-
         <ng-template #noFile>-</ng-template>
       </td>
     </ng-container> -->
+
       <ng-container matColumnDef="attachment">
         <th mat-header-cell *matHeaderCellDef class="col-actions">Attachment</th>
-
         <td mat-cell *matCellDef="let row" class="col-actions ">
-
           <button *ngIf="row.attachment_name" mat-icon-button color="primary"
             (click)="viewAttachment(row.attachment_name)">
             <mat-icon>attach_file</mat-icon>
           </button>
-
           <span *ngIf="!row.attachment_name">—</span>
-
         </td>
       </ng-container>
 
@@ -76,6 +75,7 @@
         </mat-slide-toggle>
       </td>
     </ng-container> -->
+
       <ng-container matColumnDef="status">
         <th mat-header-cell *matHeaderCellDef class="col-actions">Status</th>
         <td mat-cell *matCellDef="let row" class="col-actions">
@@ -85,13 +85,12 @@
         </td>
       </ng-container>
 
-
       <!-- Edit -->
       <ng-container matColumnDef="edit">
         <th mat-header-cell *matHeaderCellDef class="col-actions">Edit</th>
         <td mat-cell *matCellDef="let row" class="col-actions">
           <button mat-icon-button class="action-btn edit" (click)="editUser(row)">
-            <mat-icon>edit</mat-icon>
+            <mat-icon>edit_note</mat-icon>
           </button>
         </td>
       </ng-container>
@@ -100,9 +99,6 @@
       <ng-container matColumnDef="delete">
         <th mat-header-cell *matHeaderCellDef class="col-actions">Delete</th>
         <td mat-cell *matCellDef="let row" class="col-actions">
-          <!-- <button mat-icon-button class="action-btn delete" (click)="deleteuser(row)">
-          <mat-icon>delete</mat-icon>
-        </button> -->
           <button mat-icon-button class="action-btn delete" (click)="deleteuser(row)">
             <mat-icon>delete</mat-icon>
           </button>
@@ -113,11 +109,10 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
     </table>
-
+    <div class="paginator">
+      <mat-paginator [pageSizeOptions]="[20, 40, 60]" [pageSize]="20" showFirstLastButtons>
+      </mat-paginator>
+    </div>
   </div>
 
-  <div>
-    <mat-paginator [pageSizeOptions]="[20, 40, 60]" [pageSize]="20" showFirstLastButtons>
-    </mat-paginator>
-  </div>
 </div>

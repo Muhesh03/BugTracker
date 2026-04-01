@@ -1,61 +1,60 @@
-<!-- Close Button (Top Right) -->
-<mat-toolbar style="background-color:var(--formheader-color); color:var(--formcontent-color);" class="dialog-toolbar">
-  <span>
-    <h2 class="text-center" mat-dialog-title>
-      {{ isEdit ? 'update user': 'User Registration' }}
-    </h2>
-  </span>
-  <!-- This span acts as a spacer, pushing the close button to the right -->
-  <span class="toolbar-spacer"></span>
-  <button mat-icon-button (click)="onClose()" aria-label="Close dialog">
+<mat-toolbar class="dialog-toolbar">
+  <h2 class="text-center">
+    {{ isEdit ? 'Update user': 'Create User' }}
+  </h2>
+
+  <button mat-icon-button class="closebtn" (click)="onClose()" aria-label="Close dialog">
     <mat-icon>close</mat-icon>
   </button>
 </mat-toolbar>
 
-<mat-dialog-content class="dialog-content-scrollable  mx-auto">
+<mat-dialog-content>
 
   <form [formGroup]="registrationForm" (ngSubmit)="submitForm()">
 
     <!-- Full Name -->
-    <mat-form-field appearance="outline" class="full-width aggressive-field ms-4">
-      <mat-label>Full Name</mat-label>
-      <input matInput formControlName="fullname" required />
-
-      <!-- REQUIRED ERROR -->
-      <mat-error *ngIf="registrationForm.get('fullname')?.hasError('required')">
-        Full name is required
-      </mat-error>
-
-      <!-- DUPLICATE ERROR -->
-      <mat-error *ngIf="registrationForm?.get('fullname')?.hasError('duplicate')">
-        User already exists
-      </mat-error>
-
-    </mat-form-field>
+    <div class="col-12 col-md-12 mb-1 fields px-0">
+      <mat-form-field appearance="outline">
+        <mat-label>Full Name</mat-label>
+        <input matInput formControlName="fullname" required />
+        <!-- REQUIRED ERROR -->
+        <mat-error *ngIf="registrationForm.get('fullname')?.hasError('required')">
+          Full name is required
+        </mat-error>
+        <!-- DUPLICATE ERROR -->
+        <mat-error *ngIf="registrationForm?.get('fullname')?.hasError('duplicate')">
+          User already exists
+        </mat-error>
+      </mat-form-field>
+    </div>
 
     <!-- User Status -->
-    <!-- <mat-form-field appearance="outline" class="full-width aggressive-field ms-4">
+    <!-- <mat-form-field appearance="outline" class="">
       <mat-label>User Status</mat-label>
       <input matInput formControlName="status" />
     </mat-form-field> -->
 
     <!-- Contact Number -->
-    <mat-form-field appearance="outline" class="full-width aggressive-field ms-4">
-      <mat-label>Contact Number</mat-label>
-      <input matInput formControlName="phonenumber" />
-    </mat-form-field>
+    <div class="col-12 col-md-12 mb-1 fields px-0">
+      <mat-form-field appearance="outline">
+        <mat-label>Contact Number</mat-label>
+        <input matInput formControlName="phonenumber" />
+      </mat-form-field>
+    </div>
 
     <!-- Email -->
-    <mat-form-field appearance="outline" class="full-width aggressive-field ms-4">
-      <mat-label>Email Address</mat-label>
-      <input matInput formControlName="email" placeholder="pat@example.com" required autocomplete="email" />
-      <mat-error *ngIf="registrationForm.get('email')?.invalid && registrationForm.get('email')?.touched">
-        {{ getErrorMessage() }}
-      </mat-error>
-    </mat-form-field>
+    <div class="col-12 col-md-12 mb-1 fields px-0">
+      <mat-form-field appearance="outline">
+        <mat-label>Email Address</mat-label>
+        <input matInput formControlName="email" placeholder="pat@example.com" required  />
+        <mat-error *ngIf="registrationForm.get('email')?.invalid && registrationForm.get('email')?.touched">
+          {{ getErrorMessage() }}
+        </mat-error>
+      </mat-form-field>
+    </div>
 
     <!-- Password -->
-    <!-- <mat-form-field appearance="outline" class="full-width aggressive-field ms-4">
+    <!-- <mat-form-field appearance="outline" class="">
       <mat-label>Password</mat-label>
       <input matInput type="password" formControlName="password" />
       <mat-error *ngIf="registrationForm.get('password')?.hasError('minlength')">
@@ -63,27 +62,29 @@
       </mat-error>
     </mat-form-field> -->
 
-    <mat-form-field appearance="outline" class="full-width aggressive-field ms-4">
-      <mat-label>Password</mat-label>
-      <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" autocomplete="current-password">
+    <div class="col-12 col-md-12 mb-1 fields px-0">
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
 
-      <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
-        [attr.aria-pressed]="hide">
-        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-      </button>
-    </mat-form-field>
-
+        <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hide">
+          <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
 
     <!-- User Group -->
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>User Group</mat-label>
-      <mat-select formControlName="usergroup_id">
-        <mat-option *ngFor="let u of usergrouparray" [value]="u.usergroup_id">
-          {{ u.usergroupname }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
+    <div class="col-12 col-md-12 mb-1 fields px-0">
+      <mat-form-field appearance="outline">
+        <mat-label>User Group</mat-label>
+        <mat-select formControlName="usergroup_id">
+          <mat-option *ngFor="let u of usergrouparray" [value]="u.usergroup_id">
+            {{ u.usergroupname }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
     <!-- <div class="drop-zone" [class.dragging]="isDragging" (dragover)="onDragOver($event)"
       (dragleave)="onDragLeave($event)" (drop)="onDrop($event)">
 
@@ -115,7 +116,7 @@
 
       <!-- NO NEW FILE SELECTED -->
       <p *ngIf="selectedFiles.length === 0 && !existingAttachmentName">
-        Drag & drop files here or
+       Add Photo (Optional)
         <label class="browse">
           browse
           <input type="file" hidden (change)="onFileSelect($event)">
@@ -154,7 +155,6 @@
     Upload
   </button -->
 
-  <hr>
   <!-- 
   <h4>Attachments</h4>
   <ul class="attachment-list">
@@ -164,17 +164,16 @@
     </li>
   </ul> -->
 
+</mat-dialog-content>
 
-  <mat-dialog-actions class="dialog-actions">
-    <button mat-stroked-button mat-dialog-close class="cancel-btn">
-      Close
-    </button>
-    <!-- <button mat-raised-button class="save-btn me-3" (click)="submitForm(); upload()">
+<mat-dialog-actions class="dialog-actions">
+  <!-- <button mat-stroked-button mat-dialog-close class="bbtn">
+    Close
+  </button> -->
+  <!-- <button mat-raised-button class="save-btn me-3" (click)="submitForm(); upload()">
       {{ isEdit ? 'Update' : 'Save' }}
     </button> -->
-    <button mat-raised-button class="save-btn me-3" (click)="submitForm()">
-      {{ isEdit ? 'Update' : 'Save' }}
-    </button>
-  </mat-dialog-actions>
-
-</mat-dialog-content>
+  <button mat-raised-button class="pbtn" (click)="submitForm()">
+    {{ isEdit ? 'Update' : 'Create' }}
+  </button>
+</mat-dialog-actions>

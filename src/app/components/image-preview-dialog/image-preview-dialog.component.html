@@ -1,3 +1,17 @@
+<mat-toolbar class="dialog-toolbar">
+  <h2>Image Preview</h2>
+  <button mat-icon-button class="closebtn" (click)="onClose()" type="button">
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-toolbar>
+
+<mat-dialog-content>
+  <div class="popupimg-container" *ngFor="let img of images">
+    <img [src]="environment.ServerApi + 'uploads/' + img" class="image" />
+
+  </div>
+</mat-dialog-content>
+
 <!-- <div class="image-dialog-header">
   <h2 style="color:rgb(39, 41, 39)">Image Preview</h2>
   <mat-icon style="color:rgb(74, 80, 74);font-size:40px;" (click)="onClose()">cancel</mat-icon>
@@ -8,11 +22,3 @@
 <!-- <div class="image-dialog-footer">
      <button mat-raised-button style="background-color: green;color:white" (click)="onClose()">Close</button>
 </div> -->
-
-<div class="image-dialog-header">
-  <h2 style="color:rgb(39, 41, 39)">Image Preview</h2>
-  <mat-icon style="color:rgb(74, 80, 74);font-size:40px;" (click)="onClose()">cancel</mat-icon>
-</div>
-<div class="img-wrapper" *ngFor="let img of images">
- 
-<img [src]="environment.ServerApi + 'uploads/' + img" class="image" />

@@ -1,3 +1,11 @@
+:host {
+  display: flex !important;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+
 ::ng-deep .mat-tab-list .mat-tab-labels .mat-tab-label-active {
 color:rgb(255, 255, 255);
 background-color: var(--formheader-color);
@@ -5,5 +13,5 @@ background-color: var(--formheader-color);
 
 ::ng-deep .mat-tab-list .mat-tab-labels {
 color:blue;
-/* background-color: var(--tableheader-color); */
+/* background-color: var(--tableheader); */
 }

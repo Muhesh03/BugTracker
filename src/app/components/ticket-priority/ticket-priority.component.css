@@ -1,3 +1,11 @@
+:host {
+  display: flex !important;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+
 .icon-radio-group {
   display: flex;
   justify-content: space-between;
@@ -51,8 +59,8 @@
 }
 
 .project-table .mat-header-cell {
-  background: var(--tableheader-color);
-  color: var(--tablecontent-color);
+  background: var(--tableheader);
+  color: var(--tablecontent);
   font-weight: 400;
   font-size: 14px;
 }

@@ -299,7 +299,6 @@ export class ProjectDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadUsers();
-    this.loadProjectTeam();
   }
   onclose() {
     this.dialogRef.close();
@@ -308,8 +307,10 @@ export class ProjectDialogComponent implements OnInit {
 
   loadUsers() {
     this.userservice.getUsersGroupedByGroup()
-      .subscribe(res => this.groupList = res);
-    this.loadProjectTeam();
+      .subscribe(res => {
+        this.groupList = res;
+        this.loadProjectTeam();
+      });
   }
 
 
@@ -318,15 +319,14 @@ export class ProjectDialogComponent implements OnInit {
       .getProjectTeam(this.project.project_id)
       .subscribe({
         next: (rows: any[] | null) => {
-          rows = Array.isArray(rows) ? rows : [];                                  //user_id,fullname,is_active
+          rows = Array.isArray(rows) ? rows : [];
           console.log('Team from DB:', rows);
 
           // Reset selection
           this.groupList.forEach(group => {
             group.users.forEach((u: any) => {
-              // u.selected = false
               u.selected = false;
-              u.originalState = false;  // ✅ track original DB state
+              u.originalState = false;
             });
           });
 
@@ -338,9 +338,8 @@ export class ProjectDialogComponent implements OnInit {
               );
 
               if (user) {
-                // user.selected = dbUser.is_active;
-                user.selected = dbUser.is_active;  // current checkbox state
-                user.originalState = dbUser.is_active;  // ✅ save original state
+                user.selected = dbUser.is_active;
+                user.originalState = dbUser.is_active;
               }
             });
           });
@@ -385,14 +384,18 @@ export class ProjectDialogComponent implements OnInit {
         next: () => {
           this.snack.open('Permissions saved successfully', 'OK', {
             duration: 3000,
-            panelClass: ['snack-success']
+            panelClass: ['snack-success'],
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
           });
           this.dialogRef.close(true);
         },
         error: () => {
           this.snack.open('Failed to save permissions', 'Retry', {
             duration: 3000,
-            panelClass: ['snack-error']
+            panelClass: ['snack-error'],
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
           });
         }
       });

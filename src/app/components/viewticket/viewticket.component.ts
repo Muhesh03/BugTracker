@@ -349,7 +349,7 @@ export class ViewTicketComponent implements OnInit {
       icon: 'warning',
       width: '350px',
       showCloseButton: true,
-      background: 'var(--tableheader-color)',
+      background: 'var(--tableheader)',
       confirmButtonColor: 'var(--formbutton-color)',
       cancelButtonColor: '#be9a9aff',
       showCancelButton: true,
