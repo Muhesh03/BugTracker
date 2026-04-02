@@ -191,12 +191,165 @@
 
     </form>
   </div>
+  <div class="row">
+    <div class="col-12">
 
+      <!-- Add Note Header -->
+      <div class="note-section d-flex align-items-center gap-2 mb-2">
+        <span class="fw-bold">Add Note</span>
+
+        <button class="expand" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false">
+          <mat-icon>expand_more</mat-icon>
+        </button>
+      </div>
+
+      <!-- Collapse -->
+      <div class="collapse" id="collapseExample">
+        <div class="card card-body">
+
+          <table class="table table-bordered align-middle note-table">
+            <thead class="table-light">
+              <tr>
+                <th style="width: 20%">Last Updated By</th>
+                <th style="width: 50%">Note</th>
+                <th style="width: 30%">Attachment</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <!-- Existing notes (READ ONLY) -->
+              <tr *ngFor="let note of notes">
+                <td>
+                  <strong>{{ note.username }}</strong><br>
+                  <small class="text-muted">
+                    {{ note.updated_at | date:'medium' }}
+                  </small>
+                </td>
+
+                <td>{{ note.note }}</td>
+
+                <td>
+                  <!-- <div *ngFor="let file of note.attachments">
+                      📎 {{ file }}
+                    </div> -->
+                  <mat-chip *ngFor="let file of note.attachments || []" (click)="openImage(file)" class="m-1">
+                    <img [src]="imageBaseUrl + file" />
+                    <label class="chiplabel">{{ file }}</label>
+                  </mat-chip>
+                  <!-- <div *ngFor="let file of note.attachments" class="attachment-item" (click)="openImage(file)">
+                    <img [src]="imageBaseUrl + file" class="attachment-thumb" alt="attachment" />
+
+                    <span class="attachment-name">
+                      {{ file }}
+                    </span>
+                  </div> -->
+                </td>
+
+              </tr>
+
+              <!-- ADD NEW NOTE ROW -->
+              <tr class="add-note-row">
+                <td>
+                  <strong>{{ loggedInUser }}</strong><br />
+                  <small class="text-muted">
+                    {{ today | date:'medium' }}
+                  </small>
+                </td>
+
+                <td>
+                  <textarea class="form-control" rows="3" placeholder="Write note..." [(ngModel)]="newNoteText">
+                </textarea>
+                </td>
+
+                <td>
+                  <div>
+                    <!-- REAL file input (hidden) -->
+                    <input type="file" accept="image/*" hidden #fileInput multiple (change)="onFileSelect($event)">
+                    <!-- Icon button -->
+                    <button mat-icon-button type="button" (click)="fileInput.click()">
+                      <mat-icon style="color:#547562;font-size:20px;">attach_file</mat-icon>
+                    </button>
+                    <div *ngFor="let name of selectedFileNames; let i = index">
+                      📎 {{ name }}
+                      <button mat-icon-button color="primary" (click)="removeFile(i)">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+
+      <div class="note-section d-flex align-items-center gap-2 mb-2 mt-2">
+        <span class="fw-bold">Activities</span>
+
+        <button class="expand" data-bs-toggle="collapse" href="#multiCollapseExample1" role="button"
+          aria-expanded="false" aria-controls="multiCollapseExample1"><mat-icon>expand_more</mat-icon></button>
+
+
+      </div>
+      <div class="row">
+
+        <div class="collapse multi-collapse" id="multiCollapseExample1">
+          <div class="card card-body">
+            <table class="activity-table">
+              <thead>
+                <tr>
+                  <th>Date Modified</th>
+                  <th>User Name</th>
+                  <th>Field</th>
+                  <th>Change</th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+
+                <tr *ngFor="let act of activities">
+                  <td>{{ act.created_at | date:'dd-MM-yyyy HH:mm' }}</td>
+                  <td>{{ act.username }}</td>
+                  <td>{{ act.field_name }}</td>
+                  <td>
+                    <!-- NOTE ADDED -->
+                    <!-- <ng-container *ngIf="act.field_name === 'Note Added'">
+                        Note added
+                      </ng-container> -->
+
+                    <!-- STATUS / ASSIGNED -->
+                    <ng-container *ngIf="act.field_name !== 'Note Added'">
+
+                      <!-- <span *ngIf="act.field_name === 'New Ticket'">
+                          New ticket created
+                        </span> -->
+                      <span *ngIf="act.field_name === 'Status'">
+                        {{ act.old_status }} → {{ act.new_status }}
+                      </span>
+                      <span *ngIf="act.field_name === 'Assigned To'">
+                        {{ act.old_assigned_to_name }} → {{ act.new_assigned_to_name }}
+                      </span>
+                    </ng-container>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
 
 </mat-dialog-content>
 
 <mat-dialog-actions>
   <button mat-raised-button class="pbtn" form="issueticketform" type="submit">
-    {{ isEditMode ? 'Update' : 'Save' }}
+    {{ isEditMode ? 'Update' : 'Create' }}
   </button>
 </mat-dialog-actions>

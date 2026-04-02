@@ -539,6 +539,7 @@ filterForm:FormGroup;
   styleUrls: ['./liveticket.css']
 })
 export class LiveTicketUpdateFormComponent implements OnInit {
+  tickets: any;
   onclose() {
     this.dialogRef.close();
   }
@@ -586,6 +587,8 @@ export class LiveTicketUpdateFormComponent implements OnInit {
       summary: new FormControl(''),
       description: new FormControl('')
     });
+    this.tickets = this.data?.tickets || [];
+    this.today = new Date();
 
     // Load user ID from localStorage
     const userData = JSON.parse(localStorage.getItem('user') || '{}');

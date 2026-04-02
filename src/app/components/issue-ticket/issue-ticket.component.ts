@@ -12,6 +12,8 @@ import { ActivatedRoute } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { ShowImageDialogComponent } from '../image-preview-dialog/image-preview-dialog.component';
 import { tick } from '@angular/core/testing';
+import { NotePreviewDialogComponent } from '../viewticket/viewticket.component';
+import { NoteAttachmentService } from 'src/app/services/note-attachment.service';
 
 interface User {
   id: number;
@@ -227,7 +229,7 @@ export class IssueTicketComponent implements OnInit, AfterViewInit {
     });
 
 
-    
+
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
         this.getIssueTicket();
@@ -289,8 +291,16 @@ export class IssueTicketFormComponent implements OnInit {
   selectedFiles: File[] = [];
   existingImages: string[] = [];
   deletedImages: string[] = [];
+  notes: any;
+  uploadedPaths: string[] = [];
+  payload: any;
 
-
+  imageBaseUrl = environment.ServerApi + 'uploads/';
+  loggedInUser: any;
+  today: any;
+  newNoteText: string;
+  activities: any;
+  tickets: any;
 
   get selectedPriority() {
     const id = this.issueTicketForm.get('priority_id')?.value;
@@ -299,6 +309,8 @@ export class IssueTicketFormComponent implements OnInit {
 
   constructor(
     private issueticketService: IssueTicketService,
+    private dialog: MatDialog,
+    private NoteAttachmentService: NoteAttachmentService,
     private dialogRef: MatDialogRef<IssueTicketFormComponent>,
 
     @Inject(MAT_DIALOG_DATA) public data: any
@@ -308,9 +320,35 @@ export class IssueTicketFormComponent implements OnInit {
 
     this.storedProjectId = localStorage.getItem('selectedProject');
     const projectId = this.storedProjectId ? Number(this.storedProjectId) : null;
+    this.today = new Date();
+    this.tickets = this.data?.tickets || [];
 
     const userData = JSON.parse(localStorage.getItem('user') || '{}') as User;
-    this.userId = userData.id;
+    this.userId = userData.id; this.loggedInUser = userData.fullname;
+    this.issueTicketForm = new FormGroup({
+
+      ticketstatus_id: new FormControl(null, Validators.required),
+      assigned_user_id: new FormControl(null, Validators.required)
+    });
+    console.log('Raw data value:', this.data.assigned_user_id, 'Type:', typeof this.data.assigned_user_id);
+    this.issueTicketForm.get('assigned_user_id')?.valueChanges.subscribe(v => {
+      console.log('Assigned user changed →', v);
+    });
+
+    this.issueTicketForm.get('ticketstatus_id')?.valueChanges.subscribe(v => {
+      console.log('Status changed →', v);
+    });
+    console.log('Initial form values:', this.issueTicketForm.value);
+    console.log('Current user ID:', this.userId);
+    console.log('Current ticket ID:', this.data.issueticket_id);
+    console.log('Existing uploaded paths:', this.uploadedPaths);
+    console.log('TTTTTTTTTTT', this.loggedInUser)
+    console.log('All data being sent:', {
+      issueticket_id: this.data.issueticket_id,
+      note: this.newNoteText,
+      updated_by: this.userId,
+      attachments: this.uploadedPaths
+    });
 
     this.issueTicketForm = new FormGroup({
       ticketstatus_id: new FormControl('', Validators.required),
@@ -380,21 +418,45 @@ export class IssueTicketFormComponent implements OnInit {
       this.loadLatestTicketNumber();
 
     }
-
+    this.getIssueTicket();
     this.loadStatuses();
     this.loadPriorities();
-    this.loadTags();
+    // this.loadTags();
     this.loadUsers();
     this.loadTicketTypes();
+    this.loadNotes();
+    this.loadActivities();
+    this.issueTicketForm.valueChanges.subscribe(v => {
+      console.log('FORM CHANGED →', v);
+    });
 
     console.log("Dialog data:", this.data);
 
   }
 
+  getIssueTicket() {
+    this.issueticketService.getIssueTicket(this.data.issueticket_id).subscribe({
+      next: (res: any) => {
+        console.log('Ticket response:', res);
+
+        // IMPORTANT: adjust based on API response shape
+        this.tickets = res.data;
+        console.log('Tickets set in component:', this.tickets);
+      },
+      error: (err) => {
+        console.error('Failed to load tickets', err);
+      }
+    });
+  }
   loadStatuses() {
     this.issueticketService.getTicketStatuses()
       .subscribe(res => {
         this.statuses = res.data;
+        if (this.data?.ticketstatus_id) {
+          this.issueTicketForm.patchValue({
+            ticketstatus_id: Number(this.data.ticketstatus_id)
+          });
+        }
       });
   }
 
@@ -422,16 +484,30 @@ export class IssueTicketFormComponent implements OnInit {
       });
   }
 
+  // loadUsers() {
+  //   this.issueticketService.getTicketUsers()
+  //     .subscribe(res => {
+  //       this.users = res.data;
+  //       // console.log("users in frontend", res.data)
+  //       console.log("users in frontend", this.users)
+  //     });
+  // }
+
   loadUsers() {
     this.issueticketService.getTicketUsers()
       .subscribe(res => {
         this.users = res.data;
-        // console.log("users in frontend", res.data)
-        console.log("users in frontend", this.users)
+        console.log("users in frontend", res.data);
+
+        if (this.data?.assigned_user_id) {
+          this.issueTicketForm.patchValue({
+            assigned_user_id: Number(this.data.assigned_user_id),
+
+          });
+        }
+
       });
   }
-
-
 
 
 
@@ -471,6 +547,30 @@ export class IssueTicketFormComponent implements OnInit {
         });
       });
   }
+  loadNotes() {
+    this.NoteAttachmentService
+      .getNoteTicket(this.data.issueticket_id)
+      .subscribe((res: any) => {
+        console.log('Notes response:++++++++++++', res);
+        this.notes = (res.data || []).map((note: any) => ({
+          ...note,
+          attachments: Array.isArray(note.attachments)
+            ? note.attachments
+            : JSON.parse(note.attachments || '[]')
+        }));
+        console.log('Notes +++++++++++++++++++++++:', this.notes);
+      });
+  }
+
+  loadActivities() {
+    this.issueticketService.getActivities(this.data.issueticket_id)
+      .subscribe((res: any) => {
+
+        this.activities = res.data;
+        console.log('Activities response +++++++ts++++++:', this.activities);
+      });
+
+  }
 
   cancel() {
     console.log("selected project", this.storedProjectId)
@@ -482,9 +582,9 @@ export class IssueTicketFormComponent implements OnInit {
 
     const saveTicket = (uploadedImagePaths: string[]) => {
       const finalImages = [...this.existingImages, ...uploadedImagePaths]; // combine
-      const payload = {
+      this.payload = {
         ...this.issueTicketForm.value,
-        
+
         user_id: this.issueTicketForm.value.user_id || null,
         steps_to_reproduce: this.issueTicketForm.value.steps_to_reproduce,
         image_path: finalImages,
@@ -493,25 +593,100 @@ export class IssueTicketFormComponent implements OnInit {
       };
 
       if (this.isEditMode) {
-        this.issueticketService.updateIssueTicket(this.data.issueticket_id, payload)
+        this.issueticketService.updateIssueTicket(this.data.issueticket_id, this.payload)
           .subscribe(() => this.dialogRef.close(true));
       } else {
-        this.issueticketService.addIssueTicket(payload)
+        this.issueticketService.addIssueTicket(this.payload)
           .subscribe(() => this.dialogRef.close(true));
       }
     };
 
-    if (this.selectedFiles.length > 0) {
-      const formData = new FormData();
-      this.selectedFiles.forEach(f => formData.append('images', f));
 
-      this.issueticketService.uploadImage(formData)
-        .subscribe(res => saveTicket(res.image_paths));
-    } else {
-      saveTicket([]);
-    }
+    this.issueticketService
+      .updateTicket(this.data.issueticket_id, this.payload)
+      .subscribe(() => {
+        console.log('Ticket updated successfully', this.payload);
+        this.dialogRef.close(true);
+
+        this.saveNoteWithAttachments();
+
+
+        this.loadActivities();
+        this.getIssueTicket();
+      }
+      );
   }
 
+  openImage(filename: string): void {
+    this.dialog.open(NotePreviewDialogComponent, {
+      width: '600px',
+      maxWidth: '95vw',
+      data: {
+        imageUrl: this.imageBaseUrl + filename,
+        filename
+      }
+
+    });
+    console.log('Opening preview dialog with data:', {
+      imageUrl: this.imageBaseUrl + filename,
+      filename
+    });
+  }
+
+  uploadFiles(files: FileList) {
+    const formData = new FormData();
+
+    Array.from(files).forEach(file => {
+      formData.append('images', file);
+    });
+
+    this.NoteAttachmentService.uploadImage(formData).subscribe({
+      next: (res: any) => {
+        console.log('Upload response:', res);
+        this.uploadedPaths = res.image_paths;
+        this.selectedFiles = []; // clear after upload
+      },
+      error: err => console.error('Upload failed', err)
+    });
+  }
+
+
+  private saveNoteWithAttachments(): void {
+    if (!this.newNoteText && this.selectedFiles.length === 0) return;
+
+    const saveNote = (paths: string[]) => {
+      const payload = {
+        issueticket_id: this.data.issueticket_id,
+        note: this.newNoteText,
+        updated_by: this.userId,
+        updated_at: new Date().toISOString(),
+        attachments: paths
+      };
+      console.log('Payload for saving note:', payload);
+      this.NoteAttachmentService.addNoteTicket(payload).subscribe(() => {
+        this.newNoteText = '';
+        this.selectedFiles = [];
+        this.selectedFileNames = [];
+        this.uploadedPaths = [];
+        this.loadNotes();
+      });
+    };
+
+    // upload files first
+    if (this.selectedFiles.length > 0) {
+      const formData = new FormData();
+      this.selectedFiles.forEach(file => formData.append('images', file));
+
+      this.NoteAttachmentService.uploadImage(formData)
+        .subscribe(res => {
+          console.log('Upload response:', res.image_paths);
+
+          saveNote(res.image_paths);
+        });
+    } else {
+      saveNote([]);
+    }
+  }
 
   onClose(): void {
     this.dialogRef.close(true);
