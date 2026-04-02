@@ -191,45 +191,44 @@ export class LiveTicketsComponent implements OnInit, AfterViewInit {
     });
   });
 }
+getLiveTicket() {
+  const storedProjectId = localStorage.getItem('selectedProject');
 
-  getLiveTicket() {
-    const projectparams: { userid: number | null; projectid?: number } = {
-      userid: this.userId
-    };
+  const projectparams: { userid: number | null; projectid?: number } = {
+    userid: this.userId,
+    projectid: storedProjectId ? Number(storedProjectId) : undefined
+  };
 
-    this.liveticketservice.getLiveTicket(projectparams) // pass params here
-      .subscribe(res => {
-        const data = (res.data || []).map((row: any) => {
-          let imageArr: string[] = [];
+  this.liveticketservice.getLiveTicket(projectparams)
+    .subscribe(res => {
+      const data = (res.data || []).map((row: any) => {
+        let imageArr: string[] = [];
 
-          if (row.image_path) {
-            if (typeof row.image_path === 'string') {
-              imageArr = row.image_path
-                .replace('{', '')
-                .replace('}', '')
-                .replace(/"/g, '')
-                .split(',');
-            }
-            else if (Array.isArray(row.image_path)) {
-              imageArr = row.image_path;
-            }
-
-            // FILTER OUT EMPTY STRINGS
-            imageArr = imageArr.filter(img => img && img.trim() !== '');
+        if (row.image_path) {
+          if (typeof row.image_path === 'string') {
+            imageArr = row.image_path
+              .replace('{', '')
+              .replace('}', '')
+              .replace(/"/g, '')
+              .split(',');
+          } else if (Array.isArray(row.image_path)) {
+            imageArr = row.image_path;
           }
 
-          return {
-            ...row,
-            image_path: imageArr
-          };
-        });
+          // Filter out empty strings
+          imageArr = imageArr.filter(img => img && img.trim() !== '');
+        }
 
-        console.log('FINAL DATA USED BY  liveticket TABLE:', data);
-        this.liveticketDataSource.data = data;
+        return {
+          ...row,
+          image_path: imageArr
+        };
       });
-  }
 
-
+      console.log('FINAL DATA USED BY liveticket TABLE:', data);
+      this.liveticketDataSource.data = data;
+    });
+}
   openImages(images: string[]) {
     this.dialog.open(ViewImageDialogComponent, {
       data: images,

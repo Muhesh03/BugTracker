@@ -52,7 +52,7 @@ exports.deleteTicketPriority = function (priority_id, callback) {
                 });
             }
 
-            // No users → SAFE to delete (soft delete)
+            // No users  SAFE to delete 
             return knex('ticketpriority')
                 .where({ priority_id })
                 .update({ status_id: 3 })

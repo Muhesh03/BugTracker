@@ -138,9 +138,9 @@ exports.getLiveTicket = function (projectParams, cb) {
       // if (projectParams.userid) {
       //   qb.where('it.created_by', projectParams.userid);
       // }
-    //   if (projectParams.projectid) {
-    //     qb.where('it.project_id', projectParams.projectid);
-    //   }
+      if (projectParams.projectid) {
+        qb.where('it.project_id', projectParams.projectid);
+      }
     })
     .groupBy(
       'it.liveticket_id',
