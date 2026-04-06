@@ -41,7 +41,8 @@
                 <mat-label>{{ data.assigned_to_name }}</mat-label>
                 <mat-select formControlName="assigned_user_id">
                   <mat-option *ngFor="let u of users" [value]="u.user_id">
-                    {{ u.fullname }}(ID: {{ u.user_id }})
+                    {{ u.fullname }}
+                    <!-- (ID: {{ u.user_id }}) -->
                   </mat-option>
                 </mat-select>
               </mat-form-field>

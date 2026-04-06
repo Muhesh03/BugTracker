@@ -136,4 +136,12 @@ getfilter(filters): Observable<any> {
       return this.http.get<any>(this.apiUrl + 'liveticket/filter/list', httpOptionsGet);
     }
 
+markAsConverted(liveticket_id: number): Observable<any> {
+  return this.http.put(
+    this.apiUrl + 'liveticket/markconverted/' + liveticket_id, 
+    {}, 
+    httpOptionsPost
+  );
+}
+
 }

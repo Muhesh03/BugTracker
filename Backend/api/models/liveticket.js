@@ -19,6 +19,20 @@ exports.saveLiveTicket = function (data, cb) {
 
 
 
+exports.markAsConverted = function (liveticket_id, cb) {
+    knex('livetickets')
+        .where({ liveticket_id: liveticket_id })
+        .update({ is_converted: true })
+        .then(function () {
+            cb(null, true);
+        })
+        .catch(function (err) {
+            console.error('Error marking as converted:', err);
+            cb(err, null);
+        });
+};
+
+
 
 exports.gettickettype = function (cb) {
   knex('tickettype')
@@ -117,15 +131,16 @@ exports.getLiveTicket = function (projectParams, cb) {
       knex.raw('array_agg(tg.tickettag_id) as tag_ids'),
       'it.created_at',
       'it.updated_on',
-      'it.updated_by'
+      'it.updated_by',
+      'it.is_converted' 
     )
     .modify(function(qb) {
       // if (projectParams.userid) {
       //   qb.where('it.created_by', projectParams.userid);
       // }
-    //   if (projectParams.projectid) {
-    //     qb.where('it.project_id', projectParams.projectid);
-    //   }
+      if (projectParams.projectid) {
+        qb.where('it.project_id', projectParams.projectid);
+      }
     })
     .groupBy(
       'it.liveticket_id',
@@ -149,9 +164,10 @@ exports.getLiveTicket = function (projectParams, cb) {
       'it.steps_to_reproduce',
       'it.created_at',
       'it.updated_on',
-      'it.updated_by'
+      'it.updated_by',
+      'it.is_converted' 
     )
-    .orderBy('it.liveticket_id', 'asc')
+    .orderBy('it.liveticket_id', 'desc')
     .then(out => cb(null, out))
     .catch(e => {
       console.error('Database query error:', e);

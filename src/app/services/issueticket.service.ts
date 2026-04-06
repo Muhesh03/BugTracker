@@ -184,8 +184,8 @@ export class IssueTicketService {
     );
   }
  updateTicket(ticketId: number, payload: any) {
-  console.log('Updating ticket with ID++++++++++++++++++++:', ticketId);
-  console.log('Payload for update++++++++++++++++++++:', payload);
+  console.log('Updating ticket with ID++++++++<<<<<<<<<<<<<<<<>>>>>>>>>>>>>++++++++++++:', ticketId);
+  console.log('Payload for update+++++++++++<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>+++++++++:', payload);
   return this.http.put(
     `${this.apiUrl}issueticket/${ticketId}`,
     payload

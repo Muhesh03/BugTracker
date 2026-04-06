@@ -13,6 +13,7 @@ exports.getTicketStatus = function (cb) {
 	knex('ticketstatus')
 		.select('*')
 		.whereNot({ "status_id": 3 })
+        .orderBy('ticketstatus_id','desc')
 		.then(function (out) {
 			console.log('mmmmmmmmmmmmmmmmmmmmmmmmmmmmm', out);
 			cb(null, out);

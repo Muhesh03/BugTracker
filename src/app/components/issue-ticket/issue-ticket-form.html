@@ -2,7 +2,7 @@
   <h2>
     {{ isEditMode ? 'Update Ticket' : 'Create Ticket' }}
   </h2>
-  <button mat-icon-button class="closebtn" (click)="onClose()" type="button">
+  <button mat-icon-button class="closebtn" (click)="onclose()" type="button">
     <mat-icon>close</mat-icon>
   </button>
 </mat-toolbar>
@@ -105,7 +105,7 @@
             <div class="col-12 col-md-12 px-0 fields">
               <mat-form-field appearance="outline" class="full-width users-field">
                 <mat-label>Assigned To</mat-label>
-                <mat-select formControlName="user_id">
+                <mat-select formControlName="assigned_user_id">
                   <mat-option *ngFor="let u of users" [value]="u.user_id">
                     {{ u.fullname}}
                   </mat-option>
@@ -191,6 +191,7 @@
 
     </form>
   </div>
+
   <div class="row">
     <div class="col-12">
 
@@ -232,17 +233,13 @@
                   <!-- <div *ngFor="let file of note.attachments">
                       📎 {{ file }}
                     </div> -->
-                  <mat-chip *ngFor="let file of note.attachments || []" (click)="openImage(file)" class="m-1">
-                    <img [src]="imageBaseUrl + file" />
+
+                  <mat-chip *ngFor="let file of note.attachments" (click)="openImage(file)" class="m-1">
+                    <img [src]="imageBaseUrl + file" alt="attachment" />
                     <label class="chiplabel">{{ file }}</label>
                   </mat-chip>
-                  <!-- <div *ngFor="let file of note.attachments" class="attachment-item" (click)="openImage(file)">
-                    <img [src]="imageBaseUrl + file" class="attachment-thumb" alt="attachment" />
 
-                    <span class="attachment-name">
-                      {{ file }}
-                    </span>
-                  </div> -->
+
                 </td>
 
               </tr>
@@ -281,6 +278,9 @@
 
             </tbody>
           </table>
+          <!-- <button mat-raised-button type="button" style="width: 100px;" class="pbtn"(click)="saveNote()">
+            Save Note
+          </button> -->
 
         </div>
       </div>
@@ -335,6 +335,11 @@
                     </ng-container>
                   </td>
                 </tr>
+                <tr *ngIf="!activities?.length">
+                  <td colspan="4" class="text-center text-muted py-3">
+                    No activity recorded yet
+                  </td>
+                </tr>
               </tbody>
             </table>
 
@@ -346,10 +351,13 @@
     </div>
   </div>
 
+
 </mat-dialog-content>
 
 <mat-dialog-actions>
-  <button mat-raised-button class="pbtn" form="issueticketform" type="submit">
-    {{ isEditMode ? 'Update' : 'Create' }}
+  <button mat-raised-button class="pbtn" form="issueticketform" type="submit" style="width: 100px;" class="pbtn"
+    (click)="saveNote()">
+    {{ isEditMode ? 'Update' : 'Save' }}
   </button>
+
 </mat-dialog-actions>

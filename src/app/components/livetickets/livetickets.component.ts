@@ -161,74 +161,74 @@ export class LiveTicketsComponent implements OnInit, AfterViewInit {
   }
 
   editLiveTicket(row: any) {
-    this.issueticketService.getLatestTicketNumber().subscribe(res => {
-      const nextTicketNumber = res.data.ticket_number; // get next available issue ticket number
+  this.issueticketService.getLatestTicketNumber().subscribe(res => {
+    const nextTicketNumber = res.data.ticket_number;
 
-      const dialogRef = this.dialog.open(IssueTicketFormComponent, {
-        width: '900px',
-        maxWidth: '95vw',
-        panelClass: 'custom-dialog',
-        data: {
-          live_ticket_id: row.liveticket_id,
-          summary: row.summary,
-          user_id: row.assigned_user_id || row.created_by,
-          description: row.description,
-          priority_id: row.priority_id,
-          ticketstatus_id: row.ticketstatus_id,
-          ticket_tag: Array.isArray(row.tag_ids) ? row.tag_ids : [],
-          tickettype_id: row.tickettype_id,
-          image_path: Array.isArray(row.image_path) ? row.image_path : [],
-          ticket_number: nextTicketNumber,
-          steps_to_reproduce: row.steps_to_reproduce || ''
-        }
-      });
-
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          this.getLiveTicket(); // refresh table if needed
-        }
-      });
+    const dialogRef = this.dialog.open(IssueTicketFormComponent, {
+      width: '900px',
+      maxWidth: '95vw',
+      panelClass: 'custom-dialog',
+      data: {
+        live_ticket_id: row.liveticket_id,
+        summary: row.summary,
+        user_id: row.assigned_user_id || row.created_by,
+        description: row.description,
+        priority_id: row.priority_id,
+        ticketstatus_id: row.ticketstatus_id,
+        ticket_tag: Array.isArray(row.tag_ids) ? row.tag_ids : [],
+        tickettype_id: row.tickettype_id,
+        image_path: Array.isArray(row.image_path) ? row.image_path : [],
+        ticket_number: nextTicketNumber,
+        steps_to_reproduce: row.steps_to_reproduce || ''
+      }
     });
 
-  }
-  getLiveTicket() {
-    const projectparams: { userid: number | null; projectid?: number } = {
-      userid: this.userId
-    };
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        row.is_converted = true; 
+        this.getLiveTicket();   
+      }
+    });
+  });
+}
+getLiveTicket() {
+  const storedProjectId = localStorage.getItem('selectedProject');
 
-    this.liveticketservice.getLiveTicket(projectparams) // pass params here
-      .subscribe(res => {
-        const data = (res.data || []).map((row: any) => {
-          let imageArr: string[] = [];
+  const projectparams: { userid: number | null; projectid?: number } = {
+    userid: this.userId,
+    projectid: storedProjectId ? Number(storedProjectId) : undefined
+  };
 
-          if (row.image_path) {
-            if (typeof row.image_path === 'string') {
-              imageArr = row.image_path
-                .replace('{', '')
-                .replace('}', '')
-                .replace(/"/g, '')
-                .split(',');
-            }
-            else if (Array.isArray(row.image_path)) {
-              imageArr = row.image_path;
-            }
+  this.liveticketservice.getLiveTicket(projectparams)
+    .subscribe(res => {
+      const data = (res.data || []).map((row: any) => {
+        let imageArr: string[] = [];
 
-            // FILTER OUT EMPTY STRINGS
-            imageArr = imageArr.filter(img => img && img.trim() !== '');
+        if (row.image_path) {
+          if (typeof row.image_path === 'string') {
+            imageArr = row.image_path
+              .replace('{', '')
+              .replace('}', '')
+              .replace(/"/g, '')
+              .split(',');
+          } else if (Array.isArray(row.image_path)) {
+            imageArr = row.image_path;
           }
 
-          return {
-            ...row,
-            image_path: imageArr
-          };
-        });
+          // Filter out empty strings
+          imageArr = imageArr.filter(img => img && img.trim() !== '');
+        }
 
-        console.log('FINAL DATA USED BY  liveticket TABLE:', data);
-        this.liveticketDataSource.data = data;
+        return {
+          ...row,
+          image_path: imageArr
+        };
       });
-  }
 
-
+      console.log('FINAL DATA USED BY liveticket TABLE:', data);
+      this.liveticketDataSource.data = data;
+    });
+}
   openImages(images: string[]) {
     this.dialog.open(ViewImageDialogComponent, {
       data: images,
@@ -539,7 +539,6 @@ filterForm:FormGroup;
   styleUrls: ['./liveticket.css']
 })
 export class LiveTicketUpdateFormComponent implements OnInit {
-  tickets: any;
   onclose() {
     this.dialogRef.close();
   }
@@ -587,8 +586,6 @@ export class LiveTicketUpdateFormComponent implements OnInit {
       summary: new FormControl(''),
       description: new FormControl('')
     });
-    this.tickets = this.data?.tickets || [];
-    this.today = new Date();
 
     // Load user ID from localStorage
     const userData = JSON.parse(localStorage.getItem('user') || '{}');

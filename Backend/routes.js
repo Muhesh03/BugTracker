@@ -26,7 +26,7 @@ module.exports = function (app) {
 
   app.use('/attachment', require("./api/controllers/attachment.js").router);
   app.use('/note', require("./api/controllers/note.js").router);
-  app.use('/issueticket', require("./api/controllers/issueticket.js").router);
+  // app.use('/issueticket', require("./api/controllers/issueticket.js").router);
   app.use('/ticket-activity', require("./api/controllers/ticketActivity.js").router);
 
 

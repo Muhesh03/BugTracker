@@ -30,9 +30,7 @@ exports.addNotesByTicket = async (data) => {
 };
 
 
-/**
- * Update note (optional – future use)
- */
+
 exports.updateNote = async (history_id, data) => {
   return knex('ticket_history')
     .where({ history_id })
