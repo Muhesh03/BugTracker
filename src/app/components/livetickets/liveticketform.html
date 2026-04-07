@@ -1,19 +1,17 @@
 <mat-toolbar class="dialog-toolbar">
-  <h2>
-    Create Client Ticket Information
-  </h2>
+  <h2>Create Client Ticket Information</h2>
   <button mat-icon-button class="closebtn" (click)="onclose()" type="button">
     <mat-icon>close</mat-icon>
   </button>
 </mat-toolbar>
 
 <mat-dialog-content>
-
-  <!-- Form Section -->
   <div class="formsection">
     <form [formGroup]="liveticketform" id="ticketForm" (ngSubmit)="onSubmit()">
 
       <div class="col-12 col-md-12 d-flex flex-wrap">
+
+        <!-- Ticket No -->
         <div class="col-12 col-md-6 px-2 form-grid-item increate">
           <div class="form-grid-label increate">Ticket No</div>
           <div class="form-grid-readonly increate">
@@ -27,22 +25,48 @@
           </div>
         </div>
 
+        <!-- STATUS -->
         <div class="col-12 col-md-6 px-2 form-grid-item increate">
           <div class="form-grid-label increate">Status</div>
           <div class="form-grid-readonly increate">
             <div class="col-12 col-md-12 px-0 fields">
-              <mat-form-field appearance="outline">
-                <mat-label>Status</mat-label>
-                <mat-select formControlName="ticketstatus_id">
-                  <mat-option *ngFor="let s of statuses" [value]="s.ticketstatus_id">
-                    {{ s.statusname }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
+
+              <div class="status-backdrop" *ngIf="isStatusOpen" (click)="isStatusOpen = false"></div>
+
+              <div class="status-wrapper">
+
+                <!-- Trigger -->
+                <div class="status-trigger" (click)="isStatusOpen = !isStatusOpen">
+                  <span class="status-dot"
+                    [style.background]="selectedStatus?.color || '#D1D5DB'">
+                  </span>
+                  <span class="status-trigger-label">
+                    {{ selectedStatus?.label || 'Select status' }}
+                  </span>
+                  <mat-icon class="status-chevron"
+                    [class.status-chevron-open]="isStatusOpen">
+                    keyboard_arrow_down
+                  </mat-icon>
+                </div>
+
+                <!-- Menu -->
+                <div class="status-menu" *ngIf="isStatusOpen">
+                  <div
+                    class="status-option"
+                    *ngFor="let s of liveticketStatuses"
+                    (click)="selectStatus(s)"
+                    [class.status-option-active]="selectedStatus?.id === s.id">
+                    <span class="status-dot" [style.background]="s.color"></span>
+                    {{ s.label }}
+                  </div>
+                </div>
+
+              </div>
             </div>
           </div>
         </div>
 
+        <!-- Ticket Type -->
         <div class="col-12 col-md-6 px-2 form-grid-item increate">
           <div class="form-grid-label increate">Ticket Type</div>
           <div class="form-grid-readonly increate">
@@ -59,6 +83,7 @@
           </div>
         </div>
 
+        <!-- Priority -->
         <div class="col-12 col-md-6 px-2 form-grid-item increate">
           <div class="form-grid-label increate">Priority</div>
           <div class="form-grid-readonly increate">
@@ -67,15 +92,18 @@
                 <mat-label>Priority</mat-label>
                 <mat-select formControlName="priority_id">
                   <mat-select-trigger>
-                    <mat-icon [style.color]="iconMap[selectedPriority?.icon]?.color"
+                    <mat-icon
+                      [style.color]="iconMap[selectedPriority?.icon] ? iconMap[selectedPriority?.icon].color : ''"
                       style="margin-right:6px; vertical-align:middle;">
-                      {{ iconMap[selectedPriority?.icon]?.name }}
+                      {{ iconMap[selectedPriority?.icon] ? iconMap[selectedPriority?.icon].name : '' }}
                     </mat-icon>
                     {{ selectedPriority?.priority }}
                   </mat-select-trigger>
                   <mat-option *ngFor="let p of priorities" [value]="p.priority_id">
-                    <mat-icon [style.color]="iconMap[p.icon]?.color" style="margin-right:6px; vertical-align:middle;">
-                      {{ iconMap[p.icon]?.name }}
+                    <mat-icon
+                      [style.color]="iconMap[p.icon] ? iconMap[p.icon].color : ''"
+                      style="margin-right:6px; vertical-align:middle;">
+                      {{ iconMap[p.icon] ? iconMap[p.icon].name : '' }}
                     </mat-icon>
                     {{ p.priority }}
                   </mat-option>
@@ -85,6 +113,7 @@
           </div>
         </div>
 
+        <!-- Instance -->
         <div class="col-12 col-md-6 px-2 form-grid-item increate">
           <div class="form-grid-label increate">Instance</div>
           <div class="form-grid-readonly increate">
@@ -97,6 +126,7 @@
           </div>
         </div>
 
+        <!-- Tags -->
         <div class="col-12 col-md-6 px-2 form-grid-item increate">
           <div class="form-grid-label increate">Tag</div>
           <div class="form-grid-readonly increate">
@@ -113,6 +143,7 @@
           </div>
         </div>
 
+        <!-- Unit -->
         <div class="col-12 col-md-6 px-2 form-grid-item increate">
           <div class="form-grid-label increate">Unit</div>
           <div class="form-grid-readonly increate">
@@ -126,65 +157,50 @@
         </div>
 
       </div>
+
       <hr>
+
       <!-- Summary & Description -->
       <div class="summary-grid">
-        <div class="col-12 col-md-12 px-2 summary-grid-item increate">
-          <div class="form-grid-label increate">Summary</div>
-          <div class="form-grid-readonly increate">
-            <div class="col-12 col-md-12 px-0 fields">
-              <mat-form-field appearance="outline">
-                <mat-label>Summary</mat-label>
-                <input matInput formControlName="summary">
-              </mat-form-field>
-            </div>
-          </div>
+
+        <div class="col-12 px-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Summary</mat-label>
+            <input matInput formControlName="summary">
+          </mat-form-field>
         </div>
 
-        <div class="col-12 col-md-12 px-2 summary-grid-item increate">
-          <div class="form-grid-label increate">Description</div>
-          <div class="form-grid-readonly increate description-box">
-            <div class="col-12 col-md-12 px-0 fields">
-              <mat-form-field appearance="outline">
-                <mat-label>Description</mat-label>
-                <textarea matInput rows="4" formControlName="description"></textarea>
-              </mat-form-field>
-            </div>
-          </div>
+        <div class="col-12 px-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Description</mat-label>
+            <textarea matInput rows="4" formControlName="description"></textarea>
+          </mat-form-field>
         </div>
 
-        <div class="col-12 col-md-12 px-2 summary-grid-item increate">
-          <div class="form-grid-label increate">Steps to Reproduce</div>
-          <div class="form-grid-readonly increate description-box pb-3">
-            <div class="col-12 col-md-12 px-0 fields">
-              <mat-form-field appearance="outline">
-                <mat-label>Steps to Reproduce</mat-label>
-                <textarea matInput rows="4" placeholder="1. Go to...
-2. Click on...
-3. Observe the issue..." formControlName="steps_to_reproduce">
-      </textarea>
-              </mat-form-field>
-            </div>
-          </div>
+        <div class="col-12 px-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Steps to Reproduce</mat-label>
+            <textarea matInput rows="4"
+              placeholder="1. Go to...&#10;2. Click on...&#10;3. Observe the issue..."
+              formControlName="steps_to_reproduce">
+            </textarea>
+          </mat-form-field>
         </div>
 
-        <div class="col-12 col-md-12 px-2 summary-grid-item increate">
-          <div class="form-grid-label increate">Attachments</div>
-          <div class="form-grid-readonly increate description-box">
-            <div class="col-12 col-md-12 fields">
-              <input type="file" accept="image/*" hidden #fileInput multiple (change)="onFileSelect($event)">
-              <button mat-icon-button type="button" (click)="fileInput.click()" class="filebtn">
-                <mat-icon style="color: var(--accent);">attach_file</mat-icon>
+        <!-- Attachments -->
+        <div class="col-12 px-2">
+          <input type="file" accept="image/*" hidden #fileInput multiple
+            (change)="onFileSelect($event)">
+          <button mat-icon-button type="button" (click)="fileInput.click()" class="filebtn">
+            <mat-icon style="color: var(--accent);">attach_file</mat-icon>
+          </button>
+          <div class="d-flex flex-wrap gap-2 mt-2">
+            <mat-chip *ngFor="let name of selectedFileNames; let i = index">
+              📎 {{ name }}
+              <button mat-icon-button class="closebtn" type="button" (click)="removeFile(i)">
+                <mat-icon>close</mat-icon>
               </button>
-              <div class="d-flex flex-wrap gap-2 mt-2">
-                <mat-chip *ngFor="let name of selectedFileNames; let i = index">
-                  📎 {{ name }}
-                  <button mat-icon-button class="closebtn" type="button" (click)="removeFile(i)">
-                    <mat-icon>close</mat-icon>
-                  </button>
-                </mat-chip>
-              </div>
-            </div>
+            </mat-chip>
           </div>
         </div>
 
@@ -192,14 +208,9 @@
 
     </form>
   </div>
-
-
 </mat-dialog-content>
 
 <mat-dialog-actions class="dialog-actions">
-  <!-- <button mat-stroked-button type="button" (click)="cancel()" class="bbtn">
-    Cancel
-  </button> -->
   <button mat-raised-button type="submit" form="ticketForm" class="pbtn">
     Create
   </button>

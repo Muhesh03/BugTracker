@@ -144,4 +144,11 @@ markAsConverted(liveticket_id: number): Observable<any> {
   );
 }
 
+getLiveticketStatuses(): Observable<any> {
+  return this.http.get<any>(
+    this.apiUrl + 'liveticket/liveticket-statuses/list',
+    httpOptionsGet
+  );
+}
+
 }

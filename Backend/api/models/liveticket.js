@@ -22,7 +22,7 @@ exports.saveLiveTicket = function (data, cb) {
 exports.markAsConverted = function (liveticket_id, cb) {
     knex('livetickets')
         .where({ liveticket_id: liveticket_id })
-        .update({ is_converted: true })
+        .update({ is_converted: true,ticketstatus_id: 3 })
         .then(function () {
             cb(null, true);
         })
@@ -94,6 +94,90 @@ exports.getTicketStatus = function (cb) {
 }
 
 
+// exports.getLiveTicket = function (projectParams, cb) {
+//   console.log("Fetching live tickets...");
+
+//   knex('livetickets as it')
+//     .leftJoin('ticketpriority as p', 'it.priority_id', 'p.priority_id')
+//     .leftJoin('tickettype as tt', 'it.tickettype_id', 'tt.tickettype_id')
+//     .leftJoin('userregistration as ur', 'it.created_by', 'ur.user_id')
+//     // .leftJoin('userregistration as u', 'it.user_id', 'u.user_id')
+//     .leftJoin('liveticket_status as ts', 'it.ticketstatus_id', 'ts.id')
+
+//     .leftJoin('tickettag as tg', function () {
+//       this.on(knex.raw('tg.tickettag_id = ANY(COALESCE(it.ticket_tag, ARRAY[]::int[]))'));
+//     })
+//     .select(
+//       'it.liveticket_id as liveticket_id',
+//       'it.ticket_number',
+//       'it.summary',
+//       'it.description',
+//       'it.instance',
+//       'it.unit',
+//       'it.tickettype_id',
+//       'tt.name as ticket_type_name',
+//       'ts.statusname',
+//       'it.priority_id',
+//       'p.priority',
+//       'p.icon',
+//       'it.ticketstatus_id',             // your table column
+//       // 'it.user_id as assigned_user_id',
+//       // 'u.fullname as assigned_to_name',
+//       'it.created_by',
+//       'ur.fullname as created_by_name',
+//       'it.image_path',
+//       'it.steps_to_reproduce',
+//       knex.raw('array_agg(tg.tickettag) as tag_names'),
+//       knex.raw('array_agg(tg.tickettag_id) as tag_ids'),
+//       'it.created_at',
+//       'it.updated_on',
+//       'it.updated_by',
+//       'it.is_converted' 
+//     )
+//     .modify(function(qb) {
+//       // if (projectParams.userid) {
+//       //   qb.where('it.created_by', projectParams.userid);
+//       // }
+//       if (projectParams.projectid) {
+//         qb.where('it.project_id', projectParams.projectid);
+//       }
+//     })
+//     .groupBy(
+//       'it.liveticket_id',
+//       'it.ticket_number',
+//       'it.summary',
+//       'it.description',
+//       'it.instance',
+//       'it.unit',
+//       'it.tickettype_id',
+//       'ts.statusname',
+//       'tt.name',
+//       'it.priority_id',
+//       'p.priority',
+//       'p.icon',
+//       'it.ticketstatus_id',
+//       // 'it.user_id',
+//       // 'u.fullname',
+//       'it.created_by',
+//       'ur.fullname',
+//       'it.image_path',
+//       'it.steps_to_reproduce',
+//       'it.created_at',
+//       'it.updated_on',
+//       'it.updated_by',
+//       'it.is_converted' 
+//     )
+//     .orderBy('it.liveticket_id', 'asc')
+//     .then(out => cb(null, out))
+//     .catch(e => {
+//       console.error('Database query error:', e);
+//       cb(e, 'error');
+//     });
+// };
+
+
+
+
 exports.getLiveTicket = function (projectParams, cb) {
   console.log("Fetching live tickets...");
 
@@ -101,8 +185,7 @@ exports.getLiveTicket = function (projectParams, cb) {
     .leftJoin('ticketpriority as p', 'it.priority_id', 'p.priority_id')
     .leftJoin('tickettype as tt', 'it.tickettype_id', 'tt.tickettype_id')
     .leftJoin('userregistration as ur', 'it.created_by', 'ur.user_id')
-    // .leftJoin('userregistration as u', 'it.user_id', 'u.user_id')
-    .leftJoin('ticketstatus as ts', 'it.ticketstatus_id', 'ts.ticketstatus_id')
+    .leftJoin('liveticket_statuses as ts', 'it.ticketstatus_id', 'ts.id') 
 
     .leftJoin('tickettag as tg', function () {
       this.on(knex.raw('tg.tickettag_id = ANY(COALESCE(it.ticket_tag, ARRAY[]::int[]))'));
@@ -116,13 +199,12 @@ exports.getLiveTicket = function (projectParams, cb) {
       'it.unit',
       'it.tickettype_id',
       'tt.name as ticket_type_name',
-      'ts.statusname',
+      'ts.label as statusname',  
+      'ts.color as status_color', 
       'it.priority_id',
       'p.priority',
       'p.icon',
-      'it.ticketstatus_id',             // your table column
-      // 'it.user_id as assigned_user_id',
-      // 'u.fullname as assigned_to_name',
+      'it.ticketstatus_id',
       'it.created_by',
       'ur.fullname as created_by_name',
       'it.image_path',
@@ -132,12 +214,9 @@ exports.getLiveTicket = function (projectParams, cb) {
       'it.created_at',
       'it.updated_on',
       'it.updated_by',
-      'it.is_converted' 
+      'it.is_converted'
     )
     .modify(function(qb) {
-      // if (projectParams.userid) {
-      //   qb.where('it.created_by', projectParams.userid);
-      // }
       if (projectParams.projectid) {
         qb.where('it.project_id', projectParams.projectid);
       }
@@ -150,14 +229,13 @@ exports.getLiveTicket = function (projectParams, cb) {
       'it.instance',
       'it.unit',
       'it.tickettype_id',
-      'ts.statusname',
+      'ts.label',       
+      'ts.color',      
       'tt.name',
       'it.priority_id',
       'p.priority',
       'p.icon',
       'it.ticketstatus_id',
-      // 'it.user_id',
-      // 'u.fullname',
       'it.created_by',
       'ur.fullname',
       'it.image_path',
@@ -165,7 +243,7 @@ exports.getLiveTicket = function (projectParams, cb) {
       'it.created_at',
       'it.updated_on',
       'it.updated_by',
-      'it.is_converted' 
+      'it.is_converted'
     )
     .orderBy('it.liveticket_id', 'desc')
     .then(out => cb(null, out))
@@ -174,8 +252,6 @@ exports.getLiveTicket = function (projectParams, cb) {
       cb(e, 'error');
     });
 };
-
-
 
 exports.getFilter = function (filters, cb) {
 
@@ -235,4 +311,18 @@ exports.getFilter = function (filters, cb) {
       cb(err, 'error');
     });
 
+};
+
+exports.getLiveticketStatuses = function (cb) {
+  knex('liveticket_statuses')
+    .select('id', 'key', 'label', 'color')
+    .orderBy('sort_order', 'asc')
+    .then(function (out) {
+      console.log('Liveticket statuses data:', out);
+      cb(null, out);
+    })
+    .catch(function (e) {
+      console.error('Error fetching liveticket statuses:', e);
+      cb(e, 'error');
+    });
 };

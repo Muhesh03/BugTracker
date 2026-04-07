@@ -23,14 +23,13 @@ interface User {
 
 
 
-
-
 @Component({
   selector: 'app-livetickets',
   templateUrl: './livetickets.component.html',
   styleUrls: ['./livetickets.component.css']
 })
 export class LiveTicketsComponent implements OnInit, AfterViewInit {
+
   filterForm: FormGroup;
   priorities: any[] = [];
   statuses: any[] = [];
@@ -39,73 +38,41 @@ export class LiveTicketsComponent implements OnInit, AfterViewInit {
   otherpermissions: any = {};
   displayedColumns: string[] = [];
   usergroup_id: number | null = null;
-  rows: any[]
+  rows: any[];
+  columnsReady = false; // ✅ controls when table renders
+
+  liveticketDataSource = new MatTableDataSource<any>([]);
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+
   constructor(
     private issueticketService: IssueTicketService,
     private usergroupService: UserGroupService,
     private dialog: MatDialog,
     private liveticketservice: LiveticketService,
+  ) {}
 
-
-  ) { }
-
-  // displayedColumns: string[] = [
-  //   'ticket_number',
-  //   'summary',
-  //   'image_path',
-  //   'description',
-  //   'instance',
-  //   'unit',
-  //   'priority_id',
-  //   'tag_names',
-  //   'action',
-  //   'update',
-  //   'status_id'
-  // ];
-  setColumns() {
-    this.displayedColumns = [
-      'ticket_number',
-      'priority_id',
-      'summary',
-      'description',
-      'instance',
-      'unit',
-      'image_path',
-      // 'tag_names',
-      'update',
-      // 'status_id'
-    ];
-
-
-    if (this.otherpermissions.clientTicketAction) {
-      this.displayedColumns.push('action');
-    }
-    console.log('Columns:', this.displayedColumns);
-  }
-  liveticketDataSource = new MatTableDataSource<any>([]);
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
   ngOnInit(): void {
     const userData = JSON.parse(localStorage.getItem('user') || '{}') as User;
     this.userId = userData.id;
     this.usergroup_id = userData.usergroup_id;
+
     this.loadTicketTypes();
     this.getLiveTicket();
     this.loadPermissions();
     this.loadTicketPriority();
     this.loadTicketStatuses();
 
-
     this.filterForm = new FormGroup({
-      searchtext: new FormControl(''),
-      filterType: new FormControl('0'),
+      searchtext:          new FormControl(''),
+      filterType:          new FormControl('0'),
       filterValuePriority: new FormControl('0'),
-      filterValueStatus: new FormControl('0'),
-      filterValueType: new FormControl('0'),
-      filterValueTag: new FormControl([]),
-      filterValueDate: new FormControl('0'),
-      fromDate: new FormControl(null),
-      toDate: new FormControl(null)
+      filterValueStatus:   new FormControl('0'),
+      filterValueType:     new FormControl('0'),
+      filterValueTag:      new FormControl([]),
+      filterValueDate:     new FormControl('0'),
+      fromDate:            new FormControl(null),
+      toDate:              new FormControl(null)
     });
   }
 
@@ -113,94 +80,67 @@ export class LiveTicketsComponent implements OnInit, AfterViewInit {
     this.liveticketDataSource.paginator = this.paginator;
     this.liveticketDataSource.sort = this.sort;
   }
+
+  // ── Permissions ──────────────────────────────────────────────────
+
   resetPermissions() {
     this.otherpermissions = {
-      clientTicketView: false,
+      clientTicketView:   false,
       clientTicketAction: false
     };
   }
 
   loadPermissions() {
     this.usergroupService.getPermissions(this.usergroup_id).subscribe((rows: any[]) => {
-
       this.resetPermissions();
 
       rows.forEach(p => {
-
         switch (p.page_name) {
-
           case 'clientTicketView':
             this.otherpermissions.clientTicketView = p.permission;
             break;
-
           case 'clientTicketAction':
             this.otherpermissions.clientTicketAction = p.permission;
             break;
         }
-
       });
 
       console.log('Permissions:', this.otherpermissions);
       this.setColumns();
-
-    });
-  }
-  openLiveTicketDialog(): void {
-    const dialogRef = this.dialog.open(LiveTicketFormComponent, {
-      width: '900px',
-      maxWidth: '95vw',
-      panelClass: 'custom-dialog'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.getLiveTicket();
-
-      }
     });
   }
 
-  editLiveTicket(row: any) {
-  this.issueticketService.getLatestTicketNumber().subscribe(res => {
-    const nextTicketNumber = res.data.ticket_number;
+  setColumns() {
+    this.displayedColumns = [
+      'ticket_number',
+      'status_id',   // ✅ colored status badge column
+      'priority_id',
+      'summary',
+      'description',
+      'instance',
+      'unit',
+      'image_path',
+      'update',
+    ];
 
-    const dialogRef = this.dialog.open(IssueTicketFormComponent, {
-      width: '900px',
-      maxWidth: '95vw',
-      panelClass: 'custom-dialog',
-      data: {
-        live_ticket_id: row.liveticket_id,
-        summary: row.summary,
-        user_id: row.assigned_user_id || row.created_by,
-        description: row.description,
-        priority_id: row.priority_id,
-        ticketstatus_id: row.ticketstatus_id,
-        ticket_tag: Array.isArray(row.tag_ids) ? row.tag_ids : [],
-        tickettype_id: row.tickettype_id,
-        image_path: Array.isArray(row.image_path) ? row.image_path : [],
-        ticket_number: nextTicketNumber,
-        steps_to_reproduce: row.steps_to_reproduce || ''
-      }
-    });
+    if (this.otherpermissions.clientTicketAction) {
+      this.displayedColumns.push('action');
+    }
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        row.is_converted = true; 
-        this.getLiveTicket();   
-      }
-    });
-  });
-}
-getLiveTicket() {
-  const storedProjectId = localStorage.getItem('selectedProject');
+    this.columnsReady = true; // ✅ table renders now
+    console.log('Columns:', this.displayedColumns);
+  }
 
-  const projectparams: { userid: number | null; projectid?: number } = {
-    userid: this.userId,
-    projectid: storedProjectId ? Number(storedProjectId) : undefined
-  };
+  // ── Data loading ─────────────────────────────────────────────────
 
-  this.liveticketservice.getLiveTicket(projectparams)
-    .subscribe(res => {
+  getLiveTicket() {
+    const storedProjectId = localStorage.getItem('selectedProject');
+    const projectparams: { userid: number | null; projectid?: number } = {
+      userid:    this.userId,
+      projectid: storedProjectId ? Number(storedProjectId) : undefined
+    };
+
+    this.liveticketservice.getLiveTicket(projectparams).subscribe(res => {
       const data = (res.data || []).map((row: any) => {
         let imageArr: string[] = [];
 
@@ -214,83 +154,103 @@ getLiveTicket() {
           } else if (Array.isArray(row.image_path)) {
             imageArr = row.image_path;
           }
-
-          // Filter out empty strings
           imageArr = imageArr.filter(img => img && img.trim() !== '');
         }
 
-        return {
-          ...row,
-          image_path: imageArr
-        };
+        return { ...row, image_path: imageArr };
       });
 
       console.log('FINAL DATA USED BY liveticket TABLE:', data);
       this.liveticketDataSource.data = data;
     });
-}
-  openImages(images: string[]) {
-    this.dialog.open(ViewImageDialogComponent, {
-      data: images,
-      width: '900px',
-      autoFocus: false
+  }
+
+  loadTicketPriority() {
+    this.liveticketservice.getTicketPriorities().subscribe(res => {
+      this.priorities = res.data;
     });
   }
-  getFilter() {
-    const filters = {
-      ...this.filterForm.value,
-    };
 
-    this.liveticketservice.getfilter(filters)
-      .subscribe(res => {
-        this.liveticketDataSource.data = res.data || [];
-      });
+  loadTicketStatuses() {
+    this.liveticketservice.getTicketStatuses().subscribe(res => {
+      this.statuses = res.data;
+    });
+  }
+
+  loadTicketTypes() {
+    this.liveticketservice.getTicketType().subscribe(res => {
+      this.tickettypes = res.data;
+    });
+  }
+
+  // ── Filter & Search ───────────────────────────────────────────────
+
+  getFilter() {
+    const filters = { ...this.filterForm.value };
+    this.liveticketservice.getfilter(filters).subscribe(res => {
+      this.liveticketDataSource.data = res.data || [];
+    });
   }
 
   searchAll(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.liveticketDataSource.filter = filterValue.trim().toLowerCase();
   }
-  loadTicketPriority() {
-    this.liveticketservice.getTicketPriorities()
-      .subscribe(res => {
-        this.priorities = res.data;
-        console.log("ticket priority are ", this.tickettypes)
-      });
+
+  // ── Dialog openers ────────────────────────────────────────────────
+
+  openLiveTicketDialog(): void {
+    const dialogRef = this.dialog.open(LiveTicketFormComponent, {
+      width: '900px',
+      maxWidth: '95vw',
+      panelClass: 'custom-dialog'
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) this.getLiveTicket();
+    });
   }
-
-  loadTicketStatuses() {
-    this.liveticketservice.getTicketStatuses()
-      .subscribe(res => {
-        this.statuses = res.data;
-        console.log("ticket status are ", this.tickettypes)
-      });
-  }
-
-
-  loadTicketTypes() {
-    this.liveticketservice.getTicketType()
-      .subscribe(res => {
-        this.tickettypes = res.data;
-        console.log("ticket types are ", this.tickettypes)
-      });
-  }
-
-
-
 
   editTicket(row: any) {
     const dialogRef = this.dialog.open(LiveTicketFormComponent, {
       width: '900px',
       maxWidth: '95vw',
       panelClass: 'custom-dialog',
-      data: row   // pass row data to form
+      data: row
     });
-
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.getLiveTicket(); // refresh table after update
-      }
+      if (result) this.getLiveTicket();
+    });
+  }
+
+  editLiveTicket(row: any) {
+    this.issueticketService.getLatestTicketNumber().subscribe(res => {
+      const nextTicketNumber = res.data.ticket_number;
+
+      const dialogRef = this.dialog.open(IssueTicketFormComponent, {
+        width: '900px',
+        maxWidth: '95vw',
+        panelClass: 'custom-dialog',
+        data: {
+          live_ticket_id:     row.liveticket_id,
+          summary:            row.summary,
+          user_id:            row.assigned_user_id || row.created_by,
+          description:        row.description,
+          priority_id:        row.priority_id,
+          ticketstatus_id:    row.ticketstatus_id,
+          ticket_tag:         Array.isArray(row.tag_ids) ? row.tag_ids : [],
+          tickettype_id:      row.tickettype_id,
+          image_path:         Array.isArray(row.image_path) ? row.image_path : [],
+          ticket_number:      nextTicketNumber,
+          steps_to_reproduce: row.steps_to_reproduce || ''
+        }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          row.is_converted = true;
+          this.getLiveTicket();
+        }
+      });
     });
   }
 
@@ -302,17 +262,19 @@ getLiveTicket() {
       panelClass: 'custom-dialog',
       data: row
     });
-
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-
-      }
+      if (result) this.getLiveTicket();
     });
   }
 
-
+  openImages(images: string[]) {
+    this.dialog.open(ViewImageDialogComponent, {
+      data: images,
+      width: '900px',
+      autoFocus: false
+    });
+  }
 }
-
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -346,6 +308,9 @@ filterForm:FormGroup;
   imagePaths: string[] = [];
   userData: number | null = null;
   userId: number | null = null;
+  liveticketStatuses: any[] = [];
+isStatusOpen = false;
+selectedStatus: any = null;
 
 
 
@@ -404,7 +369,7 @@ filterForm:FormGroup;
     this.loadTicketTypes();
     this.loadPriorities();
     this.loadTags();
-    this.loadStatuses();
+ this.loadLiveticketStatuses() ;
 
 
 
@@ -435,16 +400,20 @@ filterForm:FormGroup;
         });
       });
   }
-  loadStatuses() {
 
-    this.liveticketservice.getTicketStatuses()
-      .subscribe(res => {
-        this.statuses = res.data;
 
-      });
-    console.log("statuses  arrraaaaaaaaaaaaaarrrrrrre", this.statuses)
+  loadLiveticketStatuses() {
+  this.liveticketservice.getLiveticketStatuses().subscribe(res => {
+    this.liveticketStatuses = res.data;
+    console.log('liveticket statuses', this.liveticketStatuses);
+  });
+}
 
-  }
+selectStatus(status: any) {
+  this.selectedStatus = status;
+  this.liveticketform.patchValue({ ticketstatus_id: status.id });
+  this.isStatusOpen = false;
+}
   removeFile(index: number) {
     this.selectedFiles.splice(index, 1);
     this.selectedFileNames.splice(index, 1);
@@ -479,6 +448,7 @@ filterForm:FormGroup;
   }
 
   onSubmit(): void {
+     console.log('ticketstatus_id value >>>', this.liveticketform.get('ticketstatus_id')?.value);
     if (!this.liveticketform.valid) {
       console.log('Form is invalid');
       return;

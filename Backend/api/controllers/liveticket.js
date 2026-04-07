@@ -165,4 +165,14 @@ router.put('/liveticket/markconverted/:liveticket_id', function (req, res) {
     });
 });
 
+
+router.get('/liveticket/liveticket-statuses/list', function (req, res) {
+    liveticketdb.getLiveticketStatuses(function (err, output) {
+        if (err) {
+            return res.status(500).send({ error: "Something went wrong in liveticket status controller" });
+        }
+        res.status(200).send({ message: "Liveticket statuses list", data: output });
+    });
+});
+
 module.exports.router = router;
