@@ -12,7 +12,7 @@
 //   newMessage = '';
 
 //   messages = [
-//     { text: 'Hello 👋', type: 'received' }
+//     { text: 'Hello ', type: 'received' }
 //   ];
 
 //   sendMessage() {
@@ -27,7 +27,7 @@
 //     if (this.activeTab === 'bot') {
 //       setTimeout(() => {
 //         this.messages.push({
-//           text: 'I am a bot 🤖',
+//           text: 'I am a bot ',
 //           type: 'received'
 //         });
 //       }, 1000);
@@ -127,7 +127,7 @@ export class ChatComponent implements OnInit {
   loadUnreadCounts() {
     this.chatService.getUnreadCounts(this.currentUserId)
       .subscribe((res: any[]) => {
-        console.log("🔥 FRONTEND DATA:", res);
+        console.log("<===========> FRONTEND DATA:", res);
         this.unreadMap = {};
 
         res.forEach((item: any) => {
@@ -221,6 +221,7 @@ export class ChatComponent implements OnInit {
       this.users = [...this.users];
 
       console.log("Final Users:", this.users);
+      
       this.loadUnreadCounts();
     });
   }

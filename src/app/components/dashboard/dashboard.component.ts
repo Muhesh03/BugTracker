@@ -4,6 +4,8 @@ import { IssueTicketService } from 'src/app/services/issueticket.service';
 import { DashboardService } from 'src/app/services/dashboard.service';
 import { plugins } from 'chart.js';
 import { UserService } from 'src/app/services/user.service';
+import { LiveticketService } from 'src/app/services/liveticket.service';
+import { MatTableDataSource } from '@angular/material/table';
 
 
 @Component({
@@ -16,7 +18,7 @@ export class DashboardComponent implements OnInit {
   months: { label: string; value: string }[] = [];
 
   constructor(private issueTicketService: IssueTicketService,
-    private DashboardService: DashboardService, private userService: UserService) { }
+    private DashboardService: DashboardService, private userService: UserService,private liveticketservice: LiveticketService) { }
 
 
   tickets: any[] = []
@@ -41,7 +43,7 @@ export class DashboardComponent implements OnInit {
   pendingTickets = 0;
   reported = 0;
   priorityhigh = 0;
-
+  liveticketDataSource = new MatTableDataSource<any>([]);
   ngOnInit() {
     this.loggedInUserId = Number(localStorage.getItem('user_id'));
 
@@ -161,59 +163,7 @@ export class DashboardComponent implements OnInit {
       });
     });
   }
-  //   getDashBoard() {
-  //   const storedProject = localStorage.getItem('selectedProject');
-  //   this.projectId = storedProject ? Number(storedProject) : null;
-  //   const dashboardparams = {
-  //     projectid: this.projectId ?? null,
-  //     userid: this.userId
-  //   };
 
-  //   this.DashboardService.getDashboard(dashboardparams)
-  //     .subscribe(res => {
-  //       const data = res.data || {};
-  //       this.assignedToMeCount = res.data.total;
-  //       this.pendingTickets = res.data.pending;
-  //       this.closedTickets = res.data.closed;
-  //       this.priorityhigh = res.data.priority;
-  //       console.log("high piroity working dashboard", this.priorityhigh);
-  //       console.log("Pending dashboard", this.pendingTickets)
-  //       this.barChartLabels = [];
-  //       const counts: number[] = [];
-
-  //       data.statusChart.forEach((s: any) => {
-  //         const status = this.statuses.find(st => st.ticketstatus_id === s.status_id);
-
-  //         if (status) {
-  //           this.barChartLabels.push(status.statusname);
-  //           counts.push(Number(s.count));
-  //         }
-  //       });
-
-  //       this.barChartData = [{
-  //         data: counts
-  //       }];
-
-  //       // ✅ DONUT CHART (PRIORITY)
-  //       this.priorityStatusCharts = [];
-
-  //       data.priorityChart.forEach((p: any) => {
-  //         const priority = this.priorities.find(pr => pr.priority_id === p.priority_id);
-
-  //         if (priority) {
-  //           this.priorityStatusCharts.push({
-  //             priority: priority.priority,
-  //             total: Number(p.count),
-  //             labels: [priority.priority],
-  //             data: [Number(p.count)],
-  //             colors: ['#42A5F5'] // you can map color
-  //           });
-  //         }
-  //       });
-
-  //     });
-
-  // }
   getDashBoard() {
     const storedProject = localStorage.getItem('selectedProject');
     this.projectId = storedProject ? Number(storedProject) : null;
@@ -230,7 +180,7 @@ export class DashboardComponent implements OnInit {
 
         const data = res?.data || {};
 
-        // ✅ SAFE COUNTS
+        // COUNTS
         this.assignedToMeCount = data.total || 0;
         this.pendingTickets = data.pending || 0;
         // this.closedTickets = data.closed || 0;
@@ -239,7 +189,7 @@ export class DashboardComponent implements OnInit {
 
         console.log("Dashboard Data:", data);
 
-        // ✅ SAFE BAR CHART
+        // BAR CHART
         this.barChartLabels = [];
         const counts: number[] = [];
         const colors: string[] = [];
@@ -267,7 +217,7 @@ export class DashboardComponent implements OnInit {
           backgroundColor: colors,
         }];
 
-        // ✅ SAFE DONUT CHART
+        // DONUT CHART
         this.priorityStatusCharts = [];
 
         if (Array.isArray(data.priorityChart) && this.priorities?.length) {
@@ -283,17 +233,55 @@ export class DashboardComponent implements OnInit {
                 total: Number(p.count),
                 labels: [priority.priority],
                 data: [Number(p.count)],
-                colors: ['#42A5F5']
+                // colors: ['#42A5F5']
               });
             }
           });
         }
-
+        this.preparePriorityStatusCharts();
       }, err => {
         console.error("❌ Dashboard API Error:", err);
       });
   }
+getLiveTicket() {
+  const storedProjectId = localStorage.getItem('selectedProject');
 
+  const projectparams: { userid: number | null; projectid?: number } = {
+    userid: this.userId,
+    projectid: storedProjectId ? Number(storedProjectId) : undefined
+  };
+
+  this.liveticketservice.getLiveTicket(projectparams)
+    .subscribe(res => {
+      const data = (res.data || []).map((row: any) => {
+        let imageArr: string[] = [];
+
+        if (row.image_path) {
+          if (typeof row.image_path === 'string') {
+            imageArr = row.image_path
+              .replace('{', '')
+              .replace('}', '')
+              .replace(/"/g, '')
+              .split(',');
+          } else if (Array.isArray(row.image_path)) {
+            imageArr = row.image_path;
+          }
+
+          // Filter out empty strings
+          imageArr = imageArr.filter(img => img && img.trim() !== '');
+        }
+
+        return {
+          ...row,
+          image_path: imageArr
+        };
+      });
+
+      console.log('FINAL DATA USED BY liveticket TABLE:', data);
+      this.liveticketDataSource.data = data;
+      this.prepareLiveTicketPieChart(data);
+    });
+}
   prepareStatusBarChart() {
 
     this.barChartLabels = [];
@@ -346,31 +334,6 @@ export class DashboardComponent implements OnInit {
     }];
   }
 
-  // getMonths() {
-  //   this.months = [];
-
-  //   const startYear = 2025;
-  //   const endYear = 2027;
-
-  //   for (let year = startYear; year <= endYear; year++) {
-  //     for (let month = 0; month < 12; month++) {
-  //       const date = new Date(year, month, 1);
-
-  //       this.months.push({
-  //         label: date.toLocaleString('en-US', {
-  //           month: 'short',
-  //           year: 'numeric'
-  //         }),
-  //         value: `${year}-${String(month + 1).padStart(2, '0')}`
-  //       });
-  //     }
-  //   }
-
-  //   //  LOCAL current month
-  //   const now = new Date();
-  //   this.selectedMonth =
-  //     now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
-  // }
 
   getMonths() {
     this.months = [];
@@ -494,5 +457,65 @@ export class DashboardComponent implements OnInit {
       });
     });
   }
+  pieChartLabels: string[] = [];
+  pieChartData: number[] = [];
+  pieChartColors: any[] = [];
+  pieChartType = 'pie';
+  prepareLiveTicketPieChart(data: any[]) {
+  if (!this.statuses || this.statuses.length === 0) {
+    console.warn("Statuses not loaded yet");
+    return;
+  }
 
+    const statusMap: any = {};
+ const filteredTickets = this.selectedMonth && this.selectedMonth !== 'ALL'
+      ? this.tickets.filter(t => {
+        const d = new Date(t.created_at);
+        const month =
+          d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+        return month === this.selectedMonth;
+      })
+      : this.tickets;
+       filteredTickets.forEach(ticket => {
+      if (statusMap[ticket.ticketstatus_id]) {
+        statusMap[ticket.ticketstatus_id].count++;
+      }
+    });
+    // Initialize from status master
+    this.statuses.forEach(status => {
+      statusMap[status.ticketstatus_id] = {
+        label: status.statusname,
+        count: 0,
+        color: status.color || '#999'
+      };
+    });
+
+    // Count tickets
+    data.forEach(ticket => {
+      if (statusMap[ticket.ticketstatus_id]) {
+        statusMap[ticket.ticketstatus_id].count++;
+      }
+    });
+
+    const labels: string[] = [];
+    const counts: number[] = [];
+    const colors: string[] = [];
+
+    Object.values(statusMap).forEach((s: any) => {
+      if (s.count > 0) {
+        labels.push(s.label);
+        counts.push(s.count);
+        colors.push(s.color);
+      }
+    });
+console.log("Pie Labels:", this.pieChartLabels);
+  console.log("Pie Data:", this.pieChartData);
+  console.log("Pie Colors:", this.pieChartColors);
+
+    this.pieChartLabels = labels;
+    this.pieChartData = counts;
+    this.pieChartColors = [{
+      backgroundColor: colors
+    }];
+  }
 }
