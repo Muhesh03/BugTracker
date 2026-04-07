@@ -1,127 +1,4 @@
 
-// const express = require('express');
-// const userdb = require('../models/users.js');
-// const router = express.Router();
-
-// router.use(function (req, res, next) {
-//     router.route('/user/user_data').post(function (req, res, next) {
-
-//         console.log('cccccccccccccccccccccc', req.body);
-
-
-//         const params = {
-//             fullname: req.body.fullname,
-//             status: req.body.status,
-//             password: req.body.password,
-//             email: req.body.email,
-//             phonenumber: req.body.phonenumber,
-//             usergroup: req.body.usergroup,
-//             created_on: new Date(),
-//             status_id: 1
-//         }
-
-//         userdb.saveuser(params, function (err, output) {
-//             if (err) {
-//                 return res.status(500).send({ error: 'Something went wrong !' });
-//             } else {
-//                 var items = {};
-//                 items.data = output;
-//                 items.actionMessage = " tickettype listed ";
-//                 console.log('iiiiiiiiiiiiiiiiiiiii', items);
-//                 res.status(200).send(items);
-//             }
-//         });
-//     });
-
-//     console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-
-//     router.route('/user/get_List').get(function (req, res, next) {
-
-//         // console.log('user controler==============%%%%%%%%%5');
-//         userdb.getuser((err, output) => {
-//             if (err) {
-//                 console.log('user controler error===========', err)
-//                 return res.status(500).send({ error: "Something went wrong" });
-//             }
-
-//             res.status(200).send({
-//                 message: "user list",
-//                 data: output
-//             });
-//         });
-//     });
-//     router.post('/user/delete', (req, res) => {
-
-//         const user_id = req.body.user_id;
-
-//         console.log('Received /user/delete body:', user_id);
-//         console.log('user controler==============%%%%%%%%%5');
-//         userdb.deleteuser(user_id, function (err, output) {
-//             if (err) {
-//                 console.log('user controler error===========', err)
-//                 return res.status(500).send({ error: "===>>>>Something went wrong" });
-//             }
-
-//             res.status(200).send({
-//                 message: "user deleted",
-//                 data: output
-//             });
-//         });
-
-//     });
-//     router.post('/user/update', (req, res) => {
-
-//         const { user_id, fullname,usergroup, status, password, email, phonenumber } = req.body;
-
-//         // ================= UPDATE =================
-//         if (user_id) {
-
-//             const params = {
-//                 user_id,
-//                 fullname,
-//                 usergroup,
-//                 status,
-//                 password,
-//                 email,
-//                 phonenumber
-//             };
-
-//             userdb.updateuser(params, (err, result) => {
-//                 if (err) {
-//                     console.error('Update error:', err);
-//                     return res.status(500).send({ error: 'Update failed' });
-//                 }
-
-//                 return res.status(200).send({
-//                     message: 'User updated successfully',
-//                     data: result
-//                 });
-//             });
-
-//         }
-
-
-//     });
-
-
-//     next();
-// });
-// module.exports.router = router;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -230,14 +107,14 @@ router.post('/user/user_data', async (req, res) => {
             if (existingUser.status_id === 3) {
                 const updated = await knex('userregistration')
                     // .where('email', email)
-                     .where('user_id', existingUser.user_id)
+                    .where('user_id', existingUser.user_id)
                     .update({
                         fullname,
                         password,
                         phonenumber,
                         usergroup_id,
                         status_id: 1,
-                          is_reactivated: true 
+                        is_reactivated: true
                     })
                     .returning('*');
 
@@ -264,7 +141,7 @@ router.post('/user/user_data', async (req, res) => {
             usergroup_id,
             created_on: new Date(),
             status_id: 1,
-              is_reactivated: false 
+            is_reactivated: false
         };
 
         userdb.saveuser(params, (err, output) => {
@@ -296,7 +173,7 @@ router.post('/user/user_data', async (req, res) => {
  * GET USER LIST
  */
 router.get('/user/get_List', (req, res) => {
-    console.log("status changed to 2 check it ",req.body);
+    console.log("status changed to 2 check it ", req.body);
 
     userdb.getuser((err, output) => {
         if (err) {

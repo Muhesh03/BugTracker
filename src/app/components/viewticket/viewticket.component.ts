@@ -640,6 +640,8 @@ export class EditNoteComponent implements OnInit {
       error: (err) => {
         console.error('Failed to load tickets', err);
       }
+
+      
     });
   }
   loadUsers() {

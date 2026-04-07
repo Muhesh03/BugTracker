@@ -220,7 +220,7 @@ router.use(function (req, res, next) {
     router.post('/update/:issueticket_id', function (req, res) {
 
         const issueticket_id = req.params.issueticket_id;
-        console.log('Update request received for ticket ID:++++++++++++++controller+++++++++++++++++++', issueticket_id);
+        console.log('Update request received for ticket ID:+++++++++-----------+++++controller+++++++++----------++++++++++', issueticket_id);
 
         issueticketdb.updateTicket(issueticket_id, req.body, (err, output) => {
             if (err) {

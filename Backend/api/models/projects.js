@@ -33,7 +33,7 @@ exports.getProjects = function (cb) {
     .select('*')
     .whereNot({ status_id: 3 })
     
-    .orderBy('project_id')
+    .orderBy('project_id','desc')
     .then(function (out) {
       console.log('projects DATA SENDED', out);
       cb(null, out);

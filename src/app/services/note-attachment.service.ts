@@ -32,10 +32,7 @@ export class NoteAttachmentService {
     return this.http.post(`${this.apiUrl}note/save`, payload);
   }
 
-  // updateNoteTicket(history_id: number, payload: any): Observable<any> {
-  //   console.log('Updating note with history ID:', history_id, payload);
-  //   return this.http.put(`${this.apiUrl}/${history_id}`, payload);
-  // }
+ 
 
   uploadImage(formData: FormData): Observable<any> {
 
@@ -43,11 +40,6 @@ export class NoteAttachmentService {
     return this.http.post(`${this.apiUrl}note/upload`, formData);
   }
 
-  // getActivities(ticketId: number) {
-  //   console.log('Fetching activities for ticket ID++++++++++++++++++++>>>>>>>>>>>>><<<<<<<<<<<<<<+++++++++++++++++++++:', ticketId);
-  //   return this.http.get(
-  //     `${this.apiUrl}tickethistory/${ticketId}`
-  //   );
-  // }
+ 
 
 }

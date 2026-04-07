@@ -21,7 +21,7 @@ exports.getTicketPriority = function(cb) {
     knex('ticketpriority')
         .select('*')
         .whereNot({ status_id: 3 })
-        .orderBy('priority_id') 
+        .orderBy('priority_id','desc') 
         .then(function (out) {
             console.log('data sending from ticketpriority db to frontend', out);
             cb(null, out);
@@ -29,7 +29,7 @@ exports.getTicketPriority = function(cb) {
         .catch(function (e) {
             cb(e, 'error');
         });
-};
+};  
 
 
 exports.deleteTicketPriority = function (priority_id, callback) {

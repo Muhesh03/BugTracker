@@ -245,7 +245,7 @@ exports.getLiveTicket = function (projectParams, cb) {
       'it.updated_by',
       'it.is_converted'
     )
-    .orderBy('it.liveticket_id', 'asc')
+    .orderBy('it.liveticket_id', 'desc')
     .then(out => cb(null, out))
     .catch(e => {
       console.error('Database query error:', e);

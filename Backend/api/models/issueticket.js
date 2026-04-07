@@ -21,138 +21,6 @@ exports.saveIssueTicket = function (data, cb) {
     });
 };
 
-
-// exports.saveIssueTicket = function (data, cb) {
-//   console.log('Issue Ticket table data', data);
-
-//   knex('issueticket')
-//     .insert(data)
-//     .returning('*') // important: returns the inserted row
-//     .then(rows => cb(null, rows[0])) // return first row to callback
-//     .catch(err => cb(err)); // duplicates and other errors will be caught
-// };
-// exports.getFilter = function (filters, cb) {
-
-//   const {
-//     projectId,
-//     filterValuePriority,
-//     filterValueStatus,
-//     filterValueType,
-//     filterValueTag,
-//     filterValueDate,
-//     fromDate,
-//     toDate
-//   } = filters;
-
-//   const tags = [].concat(filterValueTag || []);
-
-//   knex('issueticket as it')
-//     .leftJoin('ticketpriority as p', 'it.priority_id', 'p.priority_id')
-//     .leftJoin('ticketstatus as t', 'it.ticketstatus_id', 't.ticketstatus_id')
-//     .leftJoin('tickettype as tt', 'it.tickettype_id', 'tt.tickettype_id')
-//     .leftJoin('userregistration as u', 'it.user_id', 'u.user_id')
-//     .leftJoin('userregistration as ur', 'it.created_by', 'ur.user_id')
-
-//     // KEEP THIS (important for tags)
-//     .joinRaw('JOIN tickettag tg ON tg.tickettag_id = ANY(it.ticket_tag)')
-
-//     .select(
-//       'it.issueticket_id',
-//       'it.summary',
-//       'it.description',
-//       'it.ticketstatus_id',
-//       'u.user_id',
-//       'u.fullname',
-//       'ur.user_id as creator_user_id',
-//       'ur.fullname as created_by_name',
-//       'it.priority_id',
-//       'p.priority',
-//       'p.icon',
-//       't.statusname',
-//       't.color',
-//       'tt.name',
-//       'it.tickettype_id',
-//       'it.ticket_number',
-//       'it.created_at',
-//       knex.raw('array_agg(tg.tickettag) as tag_names'),
-//       knex.raw('array_agg(tg.tickettag_id) as tag_ids')
-//     )
-
-//     .whereNot('it.status_id', 3)
-
-//     .where(function () {
-
-//       if (projectId && projectId !== '0') {
-//         this.where('it.project_id', Number(projectId));
-//       }
-
-//       if (filterValuePriority && filterValuePriority !== '0') {
-//         this.where('it.priority_id', Number(filterValuePriority));
-//       }
-
-//       if (filterValueStatus && filterValueStatus !== '0') {
-//         this.where('it.ticketstatus_id', Number(filterValueStatus));
-//       }
-
-//       if (filterValueType && filterValueType !== '0') {
-//         this.where('it.tickettype_id', Number(filterValueType));
-//       }
-
-//       // WORKING DATE LOGIC (from first query)
-
-//       if (filterValueDate === 'Between' && fromDate && toDate) {
-
-//         const from = new Date(fromDate).toISOString().split('T')[0];
-//         const to = new Date(toDate).toISOString().split('T')[0];
-
-//         this.whereRaw(
-//           'DATE(it.created_at) BETWEEN ? AND ?',
-//           [from, to]
-//         );
-//       }
-
-//       if (filterValueDate === 'Yesterday') {
-//         this.whereRaw(
-//           "DATE(it.created_at) = CURRENT_DATE - INTERVAL '1 day'"
-//         );
-//       }
-
-//       if (tags.length > 0) {
-//         this.whereRaw('it.ticket_tag @> ?::int[]', [tags]);
-//       }
-
-//     })
-
-//     .groupBy(
-//       'it.issueticket_id',
-//       'it.summary',
-//       'it.description',
-//       'it.ticketstatus_id',
-//       'u.user_id',
-//       'u.fullname',
-//       'ur.user_id',
-//       'ur.fullname',
-//       'it.priority_id',
-//       'p.priority',
-//       'p.icon',
-//       't.statusname',
-//       't.color',
-//       'tt.name',
-//       'it.tickettype_id',
-//       'it.ticket_number',
-//       'it.created_at'
-//     )
-
-//     .orderBy('it.issueticket_id', 'asc')
-
-//     .then(out => cb(null, out))
-//     .catch(err => {
-//       console.error('Error in getFilter:', err);
-//       cb(err, 'error');
-//     });
-
-// };
-
 exports.getFilter = function (filters, cb) {
   const {
     projectId,
@@ -330,7 +198,7 @@ exports.getIssueTicket = function (projectParams, cb) {
       'ur.user_id',
       'ur.fullname',
     )
-    .orderBy('it.issueticket_id', 'asc')
+    .orderBy('it.issueticket_id', 'desc')
     .then(
       function (out) {
         cb(null, out);

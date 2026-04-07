@@ -14,6 +14,7 @@ exports.gettickettype = function (cb) {
 	knex('tickettype')
 		.select('*')
 		.whereNot({ "status_id": 3 })
+		.orderBy('tickettype_id','desc')
 		.then(function (out) {
 			cb(null, out);
 
