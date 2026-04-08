@@ -170,9 +170,9 @@ exports.getIssueTicket = function (projectParams, cb) {
       if (projectParams.projectid) {
         this.where('it.project_id', projectParams.projectid);
       }
-      if (projectParams.userid) {
-        this.where('it.created_by', projectParams.userid);
-      }
+      // if (projectParams.userid) {
+      //   this.where('it.created_by', projectParams.userid);
+      // }
     })
     .groupBy(
       'it.issueticket_id',
@@ -525,10 +525,16 @@ exports.updateTicket = async (issueticket_id, data, cb) => {
 
 
 // db/issueticketdb.js
-
 exports.updateIssueTicket = async (issueticket_id, data) => {
-  console.log('Updating issue ticket with ID +++++++++++model+++++++:', issueticket_id);
-  console.log('Data to update+++++++++++++model++++++++++:', data);
+  console.log('Updating issue ticket:', issueticket_id);
+  console.log('Incoming data:', data);
+
+  const existing = await knex('issueticket')
+    .where({ issueticket_id })
+    .first();
+
+  console.log('Existing Ticket:', existing);
+
   const updateData = {};
 
   if (data.ticketstatus_id !== undefined) {
@@ -538,10 +544,10 @@ exports.updateIssueTicket = async (issueticket_id, data) => {
   if (data.assigned_to !== undefined) {
     updateData.user_id = data.assigned_to;
   }
+
   if (data.updated_by !== undefined) {
     updateData.updated_by = data.updated_by;
   }
-
 
   updateData.updated_at = knex.fn.now();
 
@@ -554,6 +560,22 @@ exports.updateIssueTicket = async (issueticket_id, data) => {
     .update(updateData)
     .returning('*');
 
-  return result[0];
-};
+  const updatedTicket = result[0];
 
+  const CLOSED_STATUS_ID = 17;
+  const RESOLVED_STATUS_ID = 5;
+
+  if (
+    Number(data.ticketstatus_id) === CLOSED_STATUS_ID &&
+    existing.liveticket_id
+  ) {
+
+    const liveResult = await knex('livetickets')
+      .where({ liveticket_id: existing.liveticket_id })
+      .update({
+        ticketstatus_id: RESOLVED_STATUS_ID, // or status_id (check DB)
+      });
+  }
+
+  return updatedTicket;
+};

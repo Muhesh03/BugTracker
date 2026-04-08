@@ -40,7 +40,7 @@ export class LiveTicketsComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [];
   usergroup_id: number | null = null;
   rows: any[];
-  columnsReady = false; // ✅ controls when table renders
+  columnsReady = false; 
 
   liveticketDataSource = new MatTableDataSource<any>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -114,7 +114,7 @@ export class LiveTicketsComponent implements OnInit, AfterViewInit {
   setColumns() {
     this.displayedColumns = [
       'ticket_number',
-      'status_id',   // ✅ colored status badge column
+      'status_id',  
       'priority_id',
       'summary',
       'description',
@@ -128,7 +128,7 @@ export class LiveTicketsComponent implements OnInit, AfterViewInit {
       this.displayedColumns.push('action');
     }
 
-    this.columnsReady = true; // ✅ table renders now
+    this.columnsReady = true; 
     console.log('Columns:', this.displayedColumns);
   }
 
@@ -224,30 +224,26 @@ export class LiveTicketsComponent implements OnInit, AfterViewInit {
   }
 
   editLiveTicket(row: any) {
+    console.log('ROW DATA:', row);
     this.issueticketService.getLatestTicketNumber().subscribe(res => {
       const nextTicketNumber = res.data.ticket_number;
-
-      const dialogData = {
-        live_ticket_id: row.liveticket_id,
-        summary: row.summary,
-        user_id: row.assigned_user_id || row.created_by,
-        description: row.description,
-        priority_id: row.priority_id,
-        ticketstatus_id: row.ticketstatus_id,
-        ticket_tag: Array.isArray(row.tag_ids) ? row.tag_ids : [],
-        tickettype_id: row.tickettype_id,
-        image_path: Array.isArray(row.image_path) ? row.image_path : [],
-        ticket_number: nextTicketNumber,
-        steps_to_reproduce: row.steps_to_reproduce || ''
-      };
-
-      console.log("Data passed to IssueTicketFormComponent:", dialogData);
-
       const dialogRef = this.dialog.open(IssueTicketFormComponent, {
         width: '900px',
         maxWidth: '95vw',
         panelClass: 'custom-dialog',
-        data: dialogData
+        data: {
+          live_ticket_id:     row.liveticket_id,
+          summary:            row.summary,
+          user_id:            row.assigned_user_id || row.created_by,
+          description:        row.description,
+          priority_id:        row.priority_id,
+          ticketstatus_id:   11,
+          ticket_tag:         Array.isArray(row.ticket_tag) ? row.ticket_tag : [],
+          tickettype_id:      row.tickettype_id,
+          image_path:         Array.isArray(row.image_path) ? row.image_path : [],
+          ticket_number:      nextTicketNumber,
+          steps_to_reproduce: row.steps_to_reproduce || ''
+        }
       });
 
       dialogRef.afterClosed().subscribe(result => {

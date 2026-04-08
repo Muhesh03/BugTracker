@@ -93,7 +93,8 @@
                     <!-- <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels" [chartType]="pieChartType">
                     </canvas> -->
                     <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels" [chartType]="'pie'"
-                        [colors]="[{ backgroundColor: pieChartColors }]"  style="margin: auto;">
+                        [colors]="[{ backgroundColor: pieChartColors }]" [options]="pieChartOptions"
+                        style="height: 300px;margin: auto;">
                     </canvas>
                 </mat-card>
             </div>

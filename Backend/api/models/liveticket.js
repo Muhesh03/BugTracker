@@ -186,6 +186,8 @@ exports.getLiveTicket = function (projectParams, cb) {
     .leftJoin('tickettype as tt', 'it.tickettype_id', 'tt.tickettype_id')
     .leftJoin('userregistration as ur', 'it.created_by', 'ur.user_id')
     .leftJoin('liveticket_statuses as ts', 'it.ticketstatus_id', 'ts.id')
+    .leftJoin('projects as pr', 'it.project_id', 'pr.project_id')
+
 
     .leftJoin('tickettag as tg', function () {
       this.on(knex.raw('tg.tickettag_id = ANY(COALESCE(it.ticket_tag, ARRAY[]::int[]))'));
@@ -206,6 +208,10 @@ exports.getLiveTicket = function (projectParams, cb) {
       'p.icon',
       'it.ticketstatus_id',
       'it.created_by',
+      'it.project_id',
+      'pr.projectname',
+
+
       'ur.fullname as created_by_name',
       'it.image_path',
       'it.steps_to_reproduce',
@@ -243,7 +249,11 @@ exports.getLiveTicket = function (projectParams, cb) {
       'it.created_at',
       'it.updated_on',
       'it.updated_by',
-      'it.is_converted'
+      'it.is_converted',
+      'it.project_id',
+      'pr.projectname',
+
+
     )
     .orderBy('it.liveticket_id', 'desc')
     .then(out => cb(null, out))
@@ -264,6 +274,8 @@ exports.getFilter = function (filters, cb) {
 
   knex('livetickets as it')          // ← replace with your actual table name
     .leftJoin('ticketpriority as p', 'it.priority_id', 'p.priority_id')
+    .leftJoin('liveticket_statuses as ts', 'it.ticketstatus_id', 'ts.id')
+
 
     .select(
       'it.liveticket_id',
@@ -275,7 +287,13 @@ exports.getFilter = function (filters, cb) {
       'it.ticket_number',
       'it.created_at',
       'it.instance',
-      'it.unit'
+      'it.unit',
+      'it.is_converted',
+      'it.ticketstatus_id',
+      'ts.label as statusname',
+      'ts.color as status_color',
+
+
     )
 
     .where(function () {

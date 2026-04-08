@@ -463,7 +463,10 @@ export class DashboardComponent implements OnInit {
   pieChartLabels: string[] = [];
   pieChartData: number[] = [];
   pieChartColors: string[] = [];
-
+pieChartOptions = {
+  responsive: true,
+  maintainAspectRatio: false
+};
   prepareLiveTicketPieChart(data: any[]) {
     if (!data || data.length === 0) return;
 
@@ -519,3 +522,5 @@ export class DashboardComponent implements OnInit {
     console.log("Colors:", colors);
   }
 }
+
+
