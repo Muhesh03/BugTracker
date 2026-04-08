@@ -18,7 +18,7 @@ export class DashboardComponent implements OnInit {
   months: { label: string; value: string }[] = [];
 
   constructor(private issueTicketService: IssueTicketService,
-    private DashboardService: DashboardService, private userService: UserService,private liveticketservice: LiveticketService) { }
+    private DashboardService: DashboardService, private userService: UserService, private liveticketservice: LiveticketService) { }
 
 
   tickets: any[] = []
@@ -50,6 +50,7 @@ export class DashboardComponent implements OnInit {
     this.loadStatusesAndTickets();
     this.getMonths();
     this.loadPriorities();
+    this.getLiveTicket();
     interface User {
       id: number;
       email: string;
@@ -243,45 +244,45 @@ export class DashboardComponent implements OnInit {
         console.error("❌ Dashboard API Error:", err);
       });
   }
-getLiveTicket() {
-  const storedProjectId = localStorage.getItem('selectedProject');
+  getLiveTicket() {
+    const storedProjectId = localStorage.getItem('selectedProject');
 
-  const projectparams: { userid: number | null; projectid?: number } = {
-    userid: this.userId,
-    projectid: storedProjectId ? Number(storedProjectId) : undefined
-  };
+    const projectparams: { userid: number | null; projectid?: number } = {
+      userid: this.userId,
+      projectid: storedProjectId ? Number(storedProjectId) : undefined
+    };
 
-  this.liveticketservice.getLiveTicket(projectparams)
-    .subscribe(res => {
-      const data = (res.data || []).map((row: any) => {
-        let imageArr: string[] = [];
+    this.liveticketservice.getLiveTicket(projectparams)
+      .subscribe(res => {
+        const data = (res.data || []).map((row: any) => {
+          let imageArr: string[] = [];
 
-        if (row.image_path) {
-          if (typeof row.image_path === 'string') {
-            imageArr = row.image_path
-              .replace('{', '')
-              .replace('}', '')
-              .replace(/"/g, '')
-              .split(',');
-          } else if (Array.isArray(row.image_path)) {
-            imageArr = row.image_path;
+          if (row.image_path) {
+            if (typeof row.image_path === 'string') {
+              imageArr = row.image_path
+                .replace('{', '')
+                .replace('}', '')
+                .replace(/"/g, '')
+                .split(',');
+            } else if (Array.isArray(row.image_path)) {
+              imageArr = row.image_path;
+            }
+
+            // Filter out empty strings
+            imageArr = imageArr.filter(img => img && img.trim() !== '');
           }
 
-          // Filter out empty strings
-          imageArr = imageArr.filter(img => img && img.trim() !== '');
-        }
+          return {
+            ...row,
+            image_path: imageArr
+          };
+        });
 
-        return {
-          ...row,
-          image_path: imageArr
-        };
+        console.log('FINAL DATA USED BY liveticket TABLE:', data);
+        this.liveticketDataSource.data = data;
+        this.prepareLiveTicketPieChart(data);
       });
-
-      console.log('FINAL DATA USED BY liveticket TABLE:', data);
-      this.liveticketDataSource.data = data;
-      this.prepareLiveTicketPieChart(data);
-    });
-}
+  }
   prepareStatusBarChart() {
 
     this.barChartLabels = [];
@@ -371,6 +372,7 @@ getLiveTicket() {
   onMonthChange() {
     this.prepareStatusBarChart();
     this.preparePriorityStatusCharts();
+    this.prepareLiveTicketPieChart(this.liveticketDataSource.data);
     this.getDashBoard();
   }
 
@@ -457,65 +459,63 @@ getLiveTicket() {
       });
     });
   }
+
   pieChartLabels: string[] = [];
   pieChartData: number[] = [];
-  pieChartColors: any[] = [];
-  pieChartType = 'pie';
+  pieChartColors: string[] = [];
+
   prepareLiveTicketPieChart(data: any[]) {
-  if (!this.statuses || this.statuses.length === 0) {
-    console.warn("Statuses not loaded yet");
-    return;
+    if (!data || data.length === 0) return;
+
+
+  let filteredTickets = data;
+
+  if (this.selectedMonth && this.selectedMonth !== 'ALL') {
+    filteredTickets = data.filter(t => {
+      const d = new Date(t.created_at);
+      const month =
+        d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+
+      return month === this.selectedMonth;
+    });
   }
 
-    const statusMap: any = {};
- const filteredTickets = this.selectedMonth && this.selectedMonth !== 'ALL'
-      ? this.tickets.filter(t => {
-        const d = new Date(t.created_at);
-        const month =
-          d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
-        return month === this.selectedMonth;
-      })
-      : this.tickets;
-       filteredTickets.forEach(ticket => {
-      if (statusMap[ticket.ticketstatus_id]) {
-        statusMap[ticket.ticketstatus_id].count++;
-      }
-    });
-    // Initialize from status master
-    this.statuses.forEach(status => {
-      statusMap[status.ticketstatus_id] = {
-        label: status.statusname,
+  console.log("======>>>Selected Month:", this.selectedMonth);
+  console.log("========++>>>Filtered Tickets:", filteredTickets);
+
+ 
+  const statusMap: any = {};
+
+  filteredTickets.forEach(ticket => {
+
+    if (!statusMap[ticket.ticketstatus_id]) {
+      statusMap[ticket.ticketstatus_id] = {
+        label: ticket.statusname,
         count: 0,
-        color: status.color || '#999'
+        color: ticket.status_color || '#999'
       };
-    });
+    }
 
-    // Count tickets
-    data.forEach(ticket => {
-      if (statusMap[ticket.ticketstatus_id]) {
-        statusMap[ticket.ticketstatus_id].count++;
-      }
-    });
-
+    statusMap[ticket.ticketstatus_id].count++;
+  });
+   
     const labels: string[] = [];
     const counts: number[] = [];
     const colors: string[] = [];
 
     Object.values(statusMap).forEach((s: any) => {
-      if (s.count > 0) {
-        labels.push(s.label);
-        counts.push(s.count);
-        colors.push(s.color);
-      }
+      labels.push(s.label);
+      counts.push(s.count);
+      colors.push(s.color);
     });
-console.log("Pie Labels:", this.pieChartLabels);
-  console.log("Pie Data:", this.pieChartData);
-  console.log("Pie Colors:", this.pieChartColors);
 
+    //  FINAL
     this.pieChartLabels = labels;
     this.pieChartData = counts;
-    this.pieChartColors = [{
-      backgroundColor: colors
-    }];
+    this.pieChartColors = colors;
+
+    console.log("Labels:", labels);
+    console.log("Counts:", counts);
+    console.log("Colors:", colors);
   }
 }

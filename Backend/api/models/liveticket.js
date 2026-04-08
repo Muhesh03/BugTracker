@@ -20,16 +20,16 @@ exports.saveLiveTicket = function (data, cb) {
 
 
 exports.markAsConverted = function (liveticket_id, cb) {
-    knex('livetickets')
-        .where({ liveticket_id: liveticket_id })
-        .update({ is_converted: true,ticketstatus_id: 3 })
-        .then(function () {
-            cb(null, true);
-        })
-        .catch(function (err) {
-            console.error('Error marking as converted:', err);
-            cb(err, null);
-        });
+  knex('livetickets')
+    .where({ liveticket_id: liveticket_id })
+    .update({ is_converted: true, ticketstatus_id: 3 })
+    .then(function () {
+      cb(null, true);
+    })
+    .catch(function (err) {
+      console.error('Error marking as converted:', err);
+      cb(err, null);
+    });
 };
 
 
@@ -185,7 +185,7 @@ exports.getLiveTicket = function (projectParams, cb) {
     .leftJoin('ticketpriority as p', 'it.priority_id', 'p.priority_id')
     .leftJoin('tickettype as tt', 'it.tickettype_id', 'tt.tickettype_id')
     .leftJoin('userregistration as ur', 'it.created_by', 'ur.user_id')
-    .leftJoin('liveticket_statuses as ts', 'it.ticketstatus_id', 'ts.id') 
+    .leftJoin('liveticket_statuses as ts', 'it.ticketstatus_id', 'ts.id')
 
     .leftJoin('tickettag as tg', function () {
       this.on(knex.raw('tg.tickettag_id = ANY(COALESCE(it.ticket_tag, ARRAY[]::int[]))'));
@@ -199,8 +199,8 @@ exports.getLiveTicket = function (projectParams, cb) {
       'it.unit',
       'it.tickettype_id',
       'tt.name as ticket_type_name',
-      'ts.label as statusname',  
-      'ts.color as status_color', 
+      'ts.label as statusname',
+      'ts.color as status_color',
       'it.priority_id',
       'p.priority',
       'p.icon',
@@ -216,7 +216,7 @@ exports.getLiveTicket = function (projectParams, cb) {
       'it.updated_by',
       'it.is_converted'
     )
-    .modify(function(qb) {
+    .modify(function (qb) {
       if (projectParams.projectid) {
         qb.where('it.project_id', projectParams.projectid);
       }
@@ -229,8 +229,8 @@ exports.getLiveTicket = function (projectParams, cb) {
       'it.instance',
       'it.unit',
       'it.tickettype_id',
-      'ts.label',       
-      'ts.color',      
+      'ts.label',
+      'ts.color',
       'tt.name',
       'it.priority_id',
       'p.priority',
@@ -294,7 +294,7 @@ exports.getFilter = function (filters, cb) {
 
       if (filterValueDate === 'Between' && fromDate && toDate) {
         const from = new Date(fromDate).toISOString().split('T')[0];
-        const to   = new Date(toDate).toISOString().split('T')[0];
+        const to = new Date(toDate).toISOString().split('T')[0];
         this.whereRaw(
           'DATE(it.created_at) BETWEEN ? AND ?',
           [from, to]
@@ -312,7 +312,25 @@ exports.getFilter = function (filters, cb) {
     });
 
 };
-
+// exports.updateLiveTicket = function (id, data, cb) {
+//   knex('livetickets')
+//     .where('liveticket_id', id)
+//     .update({
+//       ticketstatus_id: data.ticketstatus_id,   
+//       priority_id: data.priority_id,
+//       summary: data.summary,
+//       description: data.description,
+//       updated_by: data.updated_by,
+//       updated_on: knex.fn.now()
+//     })
+//     .then(() => cb(null, { success: true }))
+//     .catch(err => cb(err));
+// };
+exports.updateLiveTicketModel = (id, payload) => {
+  return knex('livetickets')
+    .where('liveticket_id', id)
+    .update(payload);
+};
 exports.getLiveticketStatuses = function (cb) {
   knex('liveticket_statuses')
     .select('id', 'key', 'label', 'color')
