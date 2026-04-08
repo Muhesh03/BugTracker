@@ -30,6 +30,22 @@
         </mat-form-field>
       </div>
 
+
+
+
+      <div class="col-5 col-md-2 fields">
+        <mat-form-field appearance="outline">
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="filterValueStatus">
+            <mat-option value="0">please select</mat-option>
+            <mat-option *ngFor="let s of statuses" [value]="s.id">
+              {{ s.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+
       <div class="col-5 col-md-2 fields">
         <mat-form-field appearance="outline">
           <mat-label style="color:#1d6f42; font-size:15px;">Date Between</mat-label>
