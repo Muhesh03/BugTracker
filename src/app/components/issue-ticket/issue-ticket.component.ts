@@ -323,7 +323,7 @@ export class IssueTicketFormComponent implements OnInit {
       priority_id: new FormControl('', Validators.required),
       tickettype: new FormControl(null, Validators.required),
       assigned_user_id: new FormControl(null),
-      ticket_tag: new FormControl([]),
+      ticket_tag: new FormControl([], Validators.required),
       summary: new FormControl('', Validators.required),
       description: new FormControl(''),
       steps_to_reproduce: new FormControl(''),
@@ -338,7 +338,7 @@ export class IssueTicketFormComponent implements OnInit {
         ? [...this.data.image_path] : [];
       this.loadNotes();
       this.loadActivities();
-
+     
     } else if (this.data?.live_ticket_id) {
       this.isEditMode = false;
       this.patchForm(this.data);

@@ -170,9 +170,9 @@ exports.getIssueTicket = function (projectParams, cb) {
       if (projectParams.projectid) {
         this.where('it.project_id', projectParams.projectid);
       }
-      if (projectParams.userid) {
-        this.where('it.created_by', projectParams.userid);
-      }
+      // if (projectParams.userid) {
+      //   this.where('it.created_by', projectParams.userid);
+      // }
     })
     .groupBy(
       'it.issueticket_id',
