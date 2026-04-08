@@ -121,7 +121,7 @@ router.get('/liveticket/tickettype/list', function (req, res) {
 });
 
 router.get('/liveticket/statuses/list', function (req, res) {
-    liveticketdb.getTicketStatus((err, output) => {
+    liveticketdb.getLiveticketStatuses((err, output) => {
         if (err) {
             return res.status(500).send({ error: "Something went wrong in status controller" });
         }

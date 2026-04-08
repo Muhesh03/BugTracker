@@ -267,6 +267,7 @@ exports.getFilter = function (filters, cb) {
 
   const {
     filterValuePriority,
+    filterValueStatus,
     filterValueDate,
     fromDate,
     toDate
@@ -281,6 +282,7 @@ exports.getFilter = function (filters, cb) {
       'it.liveticket_id',
       'it.summary',
       'it.description',
+      'it.ticketstatus_id',
       'it.ticketstatus_id',
       'it.priority_id',
       'p.priority',
@@ -302,6 +304,11 @@ exports.getFilter = function (filters, cb) {
       if (filterValuePriority && filterValuePriority !== '0') {
         this.where('it.priority_id', Number(filterValuePriority));
       }
+
+       if (filterValueStatus && filterValueStatus !== '0') {
+        this.where('it.ticketstatus_id', Number(filterValueStatus));
+      }
+
 
       // ===== DATE FILTER =====
       if (filterValueDate === 'Yesterday') {
