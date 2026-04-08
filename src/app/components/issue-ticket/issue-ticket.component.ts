@@ -327,7 +327,14 @@ export class IssueTicketFormComponent implements OnInit {
       summary: new FormControl('', Validators.required),
       description: new FormControl(''),
       steps_to_reproduce: new FormControl(''),
-      storedprojectId: new FormControl(projectId)
+      storedprojectId: new FormControl(projectId),
+       live_ticket_id: new FormControl(null),
+
+    
+
+      
+      
+      
     });
 
     if (this.data?.issueticket_id) {
@@ -359,6 +366,9 @@ export class IssueTicketFormComponent implements OnInit {
   }
 
   private patchForm(d: any): void {
+    console.log("data recieeved in patchform",d);
+    
+    
     this.issueTicketForm.patchValue({
       ticket_number: d.ticket_number ?? '',
       ticketstatus_id: d.ticketstatus_id ?? '',
@@ -368,7 +378,8 @@ export class IssueTicketFormComponent implements OnInit {
       ticket_tag: d.tag_ids ?? [],
       summary: d.summary ?? '',
       description: d.description ?? '',
-      steps_to_reproduce: d.steps_to_reproduce ?? ''
+      steps_to_reproduce: d.steps_to_reproduce ?? '',
+       live_ticket_id: d.live_ticket_id ?? null,
     });
   }
 
@@ -465,6 +476,7 @@ export class IssueTicketFormComponent implements OnInit {
     if (this.issueTicketForm.invalid) return;
 
     const persist = (uploadedPaths: string[]) => {
+      console.log('STEP 5A - FORM VALUE BEFORE PAYLOAD:', this.issueTicketForm.value); // ✅
       const payload = {
         ...this.issueTicketForm.value,
         // keep backend field name consistent
@@ -476,6 +488,7 @@ export class IssueTicketFormComponent implements OnInit {
         reported_by: this.userId,
         updated_by: this.userId,
       };
+       console.log('STEP 5A - FINAL PAYLOAD:', payload); // ✅
 
       if (this.isEditMode) {
         this.issueticketService

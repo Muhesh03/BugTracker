@@ -59,6 +59,7 @@ router.use(function (req, res, next) {
                     steps_to_reproduce: req.body.steps_to_reproduce,
                     image_path: req.body.image_path,
                     created_by: req.body.reported_by,
+                      liveticket_id: req.body.live_ticket_id
 
                 };
                 console.log('Final params to save=================================================+++++++++++++++++++++++++++++++++++:', params);

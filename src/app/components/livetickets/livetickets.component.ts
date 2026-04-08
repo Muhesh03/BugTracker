@@ -39,7 +39,7 @@ export class LiveTicketsComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [];
   usergroup_id: number | null = null;
   rows: any[];
-  columnsReady = false; // ✅ controls when table renders
+  columnsReady = false; 
 
   liveticketDataSource = new MatTableDataSource<any>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -113,7 +113,7 @@ export class LiveTicketsComponent implements OnInit, AfterViewInit {
   setColumns() {
     this.displayedColumns = [
       'ticket_number',
-      'status_id',   // ✅ colored status badge column
+      'status_id',  
       'priority_id',
       'summary',
       'description',
@@ -127,7 +127,7 @@ export class LiveTicketsComponent implements OnInit, AfterViewInit {
       this.displayedColumns.push('action');
     }
 
-    this.columnsReady = true; // ✅ table renders now
+    this.columnsReady = true; 
     console.log('Columns:', this.displayedColumns);
   }
 
@@ -223,10 +223,9 @@ export class LiveTicketsComponent implements OnInit, AfterViewInit {
   }
 
   editLiveTicket(row: any) {
+    console.log('ROW DATA:', row);
     this.issueticketService.getLatestTicketNumber().subscribe(res => {
       const nextTicketNumber = res.data.ticket_number;
-      console.log('ticket_tag being passed:', row.ticket_tag);
-
       const dialogRef = this.dialog.open(IssueTicketFormComponent, {
         width: '900px',
         maxWidth: '95vw',
