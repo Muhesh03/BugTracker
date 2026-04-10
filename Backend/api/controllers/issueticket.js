@@ -218,24 +218,26 @@ router.use(function (req, res, next) {
 
 
 
-    router.post('/update/:issueticket_id', function (req, res) {
+    // router.post('/issueticket/update/:issueticket_id', function (req, res) {
+    //             console.log('Update request received for ticket ID:+++++++++-----------+++++controller+++++++++----------++++++++++', issueticket_id);
 
-        const issueticket_id = req.params.issueticket_id;
-        console.log('Update request received for ticket ID:+++++++++-----------+++++controller+++++++++----------++++++++++', issueticket_id);
 
-        issueticketdb.updateTicket(issueticket_id, req.body, (err, output) => {
-            if (err) {
-                return res.status(500).send({ error: 'Update failed' });
-            } else {
-                res.status(200).send({
-                    success: true,
-                    message: 'Project updated successfully',
-                    data: output
-                });
-            }
-        });
+    //     const issueticket_id = req.params.issueticket_id;
+    //     console.log('Update request received for ticket ID:+++++++++-----------+++++controller+++++++++----------++++++++++', issueticket_id);
 
-    });
+    //     issueticketdb.updateTicket(issueticket_id, req.body, (err, output) => {
+    //         if (err) {
+    //             return res.status(500).send({ error: 'Update failed' });
+    //         } else {
+    //             res.status(200).send({
+    //                 success: true,
+    //                 message: 'Project updated successfully',
+    //                 data: output
+    //             });
+    //         }
+    //     });
+
+    // });
 
 
     router.route('/issueticket/priorities/list').get(function (req, res) {
@@ -524,43 +526,111 @@ router.post('/issueticket/pdf', async (req, res) => {
 });
 
 
-router.put('/issueticket/:id', async (req, res) => {
-    console.log(
-        'Update request received for ticket ID:++++++++++++++controller+++++++++++++++++++',
-        req.params.id
-    );
+// router.put('/issueticket/:id', async (req, res) => {
+    
 
+//     try {
+//         const issueticket_id = req.params.id;
+//         const { ticketstatus_id, assigned_user_id, updated_by } = req.body;
+
+//         console.log('Update payload:', {
+//             ticketstatus_id,
+//             assigned_user_id,
+//             updated_by
+//         });
+
+//         // Fetch old ticket
+//         const oldTicket = await knex('issueticket')
+//             .where({ issueticket_id })
+//             .first();
+
+//         if (!oldTicket) {
+//             return res.status(404).json({ message: 'Ticket not found' });
+//         }
+
+//         // Update ticket
+//         const updatedTicket = await issueticketdb.updateIssueTicket(
+//             issueticket_id,
+//             {
+//                 ticketstatus_id: ticketstatus_id,
+//                 assigned_to: assigned_user_id,
+//                 updated_by
+
+//             }
+//         );
+
+//         //  Activity — Status
+//         if (
+//             ticketstatus_id !== undefined &&
+//             oldTicket.ticketstatus_id !== ticketstatus_id
+//         ) {
+//             await knex('ticket_activity').insert({
+//                 issueticket_id,
+//                 user_id: updated_by,
+//                 field_name: 'Status',
+//                 old_value: oldTicket.ticketstatus_id,
+//                 new_value: ticketstatus_id,
+//                 created_at: knex.fn.now()
+//             });
+//         }
+
+//         //  Activity — Assigned user
+//         if (
+//             assigned_user_id !== undefined &&
+//             oldTicket.user_id !== assigned_user_id
+//         ) {
+//             await knex('ticket_activity').insert({
+//                 issueticket_id,
+//                 user_id: updated_by,
+//                 field_name: 'Assigned To',
+//                 old_value: oldTicket.user_id,
+//                 new_value: assigned_user_id,
+//                 created_at: knex.fn.now()
+//             });
+//         }
+
+//         return res.status(200).json({
+//             success: true,
+//             message: 'Ticket updated successfully',
+//             data: updatedTicket
+//         });
+
+//     } catch (err) {
+//         console.error('Update ticket error:', err);
+//         return res.status(500).json({ error: err.message });
+//     }
+// });
+
+
+
+
+
+
+router.put('/issueticket/:id', async (req, res) => {
     try {
         const issueticket_id = req.params.id;
         const { ticketstatus_id, assigned_user_id, updated_by } = req.body;
 
-        console.log('Update payload:', {
-            ticketstatus_id,
-            assigned_user_id,
-            updated_by
-        });
 
-        // Fetch old ticket
         const oldTicket = await knex('issueticket')
             .where({ issueticket_id })
             .first();
 
         if (!oldTicket) {
-            return res.status(404).json({ message: 'Ticket not found' });
+            return res.status(404).json({
+                success: false,
+                message: 'Ticket not found'
+            });
         }
 
-        // Update ticket
-        const updatedTicket = await issueticketdb.updateIssueTicket(
+        const updatedTicket = await issueticketdb.updateTicket(
             issueticket_id,
             {
-                ticketstatus_id: ticketstatus_id,
+                ...req.body,
                 assigned_to: assigned_user_id,
-                updated_by
-
             }
         );
 
-        //  Activity — Status
         if (
             ticketstatus_id !== undefined &&
             oldTicket.ticketstatus_id !== ticketstatus_id
@@ -575,7 +645,6 @@ router.put('/issueticket/:id', async (req, res) => {
             });
         }
 
-        //  Activity — Assigned user
         if (
             assigned_user_id !== undefined &&
             oldTicket.user_id !== assigned_user_id
@@ -598,9 +667,15 @@ router.put('/issueticket/:id', async (req, res) => {
 
     } catch (err) {
         console.error('Update ticket error:', err);
-        return res.status(500).json({ error: err.message });
+
+        return res.status(500).json({
+            success: false,
+            message: err.message || 'Update failed'
+        });
     }
 });
+
+
 
 // router.get('/:issueticket_id', async (req, res) => {
 //   try {

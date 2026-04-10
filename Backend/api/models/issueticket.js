@@ -170,9 +170,9 @@ exports.getIssueTicket = function (projectParams, cb) {
       if (projectParams.projectid) {
         this.where('it.project_id', projectParams.projectid);
       }
-      // if (projectParams.userid) {
-      //   this.where('it.created_by', projectParams.userid);
-      // }
+      if (projectParams.userid) {
+        this.where('it.created_by', projectParams.userid);
+      }
     })
     .groupBy(
       'it.issueticket_id',
@@ -496,86 +496,169 @@ exports.getTicketById = async (issueticket_id) => {
 // };
 
 
-exports.updateTicket = async (issueticket_id, data, cb) => {
+// exports.updateTicket = async (issueticket_id, data, cb) => {
+//   console.log("updating data",data)
+//   try {
+//     const updateData = {
+//       ticketstatus_id: data.ticketstatus_id,
+//       priority_id: data.priority_id,
+//       tickettype_id: data.tickettype,
+//       summary: data.summary,
+//       description: data.description,
+//       user_id: data.user_id,
+//       image_path: data.image_path,
+//       steps_to_reproduce: data.steps_to_reproduce,
+//       ticket_tag: data.ticket_tag,
+//       updated_at: knex.fn.now(),
+//       updated_by: data.updated_by
+//     };
+
+//     await knex('issueticket')
+//       .where({ issueticket_id })
+//       .update(updateData);
+
+//     cb(null, { success: true });
+//   } catch (err) {
+//     console.error('Update failed:', err);
+//     cb(err);
+//   }
+// };
+
+
+// // db/issueticketdb.js
+// exports.updateIssueTicket = async (issueticket_id, data) => {
+
+//   const existing = await knex('issueticket')
+//     .where({ issueticket_id })
+//     .first();
+
+
+//   const updateData = {};
+
+//   if (data.ticketstatus_id !== undefined) {
+//     updateData.ticketstatus_id = data.ticketstatus_id;
+//   }
+
+//   if (data.assigned_to !== undefined) {
+//     updateData.user_id = data.assigned_to;
+//   }
+
+//   if (data.updated_by !== undefined) {
+//     updateData.updated_by = data.updated_by;
+//   }
+
+//   updateData.updated_at = knex.fn.now();
+
+//   if (Object.keys(updateData).length === 0) {
+//     throw new Error('No fields provided for update');
+//   }
+
+//   const result = await knex('issueticket')
+//     .where({ issueticket_id })
+//     .update(updateData)
+//     .returning('*');
+
+//   const updatedTicket = result[0];
+
+//   const CLOSED_STATUS_ID = 17;
+//   const RESOLVED_STATUS_ID = 5;
+
+//   if (
+//     Number(data.ticketstatus_id) === CLOSED_STATUS_ID &&
+//     existing.liveticket_id
+//   ) {
+
+//     const liveResult = await knex('livetickets')
+//       .where({ liveticket_id: existing.liveticket_id })
+//       .update({
+//         ticketstatus_id: RESOLVED_STATUS_ID, // or status_id (check DB)
+//       });
+//   }
+
+//   return updatedTicket;
+// };
+
+exports.updateTicket = async (issueticket_id, data) => {
+
+
   try {
-    const updateData = {
-      ticketstatus_id: data.ticketstatus_id,
-      priority_id: data.priority_id,
-      tickettype_id: data.tickettype,
-      summary: data.summary,
-      description: data.description,
-      user_id: data.user_id,
-      image_path: data.image_path,
-      steps_to_reproduce: data.steps_to_reproduce,
-      ticket_tag: data.ticket_tag,
-      updated_at: knex.fn.now(),
-      updated_by: data.updated_by
-    };
+    const existing = await knex('issueticket')
+      .where({ issueticket_id })
+      .first();
+
+    if (!existing) {
+      throw new Error('Ticket not found');
+    }
+
+    const updateData = {};
+
+    if (data.ticketstatus_id !== undefined)
+      updateData.ticketstatus_id = data.ticketstatus_id;
+
+    if (data.priority_id !== undefined)
+      updateData.priority_id = data.priority_id;
+
+    if (data.tickettype_id !== undefined)
+      updateData.tickettype_id = data.tickettype_id;
+
+    if (data.tickettype !== undefined)
+      updateData.tickettype_id = data.tickettype;
+
+    if (data.summary !== undefined)
+      updateData.summary = data.summary;
+
+    if (data.description !== undefined)
+      updateData.description = data.description;
+
+    if (data.assigned_to !== undefined)
+      updateData.user_id = data.assigned_to;
+    else if (data.user_id !== undefined)
+      updateData.user_id = data.user_id;
+
+    if (data.image_path !== undefined)
+      updateData.image_path = data.image_path;
+
+    if (data.steps_to_reproduce !== undefined)
+      updateData.steps_to_reproduce = data.steps_to_reproduce;
+
+    if (data.ticket_tag !== undefined)
+      updateData.ticket_tag = data.ticket_tag;
+
+    if (data.updated_by !== undefined)
+      updateData.updated_by = data.updated_by;
+
+    updateData.updated_at = knex.fn.now();
+
+
+    if (Object.keys(updateData).length === 0) {
+      throw new Error('No fields provided for update');
+    }
 
     await knex('issueticket')
       .where({ issueticket_id })
       .update(updateData);
 
-    cb(null, { success: true });
+    const CLOSED_STATUS_ID = 17;
+    const RESOLVED_STATUS_ID = 5;
+
+    if (
+      Number(data.ticketstatus_id) === CLOSED_STATUS_ID &&
+      existing.liveticket_id
+    ) {
+      await knex('livetickets')
+        .where({ liveticket_id: existing.liveticket_id })
+        .update({
+          ticketstatus_id: RESOLVED_STATUS_ID
+        });
+    }
+
+    return {
+      success: true,
+      message: 'Ticket updated successfully'
+    };
+
   } catch (err) {
     console.error('Update failed:', err);
-    cb(err);
+    throw err;
   }
-};
-
-
-// db/issueticketdb.js
-exports.updateIssueTicket = async (issueticket_id, data) => {
-  console.log('Updating issue ticket:', issueticket_id);
-  console.log('Incoming data:', data);
-
-  const existing = await knex('issueticket')
-    .where({ issueticket_id })
-    .first();
-
-  console.log('Existing Ticket:', existing);
-
-  const updateData = {};
-
-  if (data.ticketstatus_id !== undefined) {
-    updateData.ticketstatus_id = data.ticketstatus_id;
-  }
-
-  if (data.assigned_to !== undefined) {
-    updateData.user_id = data.assigned_to;
-  }
-
-  if (data.updated_by !== undefined) {
-    updateData.updated_by = data.updated_by;
-  }
-
-  updateData.updated_at = knex.fn.now();
-
-  if (Object.keys(updateData).length === 0) {
-    throw new Error('No fields provided for update');
-  }
-
-  const result = await knex('issueticket')
-    .where({ issueticket_id })
-    .update(updateData)
-    .returning('*');
-
-  const updatedTicket = result[0];
-
-  const CLOSED_STATUS_ID = 17;
-  const RESOLVED_STATUS_ID = 5;
-
-  if (
-    Number(data.ticketstatus_id) === CLOSED_STATUS_ID &&
-    existing.liveticket_id
-  ) {
-
-    const liveResult = await knex('livetickets')
-      .where({ liveticket_id: existing.liveticket_id })
-      .update({
-        ticketstatus_id: RESOLVED_STATUS_ID, // or status_id (check DB)
-      });
-  }
-
-  return updatedTicket;
 };

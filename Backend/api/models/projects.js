@@ -42,18 +42,36 @@ exports.getProjects = function (cb) {
       cb(e, 'error');
     });
 };
+exports.deleteProjects = function (project_id, callback) {
+    console.log("delete project called with id:", project_id);
 
-exports.deleteProjects = function (id, callback) {
-  knex('projects')
-    .where({ project_id: id })
-    .update({ status_id: 3 })
-    .then(result => {
-      console.log('Delete projects result:', result);
-      callback(null, result);
-    })
-    .catch(err => {
-      callback(err);
-    });
+    knex('issueticket')   
+        .where({ project_id })
+        .select('issueticket_id')
+        .then(projects => {
+
+            if (projects.length > 0) {
+                return callback(null, {
+                    success: false,
+                    message: 'Cannot delete: project is in use'
+                });
+            }
+
+            return knex('projects')
+                .where({ project_id })
+                .update({ status_id: 3 })
+                .then(() => {
+                    callback(null, {
+                        success: true,
+                        message: 'Project deleted successfully'
+                    });
+                });
+
+        })
+        .catch(err => {
+            console.error('Delete project error:', err);
+            callback(err);
+        });
 };
 
 exports.updateProjects = (id, data, cb) => {

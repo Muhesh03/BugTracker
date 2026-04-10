@@ -263,9 +263,11 @@ exports.getLiveTicket = function (projectParams, cb) {
     });
 };
 
+
 exports.getFilter = function (filters, cb) {
 
   const {
+    projectId,
     filterValuePriority,
     filterValueStatus,
     filterValueDate,
@@ -273,7 +275,7 @@ exports.getFilter = function (filters, cb) {
     toDate
   } = filters;
 
-  knex('livetickets as it')          // ← replace with your actual table name
+  knex('livetickets as it')        
     .leftJoin('ticketpriority as p', 'it.priority_id', 'p.priority_id')
     .leftJoin('liveticket_statuses as ts', 'it.ticketstatus_id', 'ts.id')
 
@@ -299,8 +301,10 @@ exports.getFilter = function (filters, cb) {
     )
 
     .where(function () {
+       if (projectId && projectId !== '0' && projectId !== 'null' && !isNaN(Number(projectId))) {
+        this.where('it.project_id', Number(projectId));
+      }
 
-      // ===== PRIORITY FILTER =====
       if (filterValuePriority && filterValuePriority !== '0') {
         this.where('it.priority_id', Number(filterValuePriority));
       }

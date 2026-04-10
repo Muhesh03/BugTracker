@@ -50,27 +50,21 @@ router.use(function (req, res, next) {
         });
     });
 
-    // DELETE PROJECT
-    router.post('/projects/delete/:project_id', function (req, res) {
+   router.post('/projects/delete/:project_id', function (req, res) {
+    const project_id = Number(req.params.project_id);
+    console.log('Project Delete working, project_id:', project_id);
 
-        const project_id = Number(req.params.project_id);
-
-        console.log('Project Delete working in controller, project_id:', project_id);
-
-        projectsdb.deleteProjects(project_id, (err, output) => {
-            if (err) {
-                return res.status(500).send({ error: 'Delete failed' });
-            } else {
-                return res.status(200).send({
-                    success: true,
-                    message: 'Project deleted successfully',
-                    data: output
-                });
-            }
-        });
-
+    projectsdb.deleteProjects(project_id, (err, output) => {
+        if (err) {
+            return res.status(500).send({
+                success: false,
+                message: err.message || 'Delete failed'
+            });
+        } else {
+            return res.status(200).send(output);
+        }
     });
-
+});
     // UPDATE PROJECT
     router.post('/projects/update/:project_id', function (req, res) {
 
