@@ -845,9 +845,12 @@ export class EditNoteComponent implements OnInit {
   styleUrls: ['./note-preview-dialog.component.css']
 })
 export class NotePreviewDialogComponent {
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<NotePreviewDialogComponent>
-  ) { }
+  ) {
+    
+   }
 
 }

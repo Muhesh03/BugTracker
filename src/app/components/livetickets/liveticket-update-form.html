@@ -32,10 +32,23 @@
     <form [formGroup]="LiveTicketForm">
 
       <div class="col-12 col-md-12 d-flex flex-wrap">
-        
+
         <div class="col-12 col-md-6 px-2 form-grid-item">
-          <div class="form-grid-label">Status</div>
-          <div class="form-grid-readonly">{{ data?.statusname || '-' }}</div>
+          <div class="form-grid-label ">Status</div>
+          <div class="form-grid-readonly ">
+            
+              <mat-form-field appearance="outline">
+                <mat-label> <span [ngStyle]="{'color': data.color}"> <mat-icon
+                      style="font-size: 15px;">circle</mat-icon></span>&nbsp; &nbsp;{{ data.statusname ||
+                  data.label}}</mat-label>
+                <mat-select formControlName="ticketstatus_id">
+                  <mat-option *ngFor="let s of liveticketStatuses" [value]="s.id">
+                    {{ s.label }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            
+          </div>
         </div>
 
         <div class="col-12 col-md-6 px-2 form-grid-item">
@@ -162,16 +175,16 @@
       </table>
 
       <!-- Submit Note Button -->
-      <div class="mt-2 text-end">
-        <button mat-raised-button class="pbtn" type="button" (click)="submitNote()" [disabled]="isAddingNote">
-          {{ isAddingNote ? 'Saving...' : 'Update' }}
-        </button>
-      </div>
+
 
 
     </div>
   </div>
-
+  <div class="mt-2 text-end">
+    <button mat-raised-button class="pbtn" type="button" (click)="submitNote()" [disabled]="isAddingNote">
+      {{ isAddingNote ? 'Saving...' : 'Update' }}
+    </button>
+  </div>
 
 </mat-dialog-content>
 

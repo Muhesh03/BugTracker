@@ -82,6 +82,7 @@ export class IssueTicketComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit(): void {
+    
     this.loadPriorities();
     this.loadStatuses();
     this.loadTags();

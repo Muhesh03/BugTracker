@@ -52,14 +52,15 @@ export class LiveticketService {
 
 
 
+updateLiveTicket(liveticket_id: number, result: any): Observable<any> {
+  console.log("STEP 4: Service calling API:", result);
 
-  updateLiveTicket(liveticket_id: number, result: any): Observable<any> {
-    return this.http.post(
-      this.apiUrl + 'liveticket/update/' + liveticket_id, result, httpOptionsPost
-    );
-  }
-
-
+  return this.http.post(
+    this.apiUrl + 'liveticket/update/' + liveticket_id,
+    result,
+    httpOptionsPost
+  );
+}
 
 
   getTicketType(): Observable<any> {

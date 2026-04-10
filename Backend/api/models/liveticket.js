@@ -337,7 +337,25 @@ exports.getFilter = function (filters, cb) {
     });
 
 };
-
+// exports.updateLiveTicket = function (id, data, cb) {
+//   knex('livetickets')
+//     .where('liveticket_id', id)
+//     .update({
+//       ticketstatus_id: data.ticketstatus_id,   
+//       priority_id: data.priority_id,
+//       summary: data.summary,
+//       description: data.description,
+//       updated_by: data.updated_by,
+//       updated_on: knex.fn.now()
+//     })
+//     .then(() => cb(null, { success: true }))
+//     .catch(err => cb(err));
+// };
+exports.updateLiveTicketModel = (id, payload) => {
+  return knex('livetickets')
+    .where('liveticket_id', id)
+    .update(payload);
+};
 exports.getLiveticketStatuses = function (cb) {
   knex('liveticket_statuses')
     .select('id', 'key', 'label', 'color')

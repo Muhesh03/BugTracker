@@ -37,24 +37,19 @@
 
                 <!-- Trigger -->
                 <div class="status-trigger" (click)="isStatusOpen = !isStatusOpen">
-                  <span class="status-dot"
-                    [style.background]="selectedStatus?.color || '#D1D5DB'">
+                  <span class="status-dot" [style.background]="selectedStatus?.color || '#D1D5DB'">
                   </span>
                   <span class="status-trigger-label">
-                    {{ selectedStatus?.label || 'Select status' }}
+                    {{ selectedStatus?.label || 'status' }}
                   </span>
-                  <mat-icon class="status-chevron"
-                    [class.status-chevron-open]="isStatusOpen">
+                  <mat-icon class="status-chevron" [class.status-chevron-open]="isStatusOpen">
                     keyboard_arrow_down
                   </mat-icon>
                 </div>
 
                 <!-- Menu -->
                 <div class="status-menu" *ngIf="isStatusOpen">
-                  <div
-                    class="status-option"
-                    *ngFor="let s of liveticketStatuses"
-                    (click)="selectStatus(s)"
+                  <div class="status-option" *ngFor="let s of liveticketStatuses" (click)="selectStatus(s)"
                     [class.status-option-active]="selectedStatus?.id === s.id">
                     <span class="status-dot" [style.background]="s.color"></span>
                     {{ s.label }}
@@ -100,8 +95,7 @@
                     {{ selectedPriority?.priority }}
                   </mat-select-trigger>
                   <mat-option *ngFor="let p of priorities" [value]="p.priority_id">
-                    <mat-icon
-                      [style.color]="iconMap[p.icon] ? iconMap[p.icon].color : ''"
+                    <mat-icon [style.color]="iconMap[p.icon] ? iconMap[p.icon].color : ''"
                       style="margin-right:6px; vertical-align:middle;">
                       {{ iconMap[p.icon] ? iconMap[p.icon].name : '' }}
                     </mat-icon>
@@ -163,44 +157,71 @@
       <!-- Summary & Description -->
       <div class="summary-grid">
 
-        <div class="col-12 px-2">
-          <mat-form-field appearance="outline">
-            <mat-label>Summary</mat-label>
-            <input matInput formControlName="summary">
-          </mat-form-field>
+        <div class="col-12 col-md-12 px-2 summary-grid-item increate  ">
+         <div class="form-grid-label increate">Summary</div>
+          <div class="form-grid-readonly increate">
+            <div class="col-12 col-md-12 px-0 fields">
+              <mat-form-field appearance="outline" class="full-width summary-field">
+                <mat-label>Summary</mat-label>
+                <input matInput formControlName="summary">
+              </mat-form-field>
+            </div>
+          </div>
         </div>
 
-        <div class="col-12 px-2">
-          <mat-form-field appearance="outline">
-            <mat-label>Description</mat-label>
-            <textarea matInput rows="4" formControlName="description"></textarea>
-          </mat-form-field>
+        <div class="col-12 col-md-12 px-2 summary-grid-item increate">
+          <div class="form-grid-label increate">Description</div>
+          <div class="form-grid-readonly increate description-box">
+            <div class="col-12 col-md-12 px-0 fields">
+              <mat-form-field appearance="outline" class="full-width description-field">
+                <mat-label>Description</mat-label>
+                <textarea matInput rows="4" formControlName="description"></textarea>
+              </mat-form-field>
+            </div>
+          </div>
         </div>
 
-        <div class="col-12 px-2">
-          <mat-form-field appearance="outline">
-            <mat-label>Steps to Reproduce</mat-label>
-            <textarea matInput rows="4"
-              placeholder="1. Go to...&#10;2. Click on...&#10;3. Observe the issue..."
-              formControlName="steps_to_reproduce">
-            </textarea>
-          </mat-form-field>
+        <div class="col-12 col-md-12 px-2 summary-grid-item increate">
+          <div class="form-grid-label increate">Steps to Reproduce</div>
+          <div class="form-grid-readonly increate description-box pb-3">
+            <div class="col-12 col-md-12 px-0 fields">
+              <mat-form-field appearance="outline" class="full-width steps-field">
+                <mat-label>Steps to Reproduce</mat-label>
+                <textarea matInput rows="4" placeholder="1. Go to...
+2. Click on...
+3. Observe the issue..." formControlName="steps_to_reproduce">
+      </textarea>
+              </mat-form-field>
+            </div>
+          </div>
         </div>
 
         <!-- Attachments -->
-        <div class="col-12 px-2">
-          <input type="file" accept="image/*" hidden #fileInput multiple
-            (change)="onFileSelect($event)">
-          <button mat-icon-button type="button" (click)="fileInput.click()" class="filebtn">
-            <mat-icon style="color: var(--accent);">attach_file</mat-icon>
-          </button>
-          <div class="d-flex flex-wrap gap-2 mt-2">
-            <mat-chip *ngFor="let name of selectedFileNames; let i = index">
-              📎 {{ name }}
-              <button mat-icon-button class="closebtn" type="button" (click)="removeFile(i)">
-                <mat-icon>close</mat-icon>
+     <div class="col-12 col-md-12 px-2 summary-grid-item increate">
+          <div class="form-grid-label increate">Attachments</div>
+          <div class="form-grid-readonly increate description-box pb-3">
+            <div class="col-12 col-md-12 fields">
+              <input type="file" accept="image/*" hidden #fileInput multiple (change)="onFileSelect($event)">
+              <button mat-icon-button type="button" (click)="fileInput.click()">
+                <mat-icon style="color: var(--accent);">attach_file</mat-icon>
               </button>
-            </mat-chip>
+              <div class="d-flex flex-wrap gap-2 mt-2">
+                <mat-chip *ngFor="let name of selectedFileNames; let i = index">
+                  📎 {{ name }}
+                  <button mat-icon-button class="closebtn" (click)="removeFile(i)">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-chip>
+              </div>
+              <div class="d-flex flex-wrap gap-2 mt-2">
+                <mat-chip *ngFor="let name of existingImages; let i = index">
+                  📎 {{ name }}
+                  <button mat-icon-button class="closebtn" (click)="removeExistingImage(i)">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-chip>
+              </div>
+            </div>
           </div>
         </div>
 

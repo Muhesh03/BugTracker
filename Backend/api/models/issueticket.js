@@ -562,7 +562,7 @@ exports.updateIssueTicket = async (issueticket_id, data) => {
 
   const updatedTicket = result[0];
 
-  const CLOSED_STATUS_ID = 4;
+  const CLOSED_STATUS_ID = 17;
   const RESOLVED_STATUS_ID = 5;
 
   if (
