@@ -477,7 +477,6 @@ export class IssueTicketFormComponent implements OnInit {
     if (this.issueTicketForm.invalid) return;
 
     const persist = (uploadedPaths: string[]) => {
-      console.log('STEP 5A - FORM VALUE BEFORE PAYLOAD:', this.issueTicketForm.value); // ✅
       const payload = {
         ...this.issueTicketForm.value,
         // keep backend field name consistent
@@ -489,7 +488,6 @@ export class IssueTicketFormComponent implements OnInit {
         reported_by: this.userId,
         updated_by: this.userId,
       };
-       console.log('STEP 5A - FINAL PAYLOAD:', payload); // ✅
 
       if (this.isEditMode) {
         this.issueticketService

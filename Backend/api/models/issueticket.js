@@ -79,12 +79,10 @@ exports.getFilter = function (filters, cb) {
     .whereNot('it.status_id', 3)
     .where(function () {
 
-      //reject "null" string and NaN
       if (projectId && projectId !== '0' && projectId !== 'null' && !isNaN(Number(projectId))) {
         this.where('it.project_id', Number(projectId));
       }
 
-      //  use toInt() result — no NaN reaches the DB
       if (priorityId) this.where('it.priority_id', priorityId);
       if (statusId) this.where('it.ticketstatus_id', statusId);
       if (typeId) this.where('it.tickettype_id', typeId);
@@ -99,7 +97,6 @@ exports.getFilter = function (filters, cb) {
         this.whereRaw("DATE(it.created_at) = CURRENT_DATE - INTERVAL '1 day'");
       }
 
-      //convert JS array to PostgreSQL array literal {1,2}
       if (tags.length > 0) {
         this.whereRaw('it.ticket_tag @> ?::int[]', ['{' + tags.join(',') + '}']);
       }

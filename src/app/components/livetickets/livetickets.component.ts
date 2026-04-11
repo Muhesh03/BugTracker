@@ -41,6 +41,8 @@ export class LiveTicketsComponent implements OnInit, AfterViewInit {
   usergroup_id: number | null = null;
   rows: any[];
   columnsReady = false; 
+   storedProjectId: string | null = null;
+  projectId: number | null = null;
 
   liveticketDataSource = new MatTableDataSource<any>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -57,6 +59,9 @@ export class LiveTicketsComponent implements OnInit, AfterViewInit {
     const userData = JSON.parse(localStorage.getItem('user') || '{}') as User;
     this.userId = userData.id;
     this.usergroup_id = userData.usergroup_id;
+        this.storedProjectId = localStorage.getItem('selectedProject');
+    this.projectId = this.storedProjectId ? Number(this.storedProjectId) : null;
+
 
     this.loadTicketTypes();
     this.getLiveTicket();
@@ -187,7 +192,9 @@ export class LiveTicketsComponent implements OnInit, AfterViewInit {
   // ── Filter & Search ───────────────────────────────────────────────
 
   getFilter() {
-    const filters = { ...this.filterForm.value };
+    const filters = { ...this.filterForm.value,
+      projectId: this.projectId   
+ };
     this.liveticketservice.getfilter(filters).subscribe(res => {
       this.liveticketDataSource.data = res.data || [];
     });

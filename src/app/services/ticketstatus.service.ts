@@ -30,6 +30,7 @@ private url = environment.ServerApi;
   }
 
   deleteTicketStatus(data: any):Observable<any> {
+    console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
     return this.http.post(`${this.url}ticketstatus/delete_ticketstatus`, data);
   }
 }
