@@ -135,18 +135,23 @@ export class TicketStatusComponent implements OnInit {
 
     
         this.ticketstatusservice.deleteTicketStatus(params).subscribe({
-          next: () => {
-            // Snackbar works
-            this.snackBar.open('Ticket Status deleted successfully', 'Close', {
-              duration: 2000,
-              horizontalPosition: 'center',
-              verticalPosition: 'top',
-              panelClass: ['success-snackbar']
-            });
+         next: (res: any) => {
 
-            // Auto refresh works
-            this.loadTicketStatus();
-          },
+  if (!res.success) {
+    Swal.fire('Warning', res.message, 'warning');
+    return;
+  }
+
+  // ✅ Use backend message
+  this.snackBar.open(res.message, 'Close', {
+    duration: 2000,
+    horizontalPosition: 'center',
+    verticalPosition: 'top',
+    panelClass: ['success-snackbar']
+  });
+
+  this.loadTicketStatus();
+},
     
           //  SERVER / NETWORK ERROR
           error: (err) => {

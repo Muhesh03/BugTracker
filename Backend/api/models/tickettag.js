@@ -22,7 +22,7 @@ exports.getTicketTag = function(cb) {
 knex('tickettag')
 	.select('*')
 	.whereNot({"status_id": 3})
-    .orderBy('tickettag_id')
+.orderBy(knex.raw('LOWER(tickettag)'), 'asc')   
 	.then(function (out) {
 		console.log('data sending form tickeytagdb tof frontend', out);
 		cb(null, out);

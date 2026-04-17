@@ -43,7 +43,7 @@ exports.getUserGroup = function (cb) {
     knex('usergroup')
         .select('*')
         .whereNot({ status_id: 3 })
-        .orderBy('usergroup_id')
+.orderBy(knex.raw('LOWER(usergroupname)'), 'asc')   
         .then(function (out) {
             cb(null, out);
         })

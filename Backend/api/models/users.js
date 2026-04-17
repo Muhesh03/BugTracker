@@ -89,17 +89,17 @@ exports.getuser = function (cb) {
     )
     // .whereIn('ug.status_id', [1, 2])
     .whereNot({ "ug.status_id": 3 })
-    .orderBy('ug.user_id', 'asc') // Added orderBy here
-    .then(async function (out) {
+.orderBy(knex.raw('LOWER(ug.fullname)'), 'asc')   
+ .then(async function (out) {
       for (const user of out) {
         const rows = await knex('messages')
          
           .count('* as unread_count')
-          .where('receiver_id', user.user_id)  // ✅ correct
+          .where('receiver_id', user.user_id)  
           .andWhere('chattype_id', 1)
           .andWhere('is_read', false);
         user.unread_count = Number(rows[0].unread_count);
-        console.log("🔥 USER:", user.user_id, "COUNT:", rows[0].unread_count);
+        console.log("&^%$##$%^&&**()==> USER:", user.user_id, "COUNT:", rows[0].unread_count);
       }
 
 
@@ -109,6 +109,7 @@ exports.getuser = function (cb) {
       cb(e, 'error');
     })
 }
+
 exports.deleteuser = function (user_id, cb) {
   console.log('Deleting user (soft delete): ', user_id);
   console.log('ssssssssssssssssssssss', user_id);

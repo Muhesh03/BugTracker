@@ -48,7 +48,7 @@ router.post('/liveticket/save_data', function (req, res) {
                 steps_to_reproduce: req.body.steps_to_reproduce || null,
                 updated_by: req.body.reported_by,
                 created_by: req.body.reported_by,
-                project_id: req.body.storedprojectId,  
+                project_id: req.body.storedprojectId,
                 created_at: new Date()
             };
 
@@ -121,7 +121,7 @@ router.get('/liveticket/tickettype/list', function (req, res) {
 });
 
 router.get('/liveticket/statuses/list', function (req, res) {
-    liveticketdb.getTicketStatus((err, output) => {
+    liveticketdb.getLiveticketStatuses((err, output) => {
         if (err) {
             return res.status(500).send({ error: "Something went wrong in status controller" });
         }
@@ -165,4 +165,42 @@ router.put('/liveticket/markconverted/:liveticket_id', function (req, res) {
     });
 });
 
+
+router.get('/liveticket/liveticket-statuses/list', function (req, res) {
+    liveticketdb.getLiveticketStatuses(function (err, output) {
+        if (err) {
+            return res.status(500).send({ error: "Something went wrong in liveticket status controller" });
+        }
+        res.status(200).send({ message: "Liveticket statuses list", data: output });
+    });
+});
+
+
+router.post('/liveticket/update/:liveticket_id', function (req, res) {
+    const liveticket_id = req.params.liveticket_id;
+    const data = req.body;
+
+    console.log("=======UPDATE API HIT");
+    console.log("ID:", liveticket_id);
+    console.log("BODY:", data);
+
+    const updatePayload = {
+        ticketstatus_id: data.ticketstatus_id,
+       
+        updated_by: data.updated_by,
+        updated_on: new Date()
+    };
+
+    knex('livetickets')
+        .where('liveticket_id', liveticket_id)
+        .update(updatePayload)
+        .then(() => {
+            console.log("DB UPDATED");
+            res.status(200).json({ success: true });
+        })
+        .catch(err => {
+            console.error("DB ERROR:", err);
+            res.status(500).json({ error: err.message });
+        });
+});
 module.exports.router = router;

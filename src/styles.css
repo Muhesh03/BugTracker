@@ -528,6 +528,10 @@ td.mat-footer-cell:last-of-type {
   padding-inline: 16px !important;
 }
 
+
+
+
+
 /* MAT DIALOG CONTAINER END  */
 
 
@@ -1022,4 +1026,99 @@ td.mat-footer-cell:last-of-type {
 /* XXL: ≥1400px */
 @media (min-width: 1400px) {
   /* large screens */
+}
+
+
+
+/* Status dropdown — global so Angular encapsulation doesn't block it */
+.status-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.status-trigger {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  min-height: 56px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  background: #fff;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.status-trigger:hover {
+  border-color: #9CA3AF;
+}
+
+.status-trigger-label {
+  flex: 1;
+  font-size: 14px;
+  color: #374151;
+}
+
+.status-chevron {
+  color: #9CA3AF;
+  transition: transform 0.2s;
+}
+
+.status-chevron-open {
+  transform: rotate(180deg);
+}
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+
+
+.status-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 99999;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+
+.status-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #374151;
+  border-bottom: 1px solid #F3F4F6;
+  transition: background 0.1s;
+}
+
+.status-option:last-child {
+  border-bottom: none;
+}
+
+.status-option:hover {
+  background: #F9FAFB;
+}
+
+.status-option-active {
+  background: #EEF2FF;
+}
+
+.status-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
 }

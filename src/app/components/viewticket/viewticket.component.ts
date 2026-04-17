@@ -255,7 +255,6 @@ export class ViewTicketComponent implements OnInit {
   }
 
 
-
   openImages(images: string[]) {
     this.dialog.open(ShowImageDialogComponent, {
       data: images,
@@ -640,6 +639,8 @@ export class EditNoteComponent implements OnInit {
       error: (err) => {
         console.error('Failed to load tickets', err);
       }
+
+      
     });
   }
   loadUsers() {
@@ -843,9 +844,12 @@ export class EditNoteComponent implements OnInit {
   styleUrls: ['./note-preview-dialog.component.css']
 })
 export class NotePreviewDialogComponent {
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<NotePreviewDialogComponent>
-  ) { }
+  ) {
+    
+   }
 
 }

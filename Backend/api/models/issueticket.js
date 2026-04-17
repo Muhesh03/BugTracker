@@ -21,138 +21,6 @@ exports.saveIssueTicket = function (data, cb) {
     });
 };
 
-
-// exports.saveIssueTicket = function (data, cb) {
-//   console.log('Issue Ticket table data', data);
-
-//   knex('issueticket')
-//     .insert(data)
-//     .returning('*') // important: returns the inserted row
-//     .then(rows => cb(null, rows[0])) // return first row to callback
-//     .catch(err => cb(err)); // duplicates and other errors will be caught
-// };
-// exports.getFilter = function (filters, cb) {
-
-//   const {
-//     projectId,
-//     filterValuePriority,
-//     filterValueStatus,
-//     filterValueType,
-//     filterValueTag,
-//     filterValueDate,
-//     fromDate,
-//     toDate
-//   } = filters;
-
-//   const tags = [].concat(filterValueTag || []);
-
-//   knex('issueticket as it')
-//     .leftJoin('ticketpriority as p', 'it.priority_id', 'p.priority_id')
-//     .leftJoin('ticketstatus as t', 'it.ticketstatus_id', 't.ticketstatus_id')
-//     .leftJoin('tickettype as tt', 'it.tickettype_id', 'tt.tickettype_id')
-//     .leftJoin('userregistration as u', 'it.user_id', 'u.user_id')
-//     .leftJoin('userregistration as ur', 'it.created_by', 'ur.user_id')
-
-//     // KEEP THIS (important for tags)
-//     .joinRaw('JOIN tickettag tg ON tg.tickettag_id = ANY(it.ticket_tag)')
-
-//     .select(
-//       'it.issueticket_id',
-//       'it.summary',
-//       'it.description',
-//       'it.ticketstatus_id',
-//       'u.user_id',
-//       'u.fullname',
-//       'ur.user_id as creator_user_id',
-//       'ur.fullname as created_by_name',
-//       'it.priority_id',
-//       'p.priority',
-//       'p.icon',
-//       't.statusname',
-//       't.color',
-//       'tt.name',
-//       'it.tickettype_id',
-//       'it.ticket_number',
-//       'it.created_at',
-//       knex.raw('array_agg(tg.tickettag) as tag_names'),
-//       knex.raw('array_agg(tg.tickettag_id) as tag_ids')
-//     )
-
-//     .whereNot('it.status_id', 3)
-
-//     .where(function () {
-
-//       if (projectId && projectId !== '0') {
-//         this.where('it.project_id', Number(projectId));
-//       }
-
-//       if (filterValuePriority && filterValuePriority !== '0') {
-//         this.where('it.priority_id', Number(filterValuePriority));
-//       }
-
-//       if (filterValueStatus && filterValueStatus !== '0') {
-//         this.where('it.ticketstatus_id', Number(filterValueStatus));
-//       }
-
-//       if (filterValueType && filterValueType !== '0') {
-//         this.where('it.tickettype_id', Number(filterValueType));
-//       }
-
-//       // WORKING DATE LOGIC (from first query)
-
-//       if (filterValueDate === 'Between' && fromDate && toDate) {
-
-//         const from = new Date(fromDate).toISOString().split('T')[0];
-//         const to = new Date(toDate).toISOString().split('T')[0];
-
-//         this.whereRaw(
-//           'DATE(it.created_at) BETWEEN ? AND ?',
-//           [from, to]
-//         );
-//       }
-
-//       if (filterValueDate === 'Yesterday') {
-//         this.whereRaw(
-//           "DATE(it.created_at) = CURRENT_DATE - INTERVAL '1 day'"
-//         );
-//       }
-
-//       if (tags.length > 0) {
-//         this.whereRaw('it.ticket_tag @> ?::int[]', [tags]);
-//       }
-
-//     })
-
-//     .groupBy(
-//       'it.issueticket_id',
-//       'it.summary',
-//       'it.description',
-//       'it.ticketstatus_id',
-//       'u.user_id',
-//       'u.fullname',
-//       'ur.user_id',
-//       'ur.fullname',
-//       'it.priority_id',
-//       'p.priority',
-//       'p.icon',
-//       't.statusname',
-//       't.color',
-//       'tt.name',
-//       'it.tickettype_id',
-//       'it.ticket_number',
-//       'it.created_at'
-//     )
-
-//     .orderBy('it.issueticket_id', 'asc')
-
-//     .then(out => cb(null, out))
-//     .catch(err => {
-//       console.error('Error in getFilter:', err);
-//       cb(err, 'error');
-//     });
-
-// };
-
 exports.getFilter = function (filters, cb) {
   const {
     projectId,
@@ -211,12 +79,10 @@ exports.getFilter = function (filters, cb) {
     .whereNot('it.status_id', 3)
     .where(function () {
 
-      //reject "null" string and NaN
       if (projectId && projectId !== '0' && projectId !== 'null' && !isNaN(Number(projectId))) {
         this.where('it.project_id', Number(projectId));
       }
 
-      //  use toInt() result — no NaN reaches the DB
       if (priorityId) this.where('it.priority_id', priorityId);
       if (statusId) this.where('it.ticketstatus_id', statusId);
       if (typeId) this.where('it.tickettype_id', typeId);
@@ -231,7 +97,6 @@ exports.getFilter = function (filters, cb) {
         this.whereRaw("DATE(it.created_at) = CURRENT_DATE - INTERVAL '1 day'");
       }
 
-      //convert JS array to PostgreSQL array literal {1,2}
       if (tags.length > 0) {
         this.whereRaw('it.ticket_tag @> ?::int[]', ['{' + tags.join(',') + '}']);
       }
@@ -330,7 +195,7 @@ exports.getIssueTicket = function (projectParams, cb) {
       'ur.user_id',
       'ur.fullname',
     )
-    .orderBy('it.issueticket_id', 'asc')
+    .orderBy('it.issueticket_id', 'desc')
     .then(
       function (out) {
         cb(null, out);
@@ -628,64 +493,169 @@ exports.getTicketById = async (issueticket_id) => {
 // };
 
 
-exports.updateTicket = async (issueticket_id, data, cb) => {
+// exports.updateTicket = async (issueticket_id, data, cb) => {
+//   console.log("updating data",data)
+//   try {
+//     const updateData = {
+//       ticketstatus_id: data.ticketstatus_id,
+//       priority_id: data.priority_id,
+//       tickettype_id: data.tickettype,
+//       summary: data.summary,
+//       description: data.description,
+//       user_id: data.user_id,
+//       image_path: data.image_path,
+//       steps_to_reproduce: data.steps_to_reproduce,
+//       ticket_tag: data.ticket_tag,
+//       updated_at: knex.fn.now(),
+//       updated_by: data.updated_by
+//     };
+
+//     await knex('issueticket')
+//       .where({ issueticket_id })
+//       .update(updateData);
+
+//     cb(null, { success: true });
+//   } catch (err) {
+//     console.error('Update failed:', err);
+//     cb(err);
+//   }
+// };
+
+
+// // db/issueticketdb.js
+// exports.updateIssueTicket = async (issueticket_id, data) => {
+
+//   const existing = await knex('issueticket')
+//     .where({ issueticket_id })
+//     .first();
+
+
+//   const updateData = {};
+
+//   if (data.ticketstatus_id !== undefined) {
+//     updateData.ticketstatus_id = data.ticketstatus_id;
+//   }
+
+//   if (data.assigned_to !== undefined) {
+//     updateData.user_id = data.assigned_to;
+//   }
+
+//   if (data.updated_by !== undefined) {
+//     updateData.updated_by = data.updated_by;
+//   }
+
+//   updateData.updated_at = knex.fn.now();
+
+//   if (Object.keys(updateData).length === 0) {
+//     throw new Error('No fields provided for update');
+//   }
+
+//   const result = await knex('issueticket')
+//     .where({ issueticket_id })
+//     .update(updateData)
+//     .returning('*');
+
+//   const updatedTicket = result[0];
+
+//   const CLOSED_STATUS_ID = 17;
+//   const RESOLVED_STATUS_ID = 5;
+
+//   if (
+//     Number(data.ticketstatus_id) === CLOSED_STATUS_ID &&
+//     existing.liveticket_id
+//   ) {
+
+//     const liveResult = await knex('livetickets')
+//       .where({ liveticket_id: existing.liveticket_id })
+//       .update({
+//         ticketstatus_id: RESOLVED_STATUS_ID, // or status_id (check DB)
+//       });
+//   }
+
+//   return updatedTicket;
+// };
+
+exports.updateTicket = async (issueticket_id, data) => {
+
+
   try {
-    const updateData = {
-      ticketstatus_id: data.ticketstatus_id,
-      priority_id: data.priority_id,
-      tickettype_id: data.tickettype,
-      summary: data.summary,
-      description: data.description,
-      user_id: data.user_id,
-      image_path: data.image_path,
-      steps_to_reproduce: data.steps_to_reproduce,
-      ticket_tag: data.ticket_tag,
-      updated_at: knex.fn.now(),
-      updated_by: data.updated_by
-    };
+    const existing = await knex('issueticket')
+      .where({ issueticket_id })
+      .first();
+
+    if (!existing) {
+      throw new Error('Ticket not found');
+    }
+
+    const updateData = {};
+
+    if (data.ticketstatus_id !== undefined)
+      updateData.ticketstatus_id = data.ticketstatus_id;
+
+    if (data.priority_id !== undefined)
+      updateData.priority_id = data.priority_id;
+
+    if (data.tickettype_id !== undefined)
+      updateData.tickettype_id = data.tickettype_id;
+
+    if (data.tickettype !== undefined)
+      updateData.tickettype_id = data.tickettype;
+
+    if (data.summary !== undefined)
+      updateData.summary = data.summary;
+
+    if (data.description !== undefined)
+      updateData.description = data.description;
+
+    if (data.assigned_to !== undefined)
+      updateData.user_id = data.assigned_to;
+    else if (data.user_id !== undefined)
+      updateData.user_id = data.user_id;
+
+    if (data.image_path !== undefined)
+      updateData.image_path = data.image_path;
+
+    if (data.steps_to_reproduce !== undefined)
+      updateData.steps_to_reproduce = data.steps_to_reproduce;
+
+    if (data.ticket_tag !== undefined)
+      updateData.ticket_tag = data.ticket_tag;
+
+    if (data.updated_by !== undefined)
+      updateData.updated_by = data.updated_by;
+
+    updateData.updated_at = knex.fn.now();
+
+
+    if (Object.keys(updateData).length === 0) {
+      throw new Error('No fields provided for update');
+    }
 
     await knex('issueticket')
       .where({ issueticket_id })
       .update(updateData);
 
-    cb(null, { success: true });
+    const CLOSED_STATUS_ID = 17;
+    const RESOLVED_STATUS_ID = 5;
+
+    if (
+      Number(data.ticketstatus_id) === CLOSED_STATUS_ID &&
+      existing.liveticket_id
+    ) {
+      await knex('livetickets')
+        .where({ liveticket_id: existing.liveticket_id })
+        .update({
+          ticketstatus_id: RESOLVED_STATUS_ID
+        });
+    }
+
+    return {
+      success: true,
+      message: 'Ticket updated successfully'
+    };
+
   } catch (err) {
     console.error('Update failed:', err);
-    cb(err);
+    throw err;
   }
 };
-
-
-// db/issueticketdb.js
-
-exports.updateIssueTicket = async (issueticket_id, data) => {
-  console.log('Updating issue ticket with ID +++++++++++model+++++++:', issueticket_id);
-  console.log('Data to update+++++++++++++model++++++++++:', data);
-  const updateData = {};
-
-  if (data.ticketstatus_id !== undefined) {
-    updateData.ticketstatus_id = data.ticketstatus_id;
-  }
-
-  if (data.assigned_to !== undefined) {
-    updateData.user_id = data.assigned_to;
-  }
-  if (data.updated_by !== undefined) {
-    updateData.updated_by = data.updated_by;
-  }
-
-
-  updateData.updated_at = knex.fn.now();
-
-  if (Object.keys(updateData).length === 0) {
-    throw new Error('No fields provided for update');
-  }
-
-  const result = await knex('issueticket')
-    .where({ issueticket_id })
-    .update(updateData)
-    .returning('*');
-
-  return result[0];
-};
-

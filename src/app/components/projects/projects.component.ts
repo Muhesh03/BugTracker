@@ -66,47 +66,60 @@ export class ProjectComponent implements OnInit {
   }
 
   // DELETE PROJECT
-  deleteproject(row: any): void {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'You want to delete ' + row.projectname,
-      icon: 'warning',
-      width: '350px',
-      showCloseButton: true,
-      background: 'var(--tableheader)',
-      confirmButtonColor: 'var(--formbutton-color)',
-      cancelButtonColor: '#be9a9aff',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
-      customClass: {
-        closeButton: 'custom-close-button'
-      }
-    }).then((result) => {
-      if (result.isConfirmed) {
+ deleteproject(row: any): void {
+  Swal.fire({
+    title: 'Are you sure?',
+    text: `You want to delete ${row.projectname}`,
+    icon: 'warning',
+    width: '350px',
+    showCloseButton: true,
+    showCancelButton: true,
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'Cancel',
+    confirmButtonColor: 'var(--formbutton-color)',
+    cancelButtonColor: '#be9a9aff',
+    background: 'var(--tableheader)',
+    customClass: {
+      closeButton: 'custom-close-button'
+    }
+  }).then((result) => {
 
-        this.projectservice.deleteProject(row.project_id).subscribe({
-          next: () => {
-            //  Snackbar 
-            this.snackBar.open('Project deleted successfully', 'Close', {
-              duration: 2000,
-              horizontalPosition: 'center',
-              verticalPosition: 'top',
-              panelClass: ['success-snackbar']
-            });
+    if (!result.isConfirmed) return;
 
-            //  Auto refresh
-            this.getProjects();
-            this.projectservice.triggerProjectRefresh();
-          },
+    this.projectservice.deleteProject(row.project_id).subscribe({
 
-          error: (err) => {
-            console.error('Delete error', err);
-            Swal.fire('Error', 'Failed to delete Project', 'error');
-          }
-        });
+      next: (res: any) => {
+
+        if (res.success) {
+          this.snackBar.open('Project deleted successfully', 'Close', {
+            duration: 2000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['success-snackbar']
+          });
+
+          this.getProjects();
+          this.projectservice.triggerProjectRefresh();
+        }
+
+        else {
+          Swal.fire({
+            title: 'Cannot Delete',
+            text: res.message || 'Project is in use',
+            icon: 'warning',
+            confirmButtonColor: 'var(--formbutton-color)'
+          });
+        }
+      },
+
+      error: (err) => {
+        console.error('Delete error:', err);
+        Swal.fire('Error', 'Failed to delete Project', 'error');
       }
     });
-  }
+
+  });
+}
   // deleteproject(project_id: number) {
   //   console.log('function delete working', project_id);
   //   this.projectservice.deleteProject(project_id).subscribe(() => {
