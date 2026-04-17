@@ -89,8 +89,8 @@ exports.getuser = function (cb) {
     )
     // .whereIn('ug.status_id', [1, 2])
     .whereNot({ "ug.status_id": 3 })
-    .orderBy('ug.user_id', 'desc') // Added orderBy here
-    .then(async function (out) {
+.orderBy(knex.raw('LOWER(ug.fullname)'), 'asc')   
+ .then(async function (out) {
       for (const user of out) {
         const rows = await knex('messages')
          
@@ -109,6 +109,7 @@ exports.getuser = function (cb) {
       cb(e, 'error');
     })
 }
+
 exports.deleteuser = function (user_id, cb) {
   console.log('Deleting user (soft delete): ', user_id);
   console.log('ssssssssssssssssssssss', user_id);
