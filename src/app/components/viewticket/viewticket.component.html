@@ -79,7 +79,7 @@
       </div>
 
       <ng-container *ngIf="filterForm.value.filterValueDate === 'Between'">
-        <div class="col-6 col-md-2 fields">
+        <div class="datepicker-div col-6 col-md-2 fields">
           <mat-form-field appearance="outline">
             <input matInput [matDatepicker]="pickerFrom" formControlName="fromDate" placeholder="From">
             <mat-datepicker-toggle matSuffix [for]="pickerFrom"
@@ -88,7 +88,7 @@
           </mat-form-field>
         </div>
 
-        <div class="col-6 col-md-2 fields">
+        <div class="datepicker-div col-6 col-md-2 fields">
           <mat-form-field appearance="outline">
             <input matInput [matDatepicker]="pickerTo" formControlName="toDate" placeholder="To">
             <mat-datepicker-toggle matSuffix [for]="pickerTo"
