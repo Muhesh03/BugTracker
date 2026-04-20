@@ -106,25 +106,25 @@
   </div>
 
   <!-- TABS -->
-  <div class="tab-buttons" *ngIf="!selectedUserId">
-    <button (click)="switchTab('personal')">Chat</button>
-    <button (click)="switchTab('team')">Group</button>
-  </div>
+<div class="tab-buttons" *ngIf="!selectedUserId">
+  <button 
+    [class.active]="activeTab === 'personal'" 
+    (click)="switchTab('personal')">Chat</button>
+  <button 
+    [class.active]="activeTab === 'team'" 
+    (click)="switchTab('team')">Group</button>
+</div>
 
   <!-- USER LIST -->
   <div *ngIf="activeTab === 'personal' && !selectedUserId" class="user-list">
-    <div *ngFor="let user of users" class="user" (click)="openChat(user.user_id)">
-      {{ user.fullname }}
-      <!-- 🔔 UNREAD COUNT -->
-      <!-- <span class="badge" *ngIf="unreadMap[user.user_id] > 0">
-        {{ unreadMap[user.user_id] }}
-      </span> -->
-      <span class="badge" *ngIf="unreadMap[user.user_id] > 0">
-        {{ unreadMap[user.user_id] }}
-      </span>
-
-
-    </div>
+    <div style="display:flex; align-items:center; gap:8px;"></div>
+   <div *ngFor="let user of users" class="user" (click)="openChat(user.user_id)">
+  <div class="uavatar"></div>
+  {{ user.fullname }}
+  <span class="badge" *ngIf="unreadMap[user.user_id] > 0">
+    {{ unreadMap[user.user_id] }}
+  </span>
+</div>
   </div>
 
   <!-- CHAT AREA -->

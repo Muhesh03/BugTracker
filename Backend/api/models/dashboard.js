@@ -70,8 +70,8 @@ exports.getDashboardCounts = async function (params, cb) {
       total,
       pending,
       reported,
-      priority,
-      statusChart,
+      priority, 
+      statusChart,  
       priorityChart
     });
 
