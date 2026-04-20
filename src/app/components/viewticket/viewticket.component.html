@@ -2,15 +2,6 @@
 
   <form [formGroup]="filterForm">
 
-    <div class="w-100 d-flex flex-wrap align-items-center justify-content-start mb-2 gap-3">
-      <div class="col-12 col-md-3 ml-auto fields">
-        <mat-form-field appearance="fill" class="searchbox">
-          <mat-icon matPrefix>search</mat-icon>
-          <input matInput placeholder="Search..." formControlName="searchtext" (keyup)="searchAll($event)">
-        </mat-form-field>
-      </div>
-    </div>
-
     <div class="d-flex flex-wrap">
 
       <!-- 
@@ -79,7 +70,7 @@
       </div>
 
       <ng-container *ngIf="filterForm.value.filterValueDate === 'Between'">
-        <div class="col-6 col-md-2 fields">
+        <div class="datepicker-div col-6 col-md-2 fields">
           <mat-form-field appearance="outline">
             <input matInput [matDatepicker]="pickerFrom" formControlName="fromDate" placeholder="From">
             <mat-datepicker-toggle matSuffix [for]="pickerFrom"
@@ -88,7 +79,7 @@
           </mat-form-field>
         </div>
 
-        <div class="col-6 col-md-2 fields">
+        <div class="datepicker-div col-6 col-md-2 fields">
           <mat-form-field appearance="outline">
             <input matInput [matDatepicker]="pickerTo" formControlName="toDate" placeholder="To">
             <mat-datepicker-toggle matSuffix [for]="pickerTo"
@@ -114,6 +105,13 @@
         <button mat-raised-button (click)="downloadPdf()" class="filebtn">
           <img src="assets/pdf.png" class="" title="Download Pdf">
         </button>
+      </div>
+
+      <div class="col-12 col-md-3 ml-auto fields">
+        <mat-form-field appearance="fill" class="searchbox">
+          <mat-icon matPrefix>search</mat-icon>
+          <input matInput placeholder="Search..." formControlName="searchtext" (keyup)="searchAll($event)">
+        </mat-form-field>
       </div>
 
     </div>
@@ -232,7 +230,7 @@
             </mat-icon>
           </ng-container>
           <span *ngIf="!row.image_path || row.image_path.length === 0">
-            
+
           </span>
         </td>
       </ng-container>
