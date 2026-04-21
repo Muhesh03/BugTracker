@@ -15,6 +15,7 @@ import { tick } from '@angular/core/testing';
 import { LiveticketService } from 'src/app/services/liveticket.service';
 import { NotePreviewDialogComponent } from '../viewticket/viewticket.component';
 import { NoteAttachmentService } from 'src/app/services/note-attachment.service';
+import { ProjectService } from 'src/app/services/projects.service';
 
 interface User {
   id: number;
@@ -271,6 +272,10 @@ export class IssueTicketFormComponent implements OnInit {
   tags: any[] = [];
   tickettypes: any[] = [];
   users: any[] = [];
+selectedProject: number | null = null;
+ allocatedProjects: any[] = [];
+
+
 
   storedProjectId: string | null = null;
   userId: number | null = null;
@@ -293,7 +298,9 @@ export class IssueTicketFormComponent implements OnInit {
     2: { name: 'arrow_upward', color: 'red' },
     3: { name: 'keyboard_arrow_up', color: 'red' },
     4: { name: 'keyboard_arrow_down', color: 'green' },
-    5: { name: 'remove', color: 'yellow' }
+    5: { name: 'remove', color: 'yellow' },
+    6: { name: 'keyboard_double_arrow_up', color: 'red' }
+
   };
 
   get selectedPriority() {
@@ -307,10 +314,12 @@ export class IssueTicketFormComponent implements OnInit {
     private liveticketservice: LiveticketService,
     private dialog: MatDialog,
     private noteAttachmentService: NoteAttachmentService,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private projectservice: ProjectService
   ) { }
 
   ngOnInit(): void {
+    this.selectedProject= 0;
     this.storedProjectId = localStorage.getItem('selectedProject');
     const projectId = this.storedProjectId ? Number(this.storedProjectId) : null;
 
@@ -330,6 +339,9 @@ export class IssueTicketFormComponent implements OnInit {
       steps_to_reproduce: new FormControl(''),
       storedprojectId: new FormControl(projectId),
        live_ticket_id: new FormControl(null),
+       selectedProject:new FormControl(this.selectedProject),
+
+       
 
     
 
@@ -338,6 +350,7 @@ export class IssueTicketFormComponent implements OnInit {
       
     });
 
+    
     if (this.data?.issueticket_id) {
       // EDIT mode
       this.isEditMode = true;
@@ -364,6 +377,7 @@ export class IssueTicketFormComponent implements OnInit {
     this.loadTags();
     this.loadTicketTypes();
     this.loadUsers();
+    this. loadAllocatedProjects();
   }
 
   private patchForm(d: any): void {
@@ -381,8 +395,16 @@ export class IssueTicketFormComponent implements OnInit {
       description: d.description ?? '',
       steps_to_reproduce: d.steps_to_reproduce ?? '',
        live_ticket_id: d.live_ticket_id ?? null,
+
     });
   }
+
+
+hello() {
+  console.log("Selected Project:", this.selectedProject);
+ }
+
+    
 
   loadStatuses(): void {
     this.issueticketService.getTicketStatuses().subscribe(res => {
@@ -395,6 +417,16 @@ export class IssueTicketFormComponent implements OnInit {
       this.priorities = res.data;
     });
   }
+
+  loadAllocatedProjects() {
+    this.projectservice.getUserProjects(this.userId).subscribe(res => {
+      this.allocatedProjects = res;
+      console.log('Allocated heeeeey Projects:', this.allocatedProjects);
+      // this.loadLastProject();
+
+    });
+  }
+
 
   loadTags(): void {
     this.issueticketService.getTicketTags().subscribe(res => {
@@ -487,12 +519,16 @@ export class IssueTicketFormComponent implements OnInit {
         deleted_images: this.deletedImages,
         reported_by: this.userId,
         updated_by: this.userId,
+  selectedProject: this.selectedProject
       };
 
       if (this.isEditMode) {
+  console.log("🔵 FORM VALUE:", this.issueTicketForm.value);
+  console.log("🔵 ORIGINAL DATA:", this.data);
         this.issueticketService
           .updateTicket(this.data.issueticket_id, payload)
           .subscribe(() => this.dialogRef.close(true));
+          this.hello();
       } else {
         this.issueticketService.addIssueTicket(payload).subscribe(() => {
           if (this.data?.live_ticket_id) {

@@ -355,8 +355,26 @@
 </mat-dialog-content>
 
 <mat-dialog-actions>
+
+  <div class="fields mx-1" *ngIf="isEditMode">
+  <mat-form-field appearance="outline" class="project-dropdown">
+    <mat-select  [(value)]="selectedProject" 
+                panelClass="project-dropdown-panel">
+
+      <!-- ALL PROJECT -->
+      <mat-option [value]="0">
+        All Projects
+      </mat-option>
+
+      <mat-option *ngFor="let p of allocatedProjects" [value]="p.project_id">
+        {{ p.projectname }}
+      </mat-option>
+
+    </mat-select>
+  </mat-form-field>
+</div>
   <button mat-raised-button class="pbtn" form="issueticketform" type="submit" style="width: 100px;" class="pbtn"
-    (click)="saveNote()">
+    (click)="hello()">
     {{ isEditMode ? 'Update' : 'Save' }}
   </button>
 
