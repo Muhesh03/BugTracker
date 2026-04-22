@@ -255,7 +255,6 @@ export class ViewTicketComponent implements OnInit {
   }
 
 
-
   openImages(images: string[]) {
     this.dialog.open(ShowImageDialogComponent, {
       data: images,

@@ -591,6 +591,9 @@ exports.updateTicket = async (issueticket_id, data) => {
 
     if (data.ticketstatus_id !== undefined)
       updateData.ticketstatus_id = data.ticketstatus_id;
+ if (data.selectedProject != null) {
+  updateData.project_id = data.selectedProject;
+}
 
     if (data.priority_id !== undefined)
       updateData.priority_id = data.priority_id;

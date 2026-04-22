@@ -46,7 +46,7 @@
       </div>
 
 
-      <div class="col-5 col-md-2 fields">
+      <div class=" col-5 col-md-2 fields">
         <mat-form-field appearance="outline">
           <mat-label style="color:#1d6f42; font-size:15px;">Date Between</mat-label>
           <mat-select formControlName="filterValueDate" placeholder="Time">
@@ -58,7 +58,7 @@
       </div>
 
       <ng-container *ngIf="filterForm.value.filterValueDate === 'Between'">
-        <div class="col-5 col-md-2 fields">
+        <div class=" datepicker-div col-5 col-md-2 fields">
           <mat-form-field appearance="outline">
             <input matInput [matDatepicker]="pickerFrom" formControlName="fromDate" placeholder="From">
             <mat-datepicker-toggle matSuffix [for]="pickerFrom"
@@ -68,7 +68,7 @@
           </mat-form-field>
         </div>
 
-        <div class="col-5 col-md-2 fields">
+        <div class=" datepicker-div col-5 col-md-2 fields">
           <mat-form-field appearance="outline">
             <input matInput [matDatepicker]="pickerTo" formControlName="toDate" placeholder="To">
             <mat-datepicker-toggle matSuffix [for]="pickerTo"
@@ -158,7 +158,7 @@
               image
             </mat-icon>
           </ng-container>
-          <span *ngIf="!row.image_path || row.image_path.length === 0">—</span>
+          <span *ngIf="!row.image_path || row.image_path.length === 0"></span>
         </td>
       </ng-container>
 

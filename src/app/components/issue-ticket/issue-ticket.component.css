@@ -22,5 +22,17 @@
   word-break: break-word;
 }
 
+.project-dropdown .mat-form-field-flex {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 4px;
+}
+
+/* component.css */
+ ::ng-deep .project-dropdown .mdc-notched-outline__leading,
+ ::ng-deep .project-dropdown .mdc-notched-outline__notch,
+ ::ng-deep .project-dropdown .mdc-notched-outline__trailing {
+  border-color: #4f6f5f !important;
+}
 
 

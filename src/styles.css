@@ -785,7 +785,7 @@ td.mat-footer-cell:last-of-type {
   background-color: #fff;
 }
 
-.cursor-pointer{
+.cursor-pointer {
   cursor: pointer !important;
 }
 
@@ -848,8 +848,8 @@ td.mat-footer-cell:last-of-type {
   grid-template-columns: 1fr 1fr;
 }
 
-.form-grid-item.customgrid{
-      grid-template-columns: 0.74fr 1fr;
+.form-grid-item.customgrid {
+  grid-template-columns: 0.74fr 1fr;
 }
 
 .form-grid-label {
@@ -939,6 +939,12 @@ td.mat-footer-cell:last-of-type {
   justify-content: center;
 }
 
+.datepicker-div {
+  flex: 0 0 145px;
+  min-width: 0 !important;
+  padding-left: 5px;
+  padding-right: 5px;
+}
 
 
 
@@ -965,6 +971,11 @@ td.mat-footer-cell:last-of-type {
     margin-bottom: 6px;
     border-radius: 0px 0px 8px 8px;
   }
+
+  .datepicker-div {
+    flex: 1 1 50%;
+  }
+
 
 }
 
@@ -1126,3 +1137,5 @@ td.mat-footer-cell:last-of-type {
   inset: 0;
   z-index: 9998;
 }
+
+

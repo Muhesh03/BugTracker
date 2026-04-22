@@ -19,15 +19,17 @@
   width: 400px;
   height: 600px;
   background: white;
-  border-radius: 10px;
+  border-radius: 20px;
   display: flex;
   flex-direction: column;
   z-index: 1500;
   box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+  border: 1.5px solid var(--formheader-color); /* ← add this */
 }
-
 /* HEADER */
 .chat-header {
+    border-radius: 20px 20px 0px 0px;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -45,16 +47,43 @@
 }
 
 /* TABS */
+/* TABS */
 .tab-buttons {
   display: flex;
+  justify-content: center;
+  padding: 6px 8px;
+  background: #e6e3e3;        /* pill container background */
+  border-radius: 37px;         /* outer pill shape */
+  margin: 8px;                 /* spacing around it */
 }
 
 .tab-buttons button {
   flex: 1;
-  padding: 8px;
+  padding: 8px 20px;
   border: none;
   cursor: pointer;
-  background-color: #e6e3e3;
+  background: transparent;     /* transparent by default */
+  border-radius: 100px;        /* capsule shape ready */
+  font-size: 13px;
+  font-weight: 500;
+  color: #555;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+
+
+/* HOVER capsule */
+.tab-buttons button:hover {
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 100px;
+}
+
+/* ACTIVE capsule */
+.tab-buttons button.active {
+  background: #ffffff;
+  color: var(--formheader-color);
+  font-weight: 600;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
 
 /* USER LIST */
@@ -65,6 +94,9 @@
   background-color:#dee7d4;
 }
 .user {
+  display:flex;
+  flex-direction: row;
+justify-content: space-between;
   padding: 10px;
   border-bottom: 1px solid #eee;
 }
@@ -131,6 +163,14 @@
   margin: 10px 0;
   font-size: 12px;
   color: gray;
+}
+
+.uavatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--formheader-color);
+  flex-shrink: 0;
 }
 .text{
   display: inline-block;
