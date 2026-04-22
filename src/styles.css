@@ -328,6 +328,10 @@ td.mat-footer-cell:last-of-type {
   width: 100% !important;
 }
 
+.mat-form-field-wrapper {
+    padding-bottom: 0.34375em;
+}
+
 .fields .mat-form-field-wrapper {
   width: 100% !important;
   max-width: 100% !important;
