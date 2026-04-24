@@ -319,7 +319,46 @@ td.mat-footer-cell:last-of-type {
   z-index: 0 !important;
 }
 
+.mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+  background-color: #cfaeff;
+}
+
+.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+  background-color: #a26af6;
+}
+
+.mat-slide-toggle-thumb-container {
+  width: 16px !important;
+  height: 16px !important;
+  top: -2px !important;
+}
+
+.mat-slide-toggle-thumb {
+  height: 16px !important;
+  width: 16px !important;
+}
+
+.mat-slide-toggle-bar {
+  width: 32px !important;
+  height: 13px !important;
+}
+
 /* MAT TOGGLE END  */
+
+
+/* MAT RADIO  */
+.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+  border-color: #547562;
+}
+
+.mat-radio-button.mat-accent .mat-radio-inner-circle,
+.mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element:not(.mat-radio-persistent-ripple),
+.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-persistent-ripple,
+.mat-radio-button.mat-accent:active .mat-radio-persistent-ripple {
+  background-color: #547562;
+}
+
+/* MAT RADIO  */
 
 
 
@@ -329,7 +368,7 @@ td.mat-footer-cell:last-of-type {
 }
 
 .mat-form-field-wrapper {
-    padding-bottom: 0.34375em;
+  padding-bottom: 0.34375em;
 }
 
 .fields .mat-form-field-wrapper {
@@ -1137,5 +1176,3 @@ td.mat-footer-cell:last-of-type {
   inset: 0;
   z-index: 9998;
 }
-
-

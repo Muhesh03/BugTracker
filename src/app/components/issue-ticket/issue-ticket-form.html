@@ -196,10 +196,11 @@
     <div class="col-12">
 
       <!-- Add Note Header -->
-      <div class="note-section d-flex align-items-center gap-2 mb-2">
+      <div class="note-section d-flex align-items-center gap-2 mb-2" data-bs-toggle="collapse"
+        data-bs-target="#collapseExample" aria-expanded="false">
         <span class="fw-bold">Add Note</span>
 
-        <button class="expand" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false">
+        <button class="expand">
           <mat-icon>expand_more</mat-icon>
         </button>
       </div>
@@ -285,11 +286,11 @@
         </div>
       </div>
 
-      <div class="note-section d-flex align-items-center gap-2 mb-2 mt-2">
+      <div class="note-section d-flex align-items-center gap-2 mb-2 mt-2" data-bs-toggle="collapse"
+        href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">
         <span class="fw-bold">Activities</span>
 
-        <button class="expand" data-bs-toggle="collapse" href="#multiCollapseExample1" role="button"
-          aria-expanded="false" aria-controls="multiCollapseExample1"><mat-icon>expand_more</mat-icon></button>
+        <button class="expand"><mat-icon>expand_more</mat-icon></button>
 
 
       </div>
@@ -357,22 +358,21 @@
 <mat-dialog-actions>
 
   <div class="fields mx-1" *ngIf="isEditMode">
-  <mat-form-field appearance="outline" class="project-dropdown">
-    <mat-select  [(value)]="selectedProject" 
-                panelClass="project-dropdown-panel">
+    <mat-form-field appearance="outline" class="project-dropdown">
+      <mat-select [(value)]="selectedProject" panelClass="project-dropdown-panel">
 
-      <!-- ALL PROJECT -->
-      <mat-option [value]="0">
-        All Projects
-      </mat-option>
+        <!-- ALL PROJECT -->
+        <mat-option [value]="0">
+          All Projects
+        </mat-option>
 
-      <mat-option *ngFor="let p of allocatedProjects" [value]="p.project_id">
-        {{ p.projectname }}
-      </mat-option>
+        <mat-option *ngFor="let p of allocatedProjects" [value]="p.project_id">
+          {{ p.projectname }}
+        </mat-option>
 
-    </mat-select>
-  </mat-form-field>
-</div>
+      </mat-select>
+    </mat-form-field>
+  </div>
   <button mat-raised-button class="pbtn" form="issueticketform" type="submit" style="width: 100px;" class="pbtn"
     (click)="hello()">
     {{ isEditMode ? 'Update' : 'Save' }}
