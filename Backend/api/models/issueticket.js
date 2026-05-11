@@ -247,28 +247,28 @@ exports.deleteIssueTicket = function (issueticket_id, callback) {
 
 
 
-exports.updateIssueTicket = (issueticket_id, data, cb) => {
-  knex('issueticket')
-    .where({ issueticket_id })
-    .update({
-      summary: data.summary,
-      description: data.description,
-      ticketstatus_id: data.ticketstatus_id,
-      priority_id: data.priority_id,
-      ticket_tag: data.ticket_tag,
-      image_path: data.image_path,
-      updated_at: knex.fn.now(),
-      updated_by: data.user_id
+// exports.updateIssueTicket = (issueticket_id, data, cb) => {
+//   knex('issueticket')
+//     .where({ issueticket_id })
+//     .update({
+//       summary: data.summary,
+//       description: data.description,
+//       ticketstatus_id: data.ticketstatus_id,
+//       priority_id: data.priority_id,
+//       ticket_tag: data.ticket_tag,
+//       image_path: data.image_path,
+//       updated_at: knex.fn.now(),
+//       updated_by: data.user_id
 
 
 
-    })
-    .then(result => {
-      console.log('Priority updated, rows affected:', result);
-      cb(null, result);
-    })
-    .catch(err => cb(err));
-};
+//     })
+//     .then(result => {
+//       console.log('Priority updated, rows affected:', result);
+//       cb(null, result);
+//     })
+//     .catch(err => cb(err));
+// };
 
 
 
@@ -576,6 +576,9 @@ exports.getTicketById = async (issueticket_id) => {
 // };
 
 exports.updateTicket = async (issueticket_id, data) => {
+  console.log('=== DATA RECEIVED IN UPDATE ===', data);            // ADD THIS
+  console.log('=== selectedProject ===', data.selectedProject);    // ADD THIS
+  console.log('=== ticket_tag ===', data.ticket_tag); 
 
 
   try {
@@ -591,10 +594,10 @@ exports.updateTicket = async (issueticket_id, data) => {
 
     if (data.ticketstatus_id !== undefined)
       updateData.ticketstatus_id = data.ticketstatus_id;
- if (data.selectedProject != null) {
-  updateData.project_id = data.selectedProject;
-}
 
+   if (data.project_id != null) {
+  updateData.project_id = data.project_id;
+   }
     if (data.priority_id !== undefined)
       updateData.priority_id = data.priority_id;
 

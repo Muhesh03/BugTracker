@@ -319,7 +319,7 @@ selectedProject: number | null = null;
   ) { }
 
   ngOnInit(): void {
-    this.selectedProject= 0;
+     this.selectedProject = null;
     this.storedProjectId = localStorage.getItem('selectedProject');
     const projectId = this.storedProjectId ? Number(this.storedProjectId) : null;
 
@@ -338,16 +338,7 @@ selectedProject: number | null = null;
       description: new FormControl(''),
       steps_to_reproduce: new FormControl(''),
       storedprojectId: new FormControl(projectId),
-       live_ticket_id: new FormControl(null),
-       selectedProject:new FormControl(this.selectedProject),
-
-       
-
-    
-
-      
-      
-      
+      live_ticket_id: new FormControl(null)
     });
 
     
@@ -382,6 +373,7 @@ selectedProject: number | null = null;
 
   private patchForm(d: any): void {
     console.log("data recieeved in patchform",d);
+     this.selectedProject = d.project_id ?? null;
     
     
     this.issueTicketForm.patchValue({
@@ -519,12 +511,12 @@ hello() {
         deleted_images: this.deletedImages,
         reported_by: this.userId,
         updated_by: this.userId,
-  selectedProject: this.selectedProject
       };
-
+      if (this.selectedProject && this.selectedProject !== 0) {
+  payload.project_id = this.selectedProject;
+}
+  
       if (this.isEditMode) {
-  console.log("🔵 FORM VALUE:", this.issueTicketForm.value);
-  console.log("🔵 ORIGINAL DATA:", this.data);
         this.issueticketService
           .updateTicket(this.data.issueticket_id, payload)
           .subscribe(() => this.dialogRef.close(true));
