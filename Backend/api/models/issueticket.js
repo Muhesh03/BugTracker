@@ -136,7 +136,7 @@ exports.getFilter = function (filters, cb) {
 };
 
 exports.getIssueTicket = function (projectParams, cb) {
-  console.log("Fetching issue tickets...");
+  console.log("Fetching issue tickets............................",projectParams);
   knex('issueticket as it')
     .leftJoin('ticketpriority as p', 'it.priority_id', 'p.priority_id')
     .leftJoin('ticketstatus as t', 'it.ticketstatus_id', 't.ticketstatus_id')
@@ -144,34 +144,15 @@ exports.getIssueTicket = function (projectParams, cb) {
     .leftJoin('userregistration as ur', 'it.created_by', 'ur.user_id')
     .leftJoin('userregistration as u', 'it.user_id', 'u.user_id')
     .leftJoin('projects as pr', 'it.project_id', 'pr.project_id')
-    .select(
-      'it.issueticket_id',
-      'it.summary',
-      'it.description',
-      'it.ticketstatus_id',
-      'u.user_id as assigned_user_id',
-      'u.fullname as assigned_to_name',
-      'it.priority_id',
-      'p.priority',
-      'pr.projectname',
-      'it.project_id',
-      'p.icon',
-      't.statusname',
-      't.color',
-      'tt.name as ticket_type_name',
-      'it.tickettype_id',
-      'it.ticket_number',
-      'it.steps_to_reproduce',
-      'it.created_at',
-      'it.image_path',
-      'it.created_by',
-      'ur.user_id as creator_user_id',
-      'ur.fullname as created_by_name',
+    .select('it.issueticket_id', 'it.summary', 'it.description', 'it.ticketstatus_id', 'u.user_id as assigned_user_id','u.fullname as assigned_to_name', 'it.priority_id',
+      'p.priority','pr.projectname', 'it.project_id', 'p.icon', 't.statusname', 't.color', 'tt.name as ticket_type_name', 'it.tickettype_id', 'it.ticket_number',
+      'it.steps_to_reproduce', 'it.created_at', 'it.image_path', 'it.created_by', 'ur.user_id as creator_user_id', 'ur.fullname as created_by_name',
       knex.raw('array_agg(tg.tickettag) as tag_names'),
       knex.raw('array_agg(tg.tickettag_id) as tag_ids'))
     .joinRaw('JOIN tickettag tg ON tg.tickettag_id = ANY(it.ticket_tag)')
     .whereNot('it.status_id', 3)
-    .modify(function (queryBuilder) {
+    .where(function () {
+    //.modify(function (queryBuilder) {
       if (projectParams.projectid) {
         this.where('it.project_id', projectParams.projectid);
       }
@@ -204,8 +185,8 @@ exports.getIssueTicket = function (projectParams, cb) {
       'ur.fullname',
     )
     .orderBy('it.issueticket_id', 'desc')
-    .then(
-      function (out) {
+    .then(function (out) {
+        console.log('ooooooooooooooooooooo', out);
         cb(null, out);
       })
     .catch(function (e) {

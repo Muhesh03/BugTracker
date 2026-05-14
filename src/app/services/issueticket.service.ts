@@ -25,7 +25,7 @@ export class IssueTicketService {
   constructor(private http: HttpClient) { }
 
 
-  addIssueTicket(payload): Observable<any> {
+  addIssueTicket(payload : any): Observable<any> {
 
     console.log("=============inage oath====================", payload)
     return this.http.post(
@@ -47,7 +47,7 @@ export class IssueTicketService {
   }
 
 
-  getfilter(filters): Observable<any> {
+  getfilter(filters : any): Observable<any> {
     console.log("filteeesr", filters)
     httpOptionsGet.params = filters;
     console.log("Sending request with params:", filters);

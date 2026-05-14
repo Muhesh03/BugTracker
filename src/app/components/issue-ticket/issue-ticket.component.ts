@@ -94,7 +94,7 @@ export class IssueTicketComponent implements OnInit, AfterViewInit {
     this.userId = userData.id;
 
     this.storedProjectId = localStorage.getItem('selectedProject');
-    console.log("selected project in issue ticket", this.storedProjectId);
+    
     this.projectId = this.storedProjectId ? Number(this.storedProjectId) : null;
     this.getIssueTicket();
   }
@@ -133,9 +133,9 @@ export class IssueTicketComponent implements OnInit, AfterViewInit {
     if (this.projectId && this.projectId !== 0) {
       projectparams.projectid = this.projectId;
     }
-
-    this.issueticketService.getIssueTicket(projectparams)
-      .subscribe(res => {
+    console.log('projectparams ----------------- ', projectparams);
+    this.issueticketService.getIssueTicket(projectparams).subscribe(res => {
+      console.log('res -------------------------------------', res);
         const data = (res.data || []).map((row: any) => {
           let imageArr: string[] = [];
 
@@ -161,7 +161,7 @@ export class IssueTicketComponent implements OnInit, AfterViewInit {
           };
         });
 
-        console.log('FINAL DATA USED BY TABLE:', data); // check here
+       
         this.issueticketDataSource.data = data;
       });
   }
@@ -272,13 +272,13 @@ export class IssueTicketFormComponent implements OnInit {
   tags: any[] = [];
   tickettypes: any[] = [];
   users: any[] = [];
-selectedProject: number | null = null;
- allocatedProjects: any[] = [];
+  selectedProject: number | null = null;
+  allocatedProjects: any[] = [];
 
 
 
   storedProjectId: string | null = null;
-  userId: number | null = null;
+  userId: any;
   loggedInUser: string = '';
   today = new Date();
 
@@ -372,7 +372,7 @@ selectedProject: number | null = null;
   }
 
   private patchForm(d: any): void {
-    console.log("data recieeved in patchform",d);
+   
      this.selectedProject = d.project_id ?? null;
     
     
@@ -392,9 +392,9 @@ selectedProject: number | null = null;
   }
 
 
-hello() {
-  console.log("Selected Project:", this.selectedProject);
- }
+  hello() {
+    console.log("Selected Project:", this.selectedProject);
+  }
 
     
 
@@ -411,9 +411,10 @@ hello() {
   }
 
   loadAllocatedProjects() {
+    
     this.projectservice.getUserProjects(this.userId).subscribe(res => {
       this.allocatedProjects = res;
-      console.log('Allocated heeeeey Projects:', this.allocatedProjects);
+    
       // this.loadLastProject();
 
     });
