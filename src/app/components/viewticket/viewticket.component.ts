@@ -665,6 +665,15 @@ export class EditNoteComponent implements OnInit {
       
     });
   }
+
+
+  onAssignedUserChange(event: any) {
+  if (event.value) {
+    this.issueTicketForm.patchValue({
+      ticketstatus_id: 8
+    });
+  }
+}
   loadUsers() {
     this.issueticketService.getTicketUsers()
       .subscribe(res => {

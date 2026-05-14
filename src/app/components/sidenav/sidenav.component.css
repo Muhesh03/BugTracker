@@ -108,3 +108,6 @@
   align-items: center;
   justify-content: center;
 }
+::ng-deep .project-dropdown-panel .mat-option {
+  font-weight: bold !important;
+}

@@ -28,7 +28,7 @@
   <div class="bulk-action-box">
     
     <mat-form-field appearance="outline" class="status-dropdown">
-      <mat-label>Status</mat-label>
+      <mat-label style="color:#1d6f42;font-size:15px;">Status</mat-label>
       <mat-select formControlName="bulkStatusControl" placeholder="Select Status">
         <mat-option value="0">please select</mat-option>
         <mat-option *ngFor="let s of statuses" [value]="s.ticketstatus_id">{{ s.statusname }}</mat-option>
@@ -44,7 +44,7 @@
 
       <div class="col-6 col-md-1 fields">
         <mat-form-field appearance="outline">
-          <mat-label>Priority</mat-label>
+          <mat-label style="color:#1d6f42;font-size:15px;">Priority</mat-label>
           <mat-select formControlName="filterValuePriority" placeholder="Select Priority">
             <mat-option value="0">please select</mat-option>
             <mat-option *ngFor="let p of priorities" [value]="p.priority_id">{{ p.priority }}</mat-option>
@@ -55,7 +55,7 @@
 
       <div class="col-6 col-md-1 fields">
         <mat-form-field appearance="outline">
-          <mat-label>Assigned To</mat-label>
+          <mat-label style="color:#1d6f42;font-size:15px;">Assigned To</mat-label>
           <mat-select formControlName="filterValueUser" placeholder="Select User">
             <mat-option value="0">Please select</mat-option>
             <mat-option *ngFor="let user of projectUsers" [value]="user.user_id">
@@ -67,7 +67,7 @@
 
       <div class="col-6 col-md-1 fields">
         <mat-form-field appearance="outline">
-          <mat-label>Types</mat-label>
+          <mat-label style="color:#1d6f42;font-size:15px;">Types</mat-label>
           <mat-select formControlName="filterValueType" placeholder="Select Priority">
             <mat-option value="0">please select</mat-option>
             <mat-option *ngFor="let t of tickettypes" [value]="t.tickettype_id">{{ t.name }}</mat-option>
@@ -77,7 +77,7 @@
 
       <div class="col-6 col-md-1 fields">
         <mat-form-field appearance="outline">
-          <mat-label>Status</mat-label>
+          <mat-label style="color:#1d6f42;font-size:15px;">Status</mat-label>
           <mat-select formControlName="filterValueStatus" placeholder="Select Status">
             <mat-option value="0">please select</mat-option>
             <mat-option *ngFor="let s of statuses" [value]="s.ticketstatus_id">{{ s.statusname }}</mat-option>
@@ -87,7 +87,7 @@
 
       <div class="col-6 col-md-1 fields">
         <mat-form-field appearance="outline" floatLabel="always">
-          <mat-label>Tags</mat-label>
+          <mat-label style="color:#1d6f42;font-size:15px;">Tags</mat-label>
           <mat-select formControlName="filterValueTag" multiple placeholder="Please select">
             <mat-option *ngFor="let t of tag" [value]="t.tickettag_id">
               {{ t.tickettag }}
