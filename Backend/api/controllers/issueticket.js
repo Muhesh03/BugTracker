@@ -53,13 +53,13 @@ router.use(function (req, res, next) {
                     ticket_tag: req.body.ticket_tag || [], // array of tag IDs
                     ticketstatus_id: req.body.ticketstatus_id,
                     status_id: 1,
-                    tickettype_id: req.body.tickettype || 0 ,
+                    tickettype_id: req.body.tickettype || 0,
                     project_id: req.body.storedprojectId,
                     ticket_number: ticketnumber,
                     steps_to_reproduce: req.body.steps_to_reproduce,
                     image_path: req.body.image_path,
                     created_by: req.body.reported_by,
-                      liveticket_id: req.body.live_ticket_id
+                    liveticket_id: req.body.live_ticket_id
 
                 };
                 console.log('Final params to save=================================================+++++++++++++++++++++++++++++++++++:', params);
@@ -316,6 +316,34 @@ router.use(function (req, res, next) {
 
 
 
+    router.route('/issueticket/users/byproject').get(function (req, res) {
+        const params = {
+            project_id: req.query.project_id
+        };
+
+        if (!params.project_id) {
+            return res.status(400).send({
+                error: 'project_id is required'
+            });
+        }
+
+        issueticketdb.getUserbyProject(params, function (err, output) {
+            if (err) {
+                console.error('Error fetching users by project:', err);
+                return res.status(500).send({
+                    error: 'Something went wrong in getUserbyProject controller'
+                });
+            }
+
+            res.status(200).send({
+                message: 'Users by project list',
+                data: output
+            });
+        });
+    });
+
+
+
     // Excel download route
     router.get('/issueticket/excel/download', async (req, res) => {
         try {
@@ -527,7 +555,7 @@ router.post('/issueticket/pdf', async (req, res) => {
 
 
 // router.put('/issueticket/:id', async (req, res) => {
-    
+
 
 //     try {
 //         const issueticket_id = req.params.id;
@@ -673,6 +701,26 @@ router.put('/issueticket/:id', async (req, res) => {
             message: err.message || 'Update failed'
         });
     }
+});
+
+
+router.post('/issueticket/bulkupdatestatus', function (req, res) {
+    const { ticket_ids, status_id } = req.body;
+    console.log('Bulk update payload:', req.body);
+
+    issueticketdb.selectBoxStatusUpdate({ ticket_ids, status_id }, function (err, output) {
+        if (err) {
+            return res.status(500).json({
+                success: false,
+                message: 'Bulk update failed'
+            });
+        }
+        return res.status(200).json({
+            success: true,
+            message: 'Status updated successfully',
+            data: output
+        });
+    });
 });
 
 

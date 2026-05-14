@@ -21,6 +21,7 @@ exports.saveIssueTicket = function (data, cb) {
     });
 };
 
+
 exports.getFilter = function (filters, cb) {
   const {
     projectId,
@@ -28,6 +29,7 @@ exports.getFilter = function (filters, cb) {
     filterValueStatus,
     filterValueType,
     filterValueTag,
+    filterValueUser,
     filterValueDate,
     fromDate,
     toDate
@@ -44,6 +46,7 @@ exports.getFilter = function (filters, cb) {
   const priorityId = toInt(filterValuePriority);
   const statusId = toInt(filterValueStatus);
   const typeId = toInt(filterValueType);
+  const projectuserId = toInt(filterValueUser);
 
   knex('issueticket as it')
     .leftJoin('ticketpriority as p', 'it.priority_id', 'p.priority_id')
@@ -61,7 +64,7 @@ exports.getFilter = function (filters, cb) {
       'it.description',
       'it.ticketstatus_id',
       'u.user_id',
-      'u.fullname',
+      'u.fullname as assigned_to_name',
       'ur.user_id as creator_user_id',
       'ur.fullname as created_by_name',
       'it.priority_id',
@@ -73,6 +76,7 @@ exports.getFilter = function (filters, cb) {
       'it.tickettype_id',
       'it.ticket_number',
       'it.created_at',
+
       knex.raw('array_agg(tg.tickettag) as tag_names'),
       knex.raw('array_agg(tg.tickettag_id) as tag_ids')
     )
@@ -86,6 +90,7 @@ exports.getFilter = function (filters, cb) {
       if (priorityId) this.where('it.priority_id', priorityId);
       if (statusId) this.where('it.ticketstatus_id', statusId);
       if (typeId) this.where('it.tickettype_id', typeId);
+      if (projectuserId) this.where('it.user_id', projectuserId);
 
       if (filterValueDate === 'Between' && fromDate && toDate) {
         const from = new Date(fromDate).toISOString().split('T')[0];
@@ -117,7 +122,10 @@ exports.getFilter = function (filters, cb) {
       't.color', 'tt.name',
       'it.tickettype_id',
       'it.ticket_number',
-      'it.created_at'
+      'it.created_at',
+      'it.user_id',
+
+      
     )
     .orderBy('it.issueticket_id', 'asc')
     .then(out => cb(null, out))
@@ -318,6 +326,21 @@ exports.getPriorities = function (cb) {
     });
 };
 
+exports.getUserbyProject = function (params, cb) {
+  knex('projectteam as pt')
+    .join('userregistration as u', 'pt.user_id', 'u.user_id')
+    .select('u.user_id', 'u.fullname')
+    .where('pt.project_id', params.project_id)
+    .orderBy('u.fullname', 'asc')
+    .then(function (out) {
+      console.log('Project users fetched:', out);
+      cb(null, out);
+    })
+    .catch(function (e) {
+      cb(e, 'error');
+    });
+};
+
 exports.getTags = function (cb) {
   knex('tickettag')
     .select('tickettag_id', 'tickettag')
@@ -463,6 +486,19 @@ exports.getTicketById = async (issueticket_id) => {
   return knex('issueticket')
     .where({ issueticket_id })
     .first();
+};
+
+
+
+exports.selectBoxStatusUpdate=function(params, callback) {
+    knex('issueticket')
+        .whereIn('issueticket_id', params.ticket_ids)
+        .update({ ticketstatus_id: params.status_id })
+        .then(output => callback(null, output))
+        .catch(err => {
+            console.error('Bulk update model error:', err);
+            callback(err, null);
+        });
 };
 
 /**

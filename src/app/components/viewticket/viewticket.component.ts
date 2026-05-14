@@ -16,6 +16,7 @@ import { ShowImageDialogComponent } from '../image-preview-dialog/image-preview-
 import { env } from 'process';
 import { environment } from 'src/environments/environment';
 import { tick } from '@angular/core/testing';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-issue-ticket',
@@ -23,33 +24,6 @@ import { tick } from '@angular/core/testing';
   styleUrls: ['./viewticket.component.css']
 })
 export class ViewTicketComponent implements OnInit {
-  // downloadExcel() {
-  //   if (!this.allDataForExcel || this.allDataForExcel.length === 0) {
-  //     alert('No data available to export');
-  //     return;
-  //   }
-
-  //   // Format data for Excel
-  //   const excelData = this.allDataForExcel.map(item => ({
-  //     'Ticket ID': item.ticket_id,
-  //     'Project Name': item.project_name,
-  //     'Status': item.statusname,
-  //     'Priority': item.priority,
-  //     'Created Date': new Date(item.created_at).toLocaleDateString(),
-  //     'Assigned To': item.fullname
-  //   }));
-
-  //   const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(excelData);
-  //   const workbook: XLSX.WorkBook = {
-  //     Sheets: { 'Data': worksheet },
-  //     SheetNames: ['Data']
-  //   };
-
-  //   const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-  //   const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-
-  //   saveAs(blob, `Filtered_Data_${new Date().getTime()}.xlsx`);
-  // }
 
 
   constructor(
@@ -59,6 +33,7 @@ export class ViewTicketComponent implements OnInit {
   ) { }
 
   displayedColumns: string[] = [
+    'select',
     'sno',
     'icons',
     'tag_names',
@@ -71,21 +46,7 @@ export class ViewTicketComponent implements OnInit {
     'image_path',
     'edit',
     'delete'
-    // 'sno',
-    // 'ticket_number',
-    // 'ticketstatus_id',
-    // 'icons',
-    // 'summary',
-    // 'created_by',
-    // 'user_id',
-    // 'tag_names',
-    // 'created_at',
-    // 'image_path',
-    // 'tickettype',
 
-
-    // 'edit',
-    // 'delete'
   ];
 
   iconMap: any = {
@@ -99,6 +60,8 @@ export class ViewTicketComponent implements OnInit {
   imagePath: any;
 
   issueticketDataSource = new MatTableDataSource<any>();
+  selection = new SelectionModel<any>(true, []);
+  
   filterForm!: FormGroup;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -111,6 +74,8 @@ export class ViewTicketComponent implements OnInit {
   allDataForExcel: any[] = []; // same data exported to Excel
   storedProjectId: string | null = null;
   projectId: number | null = null;
+  projectUsers: any[] = [];
+
   ngOnInit(): void {
     this.storedProjectId = localStorage.getItem('selectedProject');
     this.projectId = this.storedProjectId ? Number(this.storedProjectId) : null;
@@ -120,6 +85,8 @@ export class ViewTicketComponent implements OnInit {
     this.loadStatuses();
     this.loadTags();
     this.loadTicketTypes();
+    this.loadUsersByProject();
+    console.log("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",this.projectUsers)
 
     //  const params = new URLSearchParams(window.location.search);
     //   const statusId = Number(params.get('statusId'));
@@ -141,7 +108,9 @@ export class ViewTicketComponent implements OnInit {
       filterValueStatus: new FormControl('0'),
       filterValueType: new FormControl('0'),
       filterValueTag: new FormControl([]),
+      filterValueUser:new FormControl('0'),
       filterValueDate: new FormControl('0'),
+      bulkStatusControl : new FormControl('0'),
       fromDate: new FormControl(null),
       toDate: new FormControl(null)
     });
@@ -157,12 +126,65 @@ export class ViewTicketComponent implements OnInit {
       .subscribe(res => this.priorities = res.data);
   }
 
+  isAllSelected() {
+  const numSelected = this.selection.selected.length;
+  const numRows = this.issueticketDataSource.data.length;
+  return numSelected == numRows;
+}
+
+/** Selects all rows if they are not all selected; otherwise clear selection. */
+masterToggle() {
+  this.isAllSelected() ?
+      this.selection.clear() :
+      this.issueticketDataSource.data.forEach(row => this.selection.select(row));
+}
+
+selectBoxStatusUpdate() {
+  const selectedIds = this.selection.selected.map(row => row.issueticket_id);
+  const statusId = this.filterForm.get('bulkStatusControl')?.value;
+
+  if (!statusId || statusId === '0') {
+    this.snackBar.open('Please select a status', 'Close', { duration: 3000 });
+    return;
+  }
+
+  const payload = {
+    ticket_ids: selectedIds,
+    status_id: statusId
+  };
+
+  this.issueticketService.selectBoxStatusUpdate(payload).subscribe({
+    next: (res) => {
+      console.log('Success:', res);
+      this.snackBar.open('Status updated successfully', 'Close', { duration: 3000 });
+      this.selection.clear();
+      this.filterForm.get('bulkStatusControl')?.setValue('0');
+      this.getIssueTicket();
+    },
+    error: (err) => {
+      console.error('Error:', err);
+      this.snackBar.open('Update failed', 'Close', { duration: 3000 });
+    }
+  });
+}
+
+
+
   loadTicketTypes() {
     this.issueticketService.getTicketType()
       .subscribe(res => {
         this.tickettypes = res.data;
       });
   }
+
+
+loadUsersByProject() {
+  this.issueticketService.getUsersByProject({ project_id: this.projectId })
+    .subscribe(res => {
+      this.projectUsers = res.data;
+      console.log("function is working", res.data); 
+    });
+}
 
   loadStatuses() {
     this.issueticketService.getTicketStatuses()

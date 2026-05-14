@@ -177,6 +177,16 @@ export class IssueTicketService {
     );
   }
 
+
+
+  getUsersByProject(projectId): Observable<any> {
+  httpOptionsGet.params = projectId;
+  return this.http.get<any>(
+    this.apiUrl + 'issueticket/users/byproject',
+    httpOptionsGet
+  );
+}
+
   getTicketUsers(): Observable<any> {
     return this.http.get<any>(
       this.apiUrl + 'issueticket/users/list',
@@ -198,5 +208,10 @@ export class IssueTicketService {
       `${this.apiUrl}ticket-activity/${ticketId}`
     );
   }
+
+
+selectBoxStatusUpdate(payload: { ticket_ids: number[], status_id: number }): Observable<any> {
+  return this.http.post<any>(this.apiUrl + 'issueticket/bulkupdatestatus', payload, httpOptionsGet);
+}
 
 }
