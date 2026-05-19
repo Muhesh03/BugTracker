@@ -105,7 +105,7 @@ export class ViewTicketComponent implements OnInit {
       searchtext: new FormControl(''),
       filterType: new FormControl('0'),
       filterValuePriority: new FormControl('0'),
-      filterValueStatus: new FormControl('0'),
+      filterValueStatus: new FormControl([]),
       filterValueType: new FormControl('0'),
       filterValueTag: new FormControl([]),
       filterValueUser:new FormControl('0'),
@@ -290,6 +290,7 @@ loadUsersByProject() {
       ...this.filterForm.value,
       projectId: this.projectId   // add projectId here
     };
+    console.log("filttttttttttttered",filters)
 
     this.issueticketService.getfilter(filters)
       .subscribe(res => {

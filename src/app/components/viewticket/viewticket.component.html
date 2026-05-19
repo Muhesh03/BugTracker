@@ -24,23 +24,23 @@
 
 
 
-<div *ngIf="selection.selected.length > 0">
-  <div class="bulk-action-box">
-    
-    <mat-form-field appearance="outline" class="status-dropdown">
-      <mat-label style="color:#1d6f42;font-size:15px;">Status</mat-label>
-      <mat-select formControlName="bulkStatusControl" placeholder="Select Status">
-        <mat-option value="0">please select</mat-option>
-        <mat-option *ngFor="let s of statuses" [value]="s.ticketstatus_id">{{ s.statusname }}</mat-option>
-      </mat-select>
-    </mat-form-field>
+      <div *ngIf="selection.selected.length > 0">
+        <div class="bulk-action-box">
 
-    <button mat-raised-button (click)="selectBoxStatusUpdate()" class="pbtn">
-      Apply ({{ selection.selected.length }})
-    </button>
+          <mat-form-field appearance="outline" class="status-dropdown">
+            <mat-label style="color:#1d6f42;font-size:15px;">Status</mat-label>
+            <mat-select formControlName="bulkStatusControl" placeholder="Select Status">
+              <mat-option value="0">please select</mat-option>
+              <mat-option *ngFor="let s of statuses" [value]="s.ticketstatus_id">{{ s.statusname }}</mat-option>
+            </mat-select>
+          </mat-form-field>
 
-  </div>
-</div>
+          <button mat-raised-button (click)="selectBoxStatusUpdate()" class="pbtn">
+            Apply ({{ selection.selected.length }})
+          </button>
+
+        </div>
+      </div>
 
       <div class="col-6 col-md-1 fields">
         <mat-form-field appearance="outline">
@@ -76,12 +76,20 @@
       </div>
 
       <div class="col-6 col-md-1 fields">
-        <mat-form-field appearance="outline">
-          <mat-label style="color:#1d6f42;font-size:15px;">Status</mat-label>
-          <mat-select formControlName="filterValueStatus" placeholder="Select Status">
-            <mat-option value="0">please select</mat-option>
-            <mat-option *ngFor="let s of statuses" [value]="s.ticketstatus_id">{{ s.statusname }}</mat-option>
+        <mat-form-field appearance="outline" floatLabel="always">
+
+          <mat-label style="color:#1d6f42;font-size:15px;">
+            Status
+          </mat-label>
+
+          <mat-select formControlName="filterValueStatus" multiple placeholder="Please select">
+
+            <mat-option *ngFor="let s of statuses" [value]="s.ticketstatus_id">
+              {{ s.statusname }}
+            </mat-option>
+
           </mat-select>
+
         </mat-form-field>
       </div>
 

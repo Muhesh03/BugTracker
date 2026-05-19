@@ -34,6 +34,7 @@ exports.getFilter = function (filters, cb) {
     fromDate,
     toDate
   } = filters;
+  console.log('RAW STATUS:', filterValueStatus);
 
   const tags = [].concat(filterValueTag || []);
 
@@ -44,8 +45,18 @@ exports.getFilter = function (filters, cb) {
   };
 
   const priorityId = toInt(filterValuePriority);
-  const statusId = toInt(filterValueStatus);
-  const typeId = toInt(filterValueType);
+
+let statusIds = [];
+
+if (filterValueStatus) {        // here from frontend mutliple data's are coming in array but single data not coming  in array so here we are inserting every data from frontend to array to match the condtion
+  statusIds = (Array.isArray(filterValueStatus)
+    ? filterValueStatus
+    : [filterValueStatus]
+  )
+  .map(Number)
+  .filter(n => !isNaN(n));
+}
+    const typeId = toInt(filterValueType);
   const projectuserId = toInt(filterValueUser);
 
   knex('issueticket as it')
@@ -88,8 +99,11 @@ exports.getFilter = function (filters, cb) {
       }
 
       if (priorityId) this.where('it.priority_id', priorityId);
-      if (statusId) this.where('it.ticketstatus_id', statusId);
-      if (typeId) this.where('it.tickettype_id', typeId);
+
+if (statusIds.length > 0) {
+  this.whereIn('it.ticketstatus_id', statusIds);
+
+}      if (typeId) this.where('it.tickettype_id', typeId);
       if (projectuserId) this.where('it.user_id', projectuserId);
 
       if (filterValueDate === 'Between' && fromDate && toDate) {
