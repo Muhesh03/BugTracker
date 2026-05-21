@@ -290,6 +290,8 @@ export class IssueTicketFormComponent implements OnInit {
   notes: any[] = [];
   activities: any[] = [];
   newNoteText: string = '';
+  isSubmitting: boolean = false;
+
 
   imageBaseUrl = environment.ServerApi + 'uploads/';
 
@@ -498,53 +500,122 @@ export class IssueTicketFormComponent implements OnInit {
     });
   }
 
-  onSubmit(): void {
-    if (this.issueTicketForm.invalid) return;
+//   onSubmit(): void {
+//     if (this.issueTicketForm.invalid) return;
 
-    const persist = (uploadedPaths: string[]) => {
-      const payload = {
-        ...this.issueTicketForm.value,
-        // keep backend field name consistent
-        assigned_user_id: this.issueTicketForm.value.assigned_user_id,
+//     const persist = (uploadedPaths: string[]) => {
+//       const payload = {
+//         ...this.issueTicketForm.value,
+//         // keep backend field name consistent
+//         assigned_user_id: this.issueTicketForm.value.assigned_user_id,
 
-        user_id: this.issueTicketForm.value.assigned_user_id ?? null,
-        image_path: [...this.existingImages, ...uploadedPaths],
-        deleted_images: this.deletedImages,
-        reported_by: this.userId,
-        updated_by: this.userId,
-      };
-      if (this.selectedProject && this.selectedProject !== 0) {
-  payload.project_id = this.selectedProject;
-}
+//         user_id: this.issueTicketForm.value.assigned_user_id ?? null,
+//         image_path: [...this.existingImages, ...uploadedPaths],
+//         deleted_images: this.deletedImages,
+//         reported_by: this.userId,
+//         updated_by: this.userId,
+//       };
+//       if (this.selectedProject && this.selectedProject !== 0) {
+//   payload.project_id = this.selectedProject;
+// }
   
-      if (this.isEditMode) {
-        this.issueticketService
-          .updateTicket(this.data.issueticket_id, payload)
-          .subscribe(() => this.dialogRef.close(true));
-          this.hello();
-      } else {
-        this.issueticketService.addIssueTicket(payload).subscribe(() => {
+//       if (this.isEditMode) {
+//         this.issueticketService
+//           .updateTicket(this.data.issueticket_id, payload)
+//           .subscribe(() => this.dialogRef.close(true));
+//           this.hello();
+//       } else {
+//         this.issueticketService.addIssueTicket(payload).subscribe(() => {
+//           if (this.data?.live_ticket_id) {
+//             this.liveticketservice.markAsConverted(this.data.live_ticket_id)
+//               .subscribe();
+//           }
+//           this.dialogRef.close(true);
+//         });
+//       }
+//     };
+
+//     if (this.selectedFiles.length > 0) {
+//       const formData = new FormData();
+//       this.selectedFiles.forEach(f => formData.append('images', f));
+
+//       this.noteAttachmentService.uploadImage(formData).subscribe({
+//         next: (res: any) => persist(res.image_paths ?? []),
+//         error: err => console.error('Image upload failed', err)
+//       });
+//     } else {
+//       persist([]);
+//     }
+//   }
+
+
+
+
+
+onSubmit(): void {
+  if (this.issueTicketForm.invalid) return;
+  if (this.isSubmitting) return;
+
+  this.isSubmitting = true;
+
+  const persist = (uploadedPaths: string[]) => {
+    const payload = {
+      ...this.issueTicketForm.value,
+      assigned_user_id: this.issueTicketForm.value.assigned_user_id,
+      user_id: this.issueTicketForm.value.assigned_user_id ?? null,
+      image_path: [...this.existingImages, ...uploadedPaths],
+      deleted_images: this.deletedImages,
+      reported_by: this.userId,
+      updated_by: this.userId,
+    };
+
+    if (this.selectedProject && this.selectedProject !== 0) {
+      payload.project_id = this.selectedProject;
+    }
+
+    if (this.isEditMode) {
+      this.issueticketService
+        .updateTicket(this.data.issueticket_id, payload)
+        .subscribe({
+          next: () => {
+            this.hello();
+            this.dialogRef.close(true);
+          },
+          error: () => {
+            this.isSubmitting = false;
+          }
+        });
+    } else {
+      this.issueticketService.addIssueTicket(payload).subscribe({
+        next: () => {
           if (this.data?.live_ticket_id) {
             this.liveticketservice.markAsConverted(this.data.live_ticket_id)
               .subscribe();
           }
           this.dialogRef.close(true);
-        });
-      }
-    };
-
-    if (this.selectedFiles.length > 0) {
-      const formData = new FormData();
-      this.selectedFiles.forEach(f => formData.append('images', f));
-
-      this.noteAttachmentService.uploadImage(formData).subscribe({
-        next: (res: any) => persist(res.image_paths ?? []),
-        error: err => console.error('Image upload failed', err)
+        },
+        error: () => {
+          this.isSubmitting = false;
+        }
       });
-    } else {
-      persist([]);
     }
+  };
+
+  if (this.selectedFiles.length > 0) {
+    const formData = new FormData();
+    this.selectedFiles.forEach(f => formData.append('images', f));
+
+    this.noteAttachmentService.uploadImage(formData).subscribe({
+      next: (res: any) => persist(res.image_paths ?? []),
+      error: (err) => {
+        console.error('Image upload failed', err);
+        this.isSubmitting = false;
+      }
+    });
+  } else {
+    persist([]);
   }
+}
 
   saveNote(): void {
     if (!this.newNoteText?.trim() && this.selectedFiles.length === 0) return;

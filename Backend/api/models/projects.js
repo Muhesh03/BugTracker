@@ -116,7 +116,7 @@ exports.getProjectsByUser = (userId) => {
     .andWhereNot({'p.status_id': 2 })
     .select('p.project_id', 'p.projectname')
     .distinct()
-    .orderBy('p.project_id', 'asc');
+    .orderBy('p.projectname', 'asc');
 
 };
 

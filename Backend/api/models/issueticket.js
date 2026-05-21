@@ -141,7 +141,7 @@ if (statusIds.length > 0) {
 
       
     )
-    .orderBy('it.issueticket_id', 'asc')
+    .orderBy('it.issueticket_id', 'desc')
     .then(out => cb(null, out))
     .catch(err => {
       console.error('Error in getFilter:', err);
