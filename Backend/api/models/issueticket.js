@@ -448,6 +448,7 @@ exports.getExcelData = async (filters) => {
           new Date(filters.fromDate),
           new Date(filters.toDate)
         ]);
+        
       }
 
       if (filters.searchtext) {

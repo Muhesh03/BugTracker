@@ -185,12 +185,20 @@ loadUsersByProject() {
       console.log("function is working", res.data); 
     });
 }
+loadStatuses() {
+  this.issueticketService.getTicketStatuses().subscribe(res => {
+    this.statuses = res.data;
 
-  loadStatuses() {
-    this.issueticketService.getTicketStatuses()
-      .subscribe(res => this.statuses = res.data);
-  }
+    // Get IDs of 'New' and 'Reopened'
+    const defaultIds = this.statuses
+      .filter(s => s.statusname === 'New' || s.statusname === 'ReOpen')
+      .map(s => s.ticketstatus_id);
 
+    // Set as default selected
+    this.filterForm.get('filterValueStatus')?.setValue(defaultIds);
+       this.getFilter();
+  });
+}
   loadTags() {
     this.issueticketService.getTicketTags()
       .subscribe(res => this.tag = res.data);

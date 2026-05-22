@@ -118,6 +118,7 @@ export class LiveTicketsComponent implements OnInit, AfterViewInit {
 
   setColumns() {
     this.displayedColumns = [
+      'sno',
       'ticket_number',
       'status_id',  
       'priority_id',
