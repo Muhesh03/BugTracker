@@ -35,12 +35,12 @@ export class ViewTicketComponent implements OnInit {
   displayedColumns: string[] = [
     'select',
     'sno',
-    'icons',
+     'type',
+     'icons',
     'tag_names',
     'ticket_number',
     'created_at',
     'created_by',
-    'user_id',
     'ticketstatus_id',
     'summary',
     'image_path',
@@ -293,19 +293,38 @@ loadStatuses() {
     });
   }
 
-  getFilter() {
-    const filters = {
-      ...this.filterForm.value,
-      projectId: this.projectId   // add projectId here
-    };
-    console.log("filttttttttttttered",filters)
+getFilter() {
+  const filters = {
+    ...this.filterForm.value,
+    projectId: this.projectId
+  };
 
-    this.issueticketService.getfilter(filters)
-      .subscribe(res => {
-        this.issueticketDataSource.data = res.data || [];
-        console.log("Filtered data:", res.data);
+  this.issueticketService.getfilter(filters)
+    .subscribe(res => {
+      const data = (res.data || []).map((row: any) => {
+        let imageArr: string[] = [];
+
+        if (row.image_path) {
+          if (typeof row.image_path === 'string') {
+            const cleaned = row.image_path
+              .replace(/^\{/, '')
+              .replace(/\}$/, '')
+              .replace(/"/g, '')
+              .trim();
+
+            imageArr = cleaned.length > 0 ? cleaned.split(',') : [];
+          } else if (Array.isArray(row.image_path)) {
+            imageArr = row.image_path;
+          }
+        }
+
+        return { ...row, image_path: imageArr };
       });
-  }
+
+      this.issueticketDataSource.data = data;
+      console.log('Filtered data:', data);
+    });
+}
   downloadExcel() {
     console.log('STEP 1: Button clicked');
 

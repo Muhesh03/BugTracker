@@ -26,12 +26,12 @@
   </td>
 </ng-container>
 
-      <ng-container matColumnDef="user_id">
-        <th mat-header-cell *matHeaderCellDef>Assigned To</th>
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef>Type</th>
         <td mat-cell *matCellDef="let row">
-          <span>
-            {{ row.assigned_to_name }}
-          </span>
+          <span [matTooltip]="row.assigned_to_name">
+      {{ row.ticket_type_name  }}
+    </span>
         </td>
       </ng-container>
 

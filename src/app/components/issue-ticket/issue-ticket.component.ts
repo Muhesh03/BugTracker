@@ -43,16 +43,15 @@ export class IssueTicketComponent implements OnInit, AfterViewInit {
 
   displayedColumns: string[] = [
     'sno',
+    'type',
     'icons',
     'tag_names',
     'ticket_number',
     'created_at',
     'created_by',
-    'user_id',
     'ticketstatus_id',
     'summary',
     'image_path',
-
     'edit',
     'delete'
 

@@ -74,6 +74,7 @@ if (filterValueStatus) {        // here from frontend mutliple data's are coming
       'it.summary',
       'it.description',
       'it.ticketstatus_id',
+       'it.image_path',  
       'u.user_id',
       'u.fullname as assigned_to_name',
       'ur.user_id as creator_user_id',
@@ -137,7 +138,9 @@ if (statusIds.length > 0) {
       'it.tickettype_id',
       'it.ticket_number',
       'it.created_at',
+       'it.image_path',  
       'it.user_id',
+
 
       
     )
@@ -188,7 +191,7 @@ exports.getIssueTicket = function (projectParams, cb) {
       'p.icon',
       't.statusname',
       't.color',
-      'tt.name',
+     'tt.name',      
       'it.tickettype_id',
       'it.ticket_number',
       'it.steps_to_reproduce',
