@@ -466,7 +466,7 @@ getFilter() {
     console.log('Opening edit dialog with data+++++++++++++++++=:', row);
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        this.getIssueTicket();
+        this.getFilter();
       }
     });
   }
