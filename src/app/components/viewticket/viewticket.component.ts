@@ -594,7 +594,7 @@ export class EditNoteComponent implements OnInit {
   newNoteText: string;
   uploadedPaths: string[] = [];
   isaddingNote: boolean;
-
+  types: any[] =[];
 
   imageBaseUrl = environment.ServerApi + 'uploads/';
   activities: any;
@@ -643,7 +643,8 @@ export class EditNoteComponent implements OnInit {
     this.issueTicketForm = new FormGroup({
 
       ticketstatus_id: new FormControl(null, Validators.required),
-      assigned_user_id: new FormControl(null, Validators.required)
+      assigned_user_id: new FormControl(null, Validators.required),
+      tickettype_id :  new FormControl(null, Validators.required)
     });
     console.log('Raw data value:', this.data.assigned_user_id, 'Type:', typeof this.data.assigned_user_id);
     this.issueTicketForm.get('assigned_user_id')?.valueChanges.subscribe(v => {
@@ -675,6 +676,7 @@ export class EditNoteComponent implements OnInit {
     this.issueTicketForm.valueChanges.subscribe(v => {
       console.log('FORM CHANGED →', v);
     });
+    this.loadTicketTypes();
   }
 
   getIssueTicket() {
@@ -692,6 +694,14 @@ export class EditNoteComponent implements OnInit {
 
       
     });
+  }
+
+   loadTicketTypes() {
+    this.issueticketService.getTicketType()
+      .subscribe(res => {
+        console.log("tttttttyyyyyyyyyyy",res)
+        this.types = res.data;
+      });
   }
 
 
@@ -819,6 +829,8 @@ export class EditNoteComponent implements OnInit {
       issueticket_id: this.data.issueticket_id,
       ticketstatus_id: this.issueTicketForm.value.ticketstatus_id,
       assigned_user_id: this.issueTicketForm.value.assigned_user_id,
+       tickettype_id:  this.issueTicketForm.value.tickettype_id,
+
       updated_by: this.userId
     };
 
