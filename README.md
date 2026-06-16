@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # LutsTrack
 
 
@@ -91,3 +92,7 @@ For open source projects, say how it is licensed.
 
 ## Project status
 If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+=======
+# BugTracker
+Built interactive Angular dialogs for permission assignment with real-time UI.Designed RESTful APIs using Node.js and Express, and handled data  with PSQL using Knex.js. Focused on clean UI/UX,code structure, and scalable architecture. The system supports CRUD operations,permission,and is extensible for future features like screenshots and logs.
+>>>>>>> 38b7ee2b5cc953716552fe4df152ddfe7be181cb
