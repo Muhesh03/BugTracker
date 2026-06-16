@@ -46,7 +46,7 @@ exports.getDashboardCounts = async function (params, cb) {
           });
         }
       });
-    const total = Number(totalRes[0]?totalRes.count : 0);
+    const total = Number(totalRes[0]?totalRes[0].count : 0);
     // PENDING
     const pendingRes = await knex('issueticket')
       .count('* as count')
@@ -61,7 +61,7 @@ exports.getDashboardCounts = async function (params, cb) {
           });
         }
       });
-    const pending = Number(pendingRes[0]?pendingRes.count : 0);
+    const pending = Number(pendingRes[0]?pendingRes[0].count : 0);
 
     // CLOSED
     // const closedRes = await knex('issueticket')
@@ -76,7 +76,7 @@ exports.getDashboardCounts = async function (params, cb) {
       .modify(q => applyFilters(q, params));
 
 
-    const reported = Number(reportedRes[0]?reportedRes.count :0);
+    const reported = Number(reportedRes[0]?reportedRes[0].count :0);
     console.log("REPORTED RES:", reported);
     // PRIORITY HIGH
     const priorityRes = await knex('issueticket')
@@ -92,7 +92,7 @@ exports.getDashboardCounts = async function (params, cb) {
           });
         }
       });
-    const priority = Number(priorityRes[0]?priorityRes.count :0);
+    const priority = Number(priorityRes[0]?priorityRes[0].count :0);
     // STATUS BAR CHART
     const statusChart = await knex('issueticket')
       .select('ticketstatus_id as status_id')
