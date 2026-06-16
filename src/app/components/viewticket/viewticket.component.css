@@ -71,4 +71,12 @@
   gap: 6px;
 }
 
+.bulk-action-box {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 6px;
+}
 

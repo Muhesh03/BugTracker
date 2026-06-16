@@ -16,6 +16,7 @@ import { ShowImageDialogComponent } from '../image-preview-dialog/image-preview-
 import { env } from 'process';
 import { environment } from 'src/environments/environment';
 import { tick } from '@angular/core/testing';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-issue-ticket',
@@ -23,33 +24,6 @@ import { tick } from '@angular/core/testing';
   styleUrls: ['./viewticket.component.css']
 })
 export class ViewTicketComponent implements OnInit {
-  // downloadExcel() {
-  //   if (!this.allDataForExcel || this.allDataForExcel.length === 0) {
-  //     alert('No data available to export');
-  //     return;
-  //   }
-
-  //   // Format data for Excel
-  //   const excelData = this.allDataForExcel.map(item => ({
-  //     'Ticket ID': item.ticket_id,
-  //     'Project Name': item.project_name,
-  //     'Status': item.statusname,
-  //     'Priority': item.priority,
-  //     'Created Date': new Date(item.created_at).toLocaleDateString(),
-  //     'Assigned To': item.fullname
-  //   }));
-
-  //   const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(excelData);
-  //   const workbook: XLSX.WorkBook = {
-  //     Sheets: { 'Data': worksheet },
-  //     SheetNames: ['Data']
-  //   };
-
-  //   const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-  //   const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-
-  //   saveAs(blob, `Filtered_Data_${new Date().getTime()}.xlsx`);
-  // }
 
 
   constructor(
@@ -59,33 +33,20 @@ export class ViewTicketComponent implements OnInit {
   ) { }
 
   displayedColumns: string[] = [
+    'select',
     'sno',
-    'icons',
+     'type',
+     'icons',
     'tag_names',
     'ticket_number',
     'created_at',
     'created_by',
-    'user_id',
     'ticketstatus_id',
     'summary',
     'image_path',
     'edit',
     'delete'
-    // 'sno',
-    // 'ticket_number',
-    // 'ticketstatus_id',
-    // 'icons',
-    // 'summary',
-    // 'created_by',
-    // 'user_id',
-    // 'tag_names',
-    // 'created_at',
-    // 'image_path',
-    // 'tickettype',
 
-
-    // 'edit',
-    // 'delete'
   ];
 
   iconMap: any = {
@@ -99,6 +60,8 @@ export class ViewTicketComponent implements OnInit {
   imagePath: any;
 
   issueticketDataSource = new MatTableDataSource<any>();
+  selection = new SelectionModel<any>(true, []);
+  
   filterForm!: FormGroup;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -111,6 +74,8 @@ export class ViewTicketComponent implements OnInit {
   allDataForExcel: any[] = []; // same data exported to Excel
   storedProjectId: string | null = null;
   projectId: number | null = null;
+  projectUsers: any[] = [];
+
   ngOnInit(): void {
     this.storedProjectId = localStorage.getItem('selectedProject');
     this.projectId = this.storedProjectId ? Number(this.storedProjectId) : null;
@@ -120,6 +85,8 @@ export class ViewTicketComponent implements OnInit {
     this.loadStatuses();
     this.loadTags();
     this.loadTicketTypes();
+    this.loadUsersByProject();
+    console.log("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",this.projectUsers)
 
     //  const params = new URLSearchParams(window.location.search);
     //   const statusId = Number(params.get('statusId'));
@@ -138,10 +105,12 @@ export class ViewTicketComponent implements OnInit {
       searchtext: new FormControl(''),
       filterType: new FormControl('0'),
       filterValuePriority: new FormControl('0'),
-      filterValueStatus: new FormControl('0'),
+      filterValueStatus: new FormControl([]),
       filterValueType: new FormControl('0'),
       filterValueTag: new FormControl([]),
+      filterValueUser:new FormControl('0'),
       filterValueDate: new FormControl('0'),
+      bulkStatusControl : new FormControl('0'),
       fromDate: new FormControl(null),
       toDate: new FormControl(null)
     });
@@ -157,6 +126,50 @@ export class ViewTicketComponent implements OnInit {
       .subscribe(res => this.priorities = res.data);
   }
 
+  isAllSelected() {
+  const numSelected = this.selection.selected.length;
+  const numRows = this.issueticketDataSource.data.length;
+  return numSelected == numRows;
+}
+
+/** Selects all rows if they are not all selected; otherwise clear selection. */
+masterToggle() {
+  this.isAllSelected() ?
+      this.selection.clear() :
+      this.issueticketDataSource.data.forEach(row => this.selection.select(row));
+}
+
+selectBoxStatusUpdate() {
+  const selectedIds = this.selection.selected.map(row => row.issueticket_id);
+  const statusId = this.filterForm.get('bulkStatusControl')?.value;
+
+  if (!statusId || statusId === '0') {
+    this.snackBar.open('Please select a status', 'Close', { duration: 3000 });
+    return;
+  }
+
+  const payload = {
+    ticket_ids: selectedIds,
+    status_id: statusId
+  };
+
+  this.issueticketService.selectBoxStatusUpdate(payload).subscribe({
+    next: (res) => {
+      console.log('Success:', res);
+      this.snackBar.open('Status updated successfully', 'Close', { duration: 3000 });
+      this.selection.clear();
+      this.filterForm.get('bulkStatusControl')?.setValue('0');
+      this.getIssueTicket();
+    },
+    error: (err) => {
+      console.error('Error:', err);
+      this.snackBar.open('Update failed', 'Close', { duration: 3000 });
+    }
+  });
+}
+
+
+
   loadTicketTypes() {
     this.issueticketService.getTicketType()
       .subscribe(res => {
@@ -164,11 +177,28 @@ export class ViewTicketComponent implements OnInit {
       });
   }
 
-  loadStatuses() {
-    this.issueticketService.getTicketStatuses()
-      .subscribe(res => this.statuses = res.data);
-  }
 
+loadUsersByProject() {
+  this.issueticketService.getUsersByProject({ project_id: this.projectId })
+    .subscribe(res => {
+      this.projectUsers = res.data;
+      console.log("function is working", res.data); 
+    });
+}
+loadStatuses() {
+  this.issueticketService.getTicketStatuses().subscribe(res => {
+    this.statuses = res.data;
+
+    // Get IDs of 'New' and 'Reopened'
+    const defaultIds = this.statuses
+      .filter(s => s.statusname === 'New' || s.statusname === 'ReOpen')
+      .map(s => s.ticketstatus_id);
+
+    // Set as default selected
+    this.filterForm.get('filterValueStatus')?.setValue(defaultIds);
+       this.getFilter();
+  });
+}
   loadTags() {
     this.issueticketService.getTicketTags()
       .subscribe(res => this.tag = res.data);
@@ -255,7 +285,6 @@ export class ViewTicketComponent implements OnInit {
   }
 
 
-
   openImages(images: string[]) {
     this.dialog.open(ShowImageDialogComponent, {
       data: images,
@@ -264,18 +293,38 @@ export class ViewTicketComponent implements OnInit {
     });
   }
 
-  getFilter() {
-    const filters = {
-      ...this.filterForm.value,
-      projectId: this.projectId   // add projectId here
-    };
+getFilter() {
+  const filters = {
+    ...this.filterForm.value,
+    projectId: this.projectId
+  };
 
-    this.issueticketService.getfilter(filters)
-      .subscribe(res => {
-        this.issueticketDataSource.data = res.data || [];
-        console.log("Filtered data:", res.data);
+  this.issueticketService.getfilter(filters)
+    .subscribe(res => {
+      const data = (res.data || []).map((row: any) => {
+        let imageArr: string[] = [];
+
+        if (row.image_path) {
+          if (typeof row.image_path === 'string') {
+            const cleaned = row.image_path
+              .replace(/^\{/, '')
+              .replace(/\}$/, '')
+              .replace(/"/g, '')
+              .trim();
+
+            imageArr = cleaned.length > 0 ? cleaned.split(',') : [];
+          } else if (Array.isArray(row.image_path)) {
+            imageArr = row.image_path;
+          }
+        }
+
+        return { ...row, image_path: imageArr };
       });
-  }
+
+      this.issueticketDataSource.data = data;
+      console.log('Filtered data:', data);
+    });
+}
   downloadExcel() {
     console.log('STEP 1: Button clicked');
 
@@ -417,7 +466,7 @@ export class ViewTicketComponent implements OnInit {
     console.log('Opening edit dialog with data+++++++++++++++++=:', row);
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        this.getIssueTicket();
+        this.getFilter();
       }
     });
   }
@@ -545,7 +594,7 @@ export class EditNoteComponent implements OnInit {
   newNoteText: string;
   uploadedPaths: string[] = [];
   isaddingNote: boolean;
-
+  types: any[] =[];
 
   imageBaseUrl = environment.ServerApi + 'uploads/';
   activities: any;
@@ -594,7 +643,8 @@ export class EditNoteComponent implements OnInit {
     this.issueTicketForm = new FormGroup({
 
       ticketstatus_id: new FormControl(null, Validators.required),
-      assigned_user_id: new FormControl(null, Validators.required)
+      assigned_user_id: new FormControl(null, Validators.required),
+      tickettype_id :  new FormControl(null, Validators.required)
     });
     console.log('Raw data value:', this.data.assigned_user_id, 'Type:', typeof this.data.assigned_user_id);
     this.issueTicketForm.get('assigned_user_id')?.valueChanges.subscribe(v => {
@@ -626,6 +676,7 @@ export class EditNoteComponent implements OnInit {
     this.issueTicketForm.valueChanges.subscribe(v => {
       console.log('FORM CHANGED →', v);
     });
+    this.loadTicketTypes();
   }
 
   getIssueTicket() {
@@ -644,6 +695,23 @@ export class EditNoteComponent implements OnInit {
       
     });
   }
+
+   loadTicketTypes() {
+    this.issueticketService.getTicketType()
+      .subscribe(res => {
+        console.log("tttttttyyyyyyyyyyy",res)
+        this.types = res.data;
+      });
+  }
+
+
+  onAssignedUserChange(event: any) {
+  if (event.value) {
+    this.issueTicketForm.patchValue({
+      ticketstatus_id: 8
+    });
+  }
+}
   loadUsers() {
     this.issueticketService.getTicketUsers()
       .subscribe(res => {
@@ -761,6 +829,8 @@ export class EditNoteComponent implements OnInit {
       issueticket_id: this.data.issueticket_id,
       ticketstatus_id: this.issueTicketForm.value.ticketstatus_id,
       assigned_user_id: this.issueTicketForm.value.assigned_user_id,
+       tickettype_id:  this.issueTicketForm.value.tickettype_id,
+
       updated_by: this.userId
     };
 

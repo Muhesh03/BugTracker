@@ -118,6 +118,7 @@ export class LiveTicketsComponent implements OnInit, AfterViewInit {
 
   setColumns() {
     this.displayedColumns = [
+      'sno',
       'ticket_number',
       'status_id',  
       'priority_id',
@@ -320,6 +321,8 @@ export class LiveTicketFormComponent implements OnInit {
   liveticketStatuses: any[] = [];
   isStatusOpen = false;
   selectedStatus: any = null;
+  isSubmitting: boolean = false;
+
 
 
 
@@ -457,58 +460,68 @@ export class LiveTicketFormComponent implements OnInit {
       });
   }
 
-  onSubmit(): void {
-    console.log('ticketstatus_id value >>>', this.liveticketform.get('ticketstatus_id')?.value);
-    if (!this.liveticketform.valid) {
-      console.log('Form is invalid');
-      return;
-    }
 
-    const saveTicket = (ImagePaths: string[]) => {
-      // Merge existing images (after deletion) + newly uploaded images
-      // const finalImages = [...this.existingImages, ...uploadedImagePaths];
+onSubmit(): void {
+  console.log('ticketstatus_id value >>>', this.liveticketform.get('ticketstatus_id')?.value);
+  if (!this.liveticketform.valid) {
+    console.log('Form is invalid');
+    return;
+  }
+  if (this.isSubmitting) return;
 
-      const payload = {
-        ...this.liveticketform.value,
-        image_path: ImagePaths,
-        reported_by: this.userId,
-        steps_to_reproduce: this.liveticketform.value.steps_to_reproduce || null
-      };
+  this.isSubmitting = true;
 
-      if (this.data && this.data.issueticket_id) {
-        // Edit mode
-        this.liveticketservice
-          .updateLiveTicket(this.data.issueticket_id, payload)
-          .subscribe(() => {
-            this.dialogRef.close(true);
-          });
-      } else {
-        // New ticket
-        this.liveticketservice
-          .addLiveTicket(payload).subscribe(() => {
-            console.log("ppppppppaaaaaaaaaaaaa", payload)
-            this.dialogRef.close(true);
-
-          });
-      }
+  const saveTicket = (ImagePaths: string[]) => {
+    const payload = {
+      ...this.liveticketform.value,
+      image_path: ImagePaths,
+      reported_by: this.userId,
+      steps_to_reproduce: this.liveticketform.value.steps_to_reproduce || null
     };
 
-    if (this.selectedFiles && this.selectedFiles.length > 0) {
-      const formData = new FormData();
-      this.selectedFiles.forEach(file => formData.append('images', file));
-
-      this.liveticketservice.uploadImage(formData)
-        .subscribe(res => {
-          const imagePaths = res.image_paths || []; // backend response
-          saveTicket(imagePaths);
+    if (this.data && this.data.issueticket_id) {
+      this.liveticketservice
+        .updateLiveTicket(this.data.issueticket_id, payload)
+        .subscribe({
+          next: () => {
+            this.dialogRef.close(true);
+          },
+          error: () => {
+            this.isSubmitting = false;
+          }
         });
-
     } else {
-      saveTicket([]);
+      this.liveticketservice
+        .addLiveTicket(payload)
+        .subscribe({
+          next: () => {
+            console.log("ppppppppaaaaaaaaaaaaa", payload);
+            this.dialogRef.close(true);
+          },
+          error: () => {
+            this.isSubmitting = false;
+          }
+        });
     }
+  };
+
+  if (this.selectedFiles && this.selectedFiles.length > 0) {
+    const formData = new FormData();
+    this.selectedFiles.forEach(file => formData.append('images', file));
+
+    this.liveticketservice.uploadImage(formData).subscribe({
+      next: (res) => {
+        const imagePaths = res.image_paths || [];
+        saveTicket(imagePaths);
+      },
+      error: () => {
+        this.isSubmitting = false;
+      }
+    });
+  } else {
+    saveTicket([]);
   }
-
-
+}
 }
 
 

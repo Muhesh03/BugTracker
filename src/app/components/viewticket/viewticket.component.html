@@ -2,15 +2,6 @@
 
   <form [formGroup]="filterForm">
 
-    <div class="w-100 d-flex flex-wrap align-items-center justify-content-start mb-2 gap-3">
-      <div class="col-12 col-md-3 ml-auto fields">
-        <mat-form-field appearance="fill" class="searchbox">
-          <mat-icon matPrefix>search</mat-icon>
-          <input matInput placeholder="Search..." formControlName="searchtext" (keyup)="searchAll($event)">
-        </mat-form-field>
-      </div>
-    </div>
-
     <div class="d-flex flex-wrap">
 
       <!-- 
@@ -26,9 +17,34 @@
         </mat-select>
       </mat-form-field> -->
 
+      <!-- <button mat-raised-button color="primary" (click)="getSelectedRows()">
+  Show Selected
+</button>
+ -->
+
+
+
+      <div *ngIf="selection.selected.length > 0">
+        <div class="bulk-action-box">
+
+          <mat-form-field appearance="outline" class="status-dropdown">
+            <mat-label style="color:#1d6f42;font-size:15px;">Status</mat-label>
+            <mat-select formControlName="bulkStatusControl" placeholder="Select Status">
+              <mat-option value="0">please select</mat-option>
+              <mat-option *ngFor="let s of statuses" [value]="s.ticketstatus_id">{{ s.statusname }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <button mat-raised-button (click)="selectBoxStatusUpdate()" class="pbtn">
+            Apply ({{ selection.selected.length }})
+          </button>
+
+        </div>
+      </div>
+
       <div class="col-6 col-md-1 fields">
         <mat-form-field appearance="outline">
-          <mat-label>Priority</mat-label>
+          <mat-label style="color:#1d6f42;font-size:15px;">Priority</mat-label>
           <mat-select formControlName="filterValuePriority" placeholder="Select Priority">
             <mat-option value="0">please select</mat-option>
             <mat-option *ngFor="let p of priorities" [value]="p.priority_id">{{ p.priority }}</mat-option>
@@ -36,9 +52,22 @@
         </mat-form-field>
       </div>
 
+
       <div class="col-6 col-md-1 fields">
         <mat-form-field appearance="outline">
-          <mat-label>Types</mat-label>
+          <mat-label style="color:#1d6f42;font-size:15px;">Assigned To</mat-label>
+          <mat-select formControlName="filterValueUser" placeholder="Select User">
+            <mat-option value="0">Please select</mat-option>
+            <mat-option *ngFor="let user of projectUsers" [value]="user.user_id">
+              {{ user.fullname }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="col-6 col-md-1 fields">
+        <mat-form-field appearance="outline">
+          <mat-label style="color:#1d6f42;font-size:15px;">Types</mat-label>
           <mat-select formControlName="filterValueType" placeholder="Select Priority">
             <mat-option value="0">please select</mat-option>
             <mat-option *ngFor="let t of tickettypes" [value]="t.tickettype_id">{{ t.name }}</mat-option>
@@ -47,18 +76,26 @@
       </div>
 
       <div class="col-6 col-md-1 fields">
-        <mat-form-field appearance="outline">
-          <mat-label>Status</mat-label>
-          <mat-select formControlName="filterValueStatus" placeholder="Select Status">
-            <mat-option value="0">please select</mat-option>
-            <mat-option *ngFor="let s of statuses" [value]="s.ticketstatus_id">{{ s.statusname }}</mat-option>
+        <mat-form-field appearance="outline" floatLabel="always">
+
+          <mat-label style="color:#1d6f42;font-size:15px;">
+            Status
+          </mat-label>
+
+          <mat-select formControlName="filterValueStatus" multiple placeholder="Please select">
+
+            <mat-option *ngFor="let s of statuses" [value]="s.ticketstatus_id">
+              {{ s.statusname }}
+            </mat-option>
+
           </mat-select>
+
         </mat-form-field>
       </div>
 
       <div class="col-6 col-md-1 fields">
         <mat-form-field appearance="outline" floatLabel="always">
-          <mat-label>Tags</mat-label>
+          <mat-label style="color:#1d6f42;font-size:15px;">Tags</mat-label>
           <mat-select formControlName="filterValueTag" multiple placeholder="Please select">
             <mat-option *ngFor="let t of tag" [value]="t.tickettag_id">
               {{ t.tickettag }}
@@ -79,7 +116,7 @@
       </div>
 
       <ng-container *ngIf="filterForm.value.filterValueDate === 'Between'">
-        <div class="col-6 col-md-2 fields">
+        <div class="datepicker-div col-6 col-md-2 fields">
           <mat-form-field appearance="outline">
             <input matInput [matDatepicker]="pickerFrom" formControlName="fromDate" placeholder="From">
             <mat-datepicker-toggle matSuffix [for]="pickerFrom"
@@ -88,7 +125,7 @@
           </mat-form-field>
         </div>
 
-        <div class="col-6 col-md-2 fields">
+        <div class="datepicker-div col-6 col-md-2 fields">
           <mat-form-field appearance="outline">
             <input matInput [matDatepicker]="pickerTo" formControlName="toDate" placeholder="To">
             <mat-datepicker-toggle matSuffix [for]="pickerTo"
@@ -116,6 +153,13 @@
         </button>
       </div>
 
+      <div class="col-12 col-md-3 ml-auto fields">
+        <mat-form-field appearance="fill" class="searchbox">
+          <mat-icon matPrefix>search</mat-icon>
+          <input matInput placeholder="Search..." formControlName="searchtext" (keyup)="searchAll($event)">
+        </mat-form-field>
+      </div>
+
     </div>
   </form>
 
@@ -123,11 +167,24 @@
 
     <table mat-table [dataSource]="issueticketDataSource" class="mat-table issueticket-table ">
 
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef>
+          <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+            [indeterminate]="selection.hasValue() && !isAllSelected()">
+          </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+            [checked]="selection.isSelected(row)">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+
       <!-- S.No -->
       <ng-container matColumnDef="sno">
         <th mat-header-cell *matHeaderCellDef class="col-slno">Sl.No</th>
-        <td mat-cell *matCellDef="let row; let i = index">
-          {{ i + 1 }}
+        <td mat-cell *matCellDef="let item; let i = index">
+          {{ (paginator.pageIndex * paginator.pageSize) + i + 1 }}
         </td>
       </ng-container>
 
@@ -170,7 +227,6 @@
         <th mat-header-cell *matHeaderCellDef>Date Submitted</th>
         <td mat-cell *matCellDef="let row">
           <span>
-            <!-- Suppose ticket.created_at is your ISO string from backend -->
             <span>{{ row.created_at | date:'dd/MM/yyyy' }}</span>
 
           </span>
@@ -186,22 +242,23 @@
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="user_id">
-        <th mat-header-cell *matHeaderCellDef>Assigned To</th>
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef>Type</th>
         <td mat-cell *matCellDef="let row">
-          <span>
-            {{ row.assigned_to_name }}
+          <span [matTooltip]="row.assigned_to_name">
+            {{ row.name }}
           </span>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="ticketstatus_id">
-        <th mat-header-cell *matHeaderCellDef> Status</th>
+        <th mat-header-cell *matHeaderCellDef>Status</th>
         <td mat-cell *matCellDef="let row">
-          <span [ngStyle]="{'color': row.color}">
+          <span [ngStyle]="{'color': row.color}" [matTooltip]="row.assigned_to_name">
             <mat-icon style="font-size: 15px;">circle</mat-icon>
           </span>
           {{ row.statusname }}
+
         </td>
       </ng-container>
 
@@ -233,7 +290,7 @@
             </mat-icon>
           </ng-container>
           <span *ngIf="!row.image_path || row.image_path.length === 0">
-            —
+
           </span>
         </td>
       </ng-container>
@@ -264,8 +321,13 @@
     </table>
 
     <div class="paginator">
-      <mat-paginator [pageSizeOptions]="[20,40,60]" [pageSize]="20" showFirstLastButtons>
-      </mat-paginator>
+      <mat-paginator [pageSizeOptions]="[5,10,20]" [pageSize]="20" showFirstLastButtons>
+      </mat-paginator> <ng-container matColumnDef="sno">
+        <th mat-header-cell *matHeaderCellDef class="col-slno">Sl.No</th>
+        <td mat-cell *matCellDef="let item; let i = index">
+          {{ (paginator.pageIndex * paginator.pageSize) + i + 1 }}
+        </td>
+      </ng-container>
     </div>
 
   </div>

@@ -21,66 +21,56 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-
-
 router.use(function (req, res, next) {
     router.post('/issueticket/save_data', function (req, res) {
 
         console.log('Received issue ticket data:', req.body);
-        // Get last ticket to generate unique code
+
         knex('issueticket')
             .orderBy('issueticket_id', 'desc')
             .first()
             .then(lastTicket => {
-                // Calculate next number
                 let nextNumber = 1;
                 if (lastTicket && lastTicket.ticket_number) {
                     const parts = lastTicket.ticket_number.split('/');
                     nextNumber = parseInt(parts[1], 10) + 1;
                 }
 
-                // Generate unique ticket code
                 const ticketnumber = 'QC/' + nextNumber.toString().padStart(2, '0');
                 const loggedInUserId = (req.user && req.user.user_id) || req.body.loggedInUserId;
 
-
-                // Prepare params and include ticketCode
                 const params = {
                     summary: req.body.summary,
                     user_id: req.body.user_id || null,
                     description: req.body.description,
                     priority_id: req.body.priority_id,
-                    ticket_tag: req.body.ticket_tag || [], // array of tag IDs
+                    ticket_tag: req.body.ticket_tag || [],
                     ticketstatus_id: req.body.ticketstatus_id,
                     status_id: 1,
-                    tickettype_id: req.body.tickettype || 0 ,
+                    tickettype_id: req.body.tickettype || 0,
                     project_id: req.body.storedprojectId,
                     ticket_number: ticketnumber,
                     steps_to_reproduce: req.body.steps_to_reproduce,
                     image_path: req.body.image_path,
                     created_by: req.body.reported_by,
-                      liveticket_id: req.body.live_ticket_id
-
+                    liveticket_id: req.body.live_ticket_id
                 };
-                console.log('Final params to save=================================================+++++++++++++++++++++++++++++++++++:', params);
-                // Save to DB
+
+                console.log('Final params to save:', params);
+
                 issueticketdb.saveIssueTicket(params, async function (err, output) {
+                    console.log('1. callback fired');
+                    console.log('2. err:', err);
+                    console.log('3. output:', output);
+
                     if (err) {
                         console.error('DB Error:', err);
                         return res.status(500).send({ error: 'Something went wrong!' });
                     }
-                    // else {
-                    //     const items = {
-                    //         data: output,
-                    //         actionMessage: "Issue ticket saved successfully"
-                    //     };
-                    //     console.log('Issue ticket saved in db', items);
-                    //     res.status(200).send(items);
-                    // }
+
                     try {
-
+                        console.log('4. trying activity log');
                         const issueticket_id = output.issueticket_id;
-
 
                         await knex('ticket_activity').insert({
                             issueticket_id: issueticket_id,
@@ -91,7 +81,7 @@ router.use(function (req, res, next) {
                             created_at: knex.fn.now()
                         });
 
-                        console.log('Ticket activity logged: New Ticket');
+                        console.log('5. activity log success');
 
                         return res.status(200).json({
                             success: true,
@@ -100,7 +90,12 @@ router.use(function (req, res, next) {
                         });
 
                     } catch (activityErr) {
-                        console.error('Activity log error:', activityErr);
+                        console.log('6. activity log failed:', activityErr);
+                        return res.status(200).json({
+                            success: true,
+                            message: 'Issue ticket created successfully',
+                            data: output
+                        });
                     }
                 });
 
@@ -111,6 +106,8 @@ router.use(function (req, res, next) {
             });
 
     });
+
+
 
 
 
@@ -309,6 +306,34 @@ router.use(function (req, res, next) {
 
             res.status(200).send({
                 message: "Ticket statuses list",
+                data: output
+            });
+        });
+    });
+
+
+
+    router.route('/issueticket/users/byproject').get(function (req, res) {
+        const params = {
+            project_id: req.query.project_id
+        };
+
+        if (!params.project_id) {
+            return res.status(400).send({
+                error: 'project_id is required'
+            });
+        }
+
+        issueticketdb.getUserbyProject(params, function (err, output) {
+            if (err) {
+                console.error('Error fetching users by project:', err);
+                return res.status(500).send({
+                    error: 'Something went wrong in getUserbyProject controller'
+                });
+            }
+
+            res.status(200).send({
+                message: 'Users by project list',
                 data: output
             });
         });
@@ -527,7 +552,7 @@ router.post('/issueticket/pdf', async (req, res) => {
 
 
 // router.put('/issueticket/:id', async (req, res) => {
-    
+
 
 //     try {
 //         const issueticket_id = req.params.id;
@@ -673,6 +698,26 @@ router.put('/issueticket/:id', async (req, res) => {
             message: err.message || 'Update failed'
         });
     }
+});
+
+
+router.post('/issueticket/bulkupdatestatus', function (req, res) {
+    const { ticket_ids, status_id } = req.body;
+    console.log('Bulk update payload:', req.body);
+
+    issueticketdb.selectBoxStatusUpdate({ ticket_ids, status_id }, function (err, output) {
+        if (err) {
+            return res.status(500).json({
+                success: false,
+                message: 'Bulk update failed'
+            });
+        }
+        return res.status(200).json({
+            success: true,
+            message: 'Status updated successfully',
+            data: output
+        });
+    });
 });
 
 

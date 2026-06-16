@@ -7,9 +7,16 @@
 
 .icon-radio-group {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 4px;
+  flex-wrap: wrap;
 }
 
+::ng-deep .mat-radio-label {
+  background: #f2f2f2 !important;
+  padding: 6px 12px !important;
+  border-radius: 50px !important;
+}
 
 .immediate,
 .urgent,
@@ -34,6 +41,3 @@
   font-size: 32px;
   cursor: pointer;
 }
-
-
-

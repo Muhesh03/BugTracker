@@ -1,24 +1,39 @@
 <mat-toolbar class="dialog-toolbar">
   <h2>Image Preview</h2>
+  <div class="zoom-controls">
+    <button mat-icon-button (click)="zoomOut()" type="button" title="Zoom Out">
+      <mat-icon>remove</mat-icon>
+    </button>
+    <span class="zoom-level">{{ zoomLevel }}%</span>
+    <button mat-icon-button (click)="zoomIn()" type="button" title="Zoom In">
+      <mat-icon>add</mat-icon>
+    </button>
+    <button mat-icon-button (click)="resetZoom()" type="button" title="Reset">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
   <button mat-icon-button class="closebtn" (click)="onClose()" type="button">
     <mat-icon>close</mat-icon>
   </button>
 </mat-toolbar>
 
 <mat-dialog-content>
-  <div class="popupimg-container" *ngFor="let img of images">
-    <img [src]="environment.ServerApi + 'uploads/' + img" class="image" />
-
+  <div class="image-scroll-container" *ngFor="let img of images">
+    <div class="image-inner"
+      [style.width.px]="imageWidth"
+      [style.height.px]="imageHeight">
+      <img
+        [src]="environment.ServerApi + 'uploads/' + img"
+        class="image"
+        [style.width.px]="imageWidth"
+        [style.height.px]="imageHeight"
+        [style.cursor]="isDragging ? 'grabbing' : (zoomFactor > 1 ? 'grab' : 'zoom-in')"
+        (click)="onImageClick($event)"
+        (mousedown)="onMouseDown($event)"
+        (mousemove)="onMouseMove($event)"
+        (mouseup)="onMouseUp()"
+        (mouseleave)="onMouseUp()"
+      />
+    </div>
   </div>
 </mat-dialog-content>
-
-<!-- <div class="image-dialog-header">
-  <h2 style="color:rgb(39, 41, 39)">Image Preview</h2>
-  <mat-icon style="color:rgb(74, 80, 74);font-size:40px;" (click)="onClose()">cancel</mat-icon>
-</div>
-<div class="img-wrapper" *ngFor="let img of images">
-  <img [src]="env+'uploads/' + img" class="image" />
-</div> -->
-<!-- <div class="image-dialog-footer">
-     <button mat-raised-button style="background-color: green;color:white" (click)="onClose()">Close</button>
-</div> -->

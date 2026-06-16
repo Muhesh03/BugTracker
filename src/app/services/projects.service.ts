@@ -95,9 +95,9 @@ export class ProjectService {
 
   }
   getProjectTeam(project_id: number) {
-  console.log('Calling getProjectTeam with:', project_id);
-  return this.http.get<any[]>(
-    `${this.apiUrl}projects/team/${project_id}`
-  );
-}
+    console.log('Calling getProjectTeam with:', project_id);
+    return this.http.get<any[]>(
+      `${this.apiUrl}projects/team/${project_id}`
+    );
+  }
 }

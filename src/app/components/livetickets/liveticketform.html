@@ -232,7 +232,7 @@
 </mat-dialog-content>
 
 <mat-dialog-actions class="dialog-actions">
-  <button mat-raised-button type="submit" form="ticketForm" class="pbtn">
+  <button mat-raised-button type="submit" form="ticketForm" class="pbtn"  [disabled]="isSubmitting">
     Create
   </button>
 </mat-dialog-actions>

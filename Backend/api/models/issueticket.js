@@ -21,6 +21,7 @@ exports.saveIssueTicket = function (data, cb) {
     });
 };
 
+
 exports.getFilter = function (filters, cb) {
   const {
     projectId,
@@ -28,10 +29,12 @@ exports.getFilter = function (filters, cb) {
     filterValueStatus,
     filterValueType,
     filterValueTag,
+    filterValueUser,
     filterValueDate,
     fromDate,
     toDate
   } = filters;
+  console.log('RAW STATUS:', filterValueStatus);
 
   const tags = [].concat(filterValueTag || []);
 
@@ -42,8 +45,19 @@ exports.getFilter = function (filters, cb) {
   };
 
   const priorityId = toInt(filterValuePriority);
-  const statusId = toInt(filterValueStatus);
-  const typeId = toInt(filterValueType);
+
+let statusIds = [];
+
+if (filterValueStatus) {        // here from frontend mutliple data's are coming in array but single data not coming  in array so here we are inserting every data from frontend to array to match the condtion
+  statusIds = (Array.isArray(filterValueStatus)
+    ? filterValueStatus
+    : [filterValueStatus]
+  )
+  .map(Number)
+  .filter(n => !isNaN(n));
+}
+    const typeId = toInt(filterValueType);
+  const projectuserId = toInt(filterValueUser);
 
   knex('issueticket as it')
     .leftJoin('ticketpriority as p', 'it.priority_id', 'p.priority_id')
@@ -60,8 +74,9 @@ exports.getFilter = function (filters, cb) {
       'it.summary',
       'it.description',
       'it.ticketstatus_id',
+       'it.image_path',  
       'u.user_id',
-      'u.fullname',
+      'u.fullname as assigned_to_name',
       'ur.user_id as creator_user_id',
       'ur.fullname as created_by_name',
       'it.priority_id',
@@ -73,6 +88,7 @@ exports.getFilter = function (filters, cb) {
       'it.tickettype_id',
       'it.ticket_number',
       'it.created_at',
+
       knex.raw('array_agg(tg.tickettag) as tag_names'),
       knex.raw('array_agg(tg.tickettag_id) as tag_ids')
     )
@@ -84,8 +100,12 @@ exports.getFilter = function (filters, cb) {
       }
 
       if (priorityId) this.where('it.priority_id', priorityId);
-      if (statusId) this.where('it.ticketstatus_id', statusId);
-      if (typeId) this.where('it.tickettype_id', typeId);
+
+if (statusIds.length > 0) {
+  this.whereIn('it.ticketstatus_id', statusIds);
+
+}      if (typeId) this.where('it.tickettype_id', typeId);
+      if (projectuserId) this.where('it.user_id', projectuserId);
 
       if (filterValueDate === 'Between' && fromDate && toDate) {
         const from = new Date(fromDate).toISOString().split('T')[0];
@@ -117,9 +137,14 @@ exports.getFilter = function (filters, cb) {
       't.color', 'tt.name',
       'it.tickettype_id',
       'it.ticket_number',
-      'it.created_at'
+      'it.created_at',
+       'it.image_path',  
+      'it.user_id',
+
+
+      
     )
-    .orderBy('it.issueticket_id', 'asc')
+    .orderBy('it.issueticket_id', 'desc')
     .then(out => cb(null, out))
     .catch(err => {
       console.error('Error in getFilter:', err);
@@ -128,7 +153,7 @@ exports.getFilter = function (filters, cb) {
 };
 
 exports.getIssueTicket = function (projectParams, cb) {
-  console.log("Fetching issue tickets...");
+  console.log("Fetching issue tickets............................",projectParams);
   knex('issueticket as it')
     .leftJoin('ticketpriority as p', 'it.priority_id', 'p.priority_id')
     .leftJoin('ticketstatus as t', 'it.ticketstatus_id', 't.ticketstatus_id')
@@ -136,34 +161,15 @@ exports.getIssueTicket = function (projectParams, cb) {
     .leftJoin('userregistration as ur', 'it.created_by', 'ur.user_id')
     .leftJoin('userregistration as u', 'it.user_id', 'u.user_id')
     .leftJoin('projects as pr', 'it.project_id', 'pr.project_id')
-    .select(
-      'it.issueticket_id',
-      'it.summary',
-      'it.description',
-      'it.ticketstatus_id',
-      'u.user_id as assigned_user_id',
-      'u.fullname as assigned_to_name',
-      'it.priority_id',
-      'p.priority',
-      'pr.projectname',
-      'it.project_id',
-      'p.icon',
-      't.statusname',
-      't.color',
-      'tt.name as ticket_type_name',
-      'it.tickettype_id',
-      'it.ticket_number',
-      'it.steps_to_reproduce',
-      'it.created_at',
-      'it.image_path',
-      'it.created_by',
-      'ur.user_id as creator_user_id',
-      'ur.fullname as created_by_name',
+    .select('it.issueticket_id', 'it.summary', 'it.description', 'it.ticketstatus_id', 'u.user_id as assigned_user_id','u.fullname as assigned_to_name', 'it.priority_id',
+      'p.priority','pr.projectname', 'it.project_id', 'p.icon', 't.statusname', 't.color', 'tt.name as ticket_type_name', 'it.tickettype_id', 'it.ticket_number',
+      'it.steps_to_reproduce', 'it.created_at', 'it.image_path', 'it.created_by', 'ur.user_id as creator_user_id', 'ur.fullname as created_by_name',
       knex.raw('array_agg(tg.tickettag) as tag_names'),
       knex.raw('array_agg(tg.tickettag_id) as tag_ids'))
     .joinRaw('JOIN tickettag tg ON tg.tickettag_id = ANY(it.ticket_tag)')
     .whereNot('it.status_id', 3)
-    .modify(function (queryBuilder) {
+    .where(function () {
+    //.modify(function (queryBuilder) {
       if (projectParams.projectid) {
         this.where('it.project_id', projectParams.projectid);
       }
@@ -185,7 +191,7 @@ exports.getIssueTicket = function (projectParams, cb) {
       'p.icon',
       't.statusname',
       't.color',
-      'tt.name',
+     'tt.name',      
       'it.tickettype_id',
       'it.ticket_number',
       'it.steps_to_reproduce',
@@ -196,8 +202,8 @@ exports.getIssueTicket = function (projectParams, cb) {
       'ur.fullname',
     )
     .orderBy('it.issueticket_id', 'desc')
-    .then(
-      function (out) {
+    .then(function (out) {
+        console.log('ooooooooooooooooooooo', out);
         cb(null, out);
       })
     .catch(function (e) {
@@ -247,28 +253,28 @@ exports.deleteIssueTicket = function (issueticket_id, callback) {
 
 
 
-exports.updateIssueTicket = (issueticket_id, data, cb) => {
-  knex('issueticket')
-    .where({ issueticket_id })
-    .update({
-      summary: data.summary,
-      description: data.description,
-      ticketstatus_id: data.ticketstatus_id,
-      priority_id: data.priority_id,
-      ticket_tag: data.ticket_tag,
-      image_path: data.image_path,
-      updated_at: knex.fn.now(),
-      updated_by: data.user_id
+// exports.updateIssueTicket = (issueticket_id, data, cb) => {
+//   knex('issueticket')
+//     .where({ issueticket_id })
+//     .update({
+//       summary: data.summary,
+//       description: data.description,
+//       ticketstatus_id: data.ticketstatus_id,
+//       priority_id: data.priority_id,
+//       ticket_tag: data.ticket_tag,
+//       image_path: data.image_path,
+//       updated_at: knex.fn.now(),
+//       updated_by: data.user_id
 
 
 
-    })
-    .then(result => {
-      console.log('Priority updated, rows affected:', result);
-      cb(null, result);
-    })
-    .catch(err => cb(err));
-};
+//     })
+//     .then(result => {
+//       console.log('Priority updated, rows affected:', result);
+//       cb(null, result);
+//     })
+//     .catch(err => cb(err));
+// };
 
 
 
@@ -311,6 +317,21 @@ exports.getPriorities = function (cb) {
     .orderBy('priority', 'icon')
     .then(function (out) {
       console.log('priority DATA SENDED', out);
+      cb(null, out);
+    })
+    .catch(function (e) {
+      cb(e, 'error');
+    });
+};
+
+exports.getUserbyProject = function (params, cb) {
+  knex('projectteam as pt')
+    .join('userregistration as u', 'pt.user_id', 'u.user_id')
+    .select('u.user_id', 'u.fullname')
+    .where('pt.project_id', params.project_id)
+    .orderBy('u.fullname', 'asc')
+    .then(function (out) {
+      console.log('Project users fetched:', out);
       cb(null, out);
     })
     .catch(function (e) {
@@ -430,6 +451,7 @@ exports.getExcelData = async (filters) => {
           new Date(filters.fromDate),
           new Date(filters.toDate)
         ]);
+        
       }
 
       if (filters.searchtext) {
@@ -463,6 +485,19 @@ exports.getTicketById = async (issueticket_id) => {
   return knex('issueticket')
     .where({ issueticket_id })
     .first();
+};
+
+
+
+exports.selectBoxStatusUpdate=function(params, callback) {
+    knex('issueticket')
+        .whereIn('issueticket_id', params.ticket_ids)
+        .update({ ticketstatus_id: params.status_id })
+        .then(output => callback(null, output))
+        .catch(err => {
+            console.error('Bulk update model error:', err);
+            callback(err, null);
+        });
 };
 
 /**
@@ -576,6 +611,9 @@ exports.getTicketById = async (issueticket_id) => {
 // };
 
 exports.updateTicket = async (issueticket_id, data) => {
+  console.log('=== DATA RECEIVED IN UPDATE ===', data);            // ADD THIS
+  console.log('=== selectedProject ===', data.selectedProject);    // ADD THIS
+  console.log('=== ticket_tag ===', data.ticket_tag); 
 
 
   try {
@@ -592,6 +630,9 @@ exports.updateTicket = async (issueticket_id, data) => {
     if (data.ticketstatus_id !== undefined)
       updateData.ticketstatus_id = data.ticketstatus_id;
 
+   if (data.project_id != null) {
+  updateData.project_id = data.project_id;
+   }
     if (data.priority_id !== undefined)
       updateData.priority_id = data.priority_id;
 

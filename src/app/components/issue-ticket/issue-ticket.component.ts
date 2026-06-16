@@ -15,6 +15,7 @@ import { tick } from '@angular/core/testing';
 import { LiveticketService } from 'src/app/services/liveticket.service';
 import { NotePreviewDialogComponent } from '../viewticket/viewticket.component';
 import { NoteAttachmentService } from 'src/app/services/note-attachment.service';
+import { ProjectService } from 'src/app/services/projects.service';
 
 interface User {
   id: number;
@@ -42,16 +43,15 @@ export class IssueTicketComponent implements OnInit, AfterViewInit {
 
   displayedColumns: string[] = [
     'sno',
+    'type',
     'icons',
     'tag_names',
     'ticket_number',
     'created_at',
     'created_by',
-    'user_id',
     'ticketstatus_id',
     'summary',
     'image_path',
-
     'edit',
     'delete'
 
@@ -82,7 +82,7 @@ export class IssueTicketComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit(): void {
-    
+
     this.loadPriorities();
     this.loadStatuses();
     this.loadTags();
@@ -93,7 +93,7 @@ export class IssueTicketComponent implements OnInit, AfterViewInit {
     this.userId = userData.id;
 
     this.storedProjectId = localStorage.getItem('selectedProject');
-    console.log("selected project in issue ticket", this.storedProjectId);
+
     this.projectId = this.storedProjectId ? Number(this.storedProjectId) : null;
     this.getIssueTicket();
   }
@@ -132,37 +132,37 @@ export class IssueTicketComponent implements OnInit, AfterViewInit {
     if (this.projectId && this.projectId !== 0) {
       projectparams.projectid = this.projectId;
     }
+    console.log('projectparams ----------------- ', projectparams);
+    this.issueticketService.getIssueTicket(projectparams).subscribe(res => {
+      console.log('res -------------------------------------', res);
+      const data = (res.data || []).map((row: any) => {
+        let imageArr: string[] = [];
 
-    this.issueticketService.getIssueTicket(projectparams)
-      .subscribe(res => {
-        const data = (res.data || []).map((row: any) => {
-          let imageArr: string[] = [];
-
-          if (row.image_path) {
-            if (typeof row.image_path === 'string') {
-              imageArr = row.image_path
-                .replace('{', '')
-                .replace('}', '')
-                .replace(/"/g, '')
-                .split(',');
-            }
-            else if (Array.isArray(row.image_path)) {
-              imageArr = row.image_path;
-            }
-
-            // FILTER OUT EMPTY STRINGS
-            imageArr = imageArr.filter(img => img && img.trim() !== '');
+        if (row.image_path) {
+          if (typeof row.image_path === 'string') {
+            imageArr = row.image_path
+              .replace('{', '')
+              .replace('}', '')
+              .replace(/"/g, '')
+              .split(',');
+          }
+          else if (Array.isArray(row.image_path)) {
+            imageArr = row.image_path;
           }
 
-          return {
-            ...row,
-            image_path: imageArr
-          };
-        });
+          // FILTER OUT EMPTY STRINGS
+          imageArr = imageArr.filter(img => img && img.trim() !== '');
+        }
 
-        console.log('FINAL DATA USED BY TABLE:', data); // check here
-        this.issueticketDataSource.data = data;
+        return {
+          ...row,
+          image_path: imageArr
+        };
       });
+
+
+      this.issueticketDataSource.data = data;
+    });
   }
 
 
@@ -271,9 +271,13 @@ export class IssueTicketFormComponent implements OnInit {
   tags: any[] = [];
   tickettypes: any[] = [];
   users: any[] = [];
+  selectedProject: number | null = null;
+  allocatedProjects: any[] = [];
+
+
 
   storedProjectId: string | null = null;
-  userId: number | null = null;
+  userId: any;
   loggedInUser: string = '';
   today = new Date();
 
@@ -285,6 +289,8 @@ export class IssueTicketFormComponent implements OnInit {
   notes: any[] = [];
   activities: any[] = [];
   newNoteText: string = '';
+  isSubmitting: boolean = false;
+
 
   imageBaseUrl = environment.ServerApi + 'uploads/';
 
@@ -293,7 +299,9 @@ export class IssueTicketFormComponent implements OnInit {
     2: { name: 'arrow_upward', color: 'red' },
     3: { name: 'keyboard_arrow_up', color: 'red' },
     4: { name: 'keyboard_arrow_down', color: 'green' },
-    5: { name: 'remove', color: 'yellow' }
+    5: { name: 'remove', color: 'yellow' },
+    6: { name: 'keyboard_double_arrow_up', color: 'red' }
+
   };
 
   get selectedPriority() {
@@ -307,10 +315,12 @@ export class IssueTicketFormComponent implements OnInit {
     private liveticketservice: LiveticketService,
     private dialog: MatDialog,
     private noteAttachmentService: NoteAttachmentService,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private projectservice: ProjectService
   ) { }
 
   ngOnInit(): void {
+    this.selectedProject = null;
     this.storedProjectId = localStorage.getItem('selectedProject');
     const projectId = this.storedProjectId ? Number(this.storedProjectId) : null;
 
@@ -329,14 +339,9 @@ export class IssueTicketFormComponent implements OnInit {
       description: new FormControl(''),
       steps_to_reproduce: new FormControl(''),
       storedprojectId: new FormControl(projectId),
-       live_ticket_id: new FormControl(null),
-
-    
-
-      
-      
-      
+      live_ticket_id: new FormControl(null)
     });
+
 
     if (this.data?.issueticket_id) {
       // EDIT mode
@@ -346,7 +351,7 @@ export class IssueTicketFormComponent implements OnInit {
         ? [...this.data.image_path] : [];
       this.loadNotes();
       this.loadActivities();
-     
+
     } else if (this.data?.live_ticket_id) {
       this.isEditMode = false;
       this.patchForm(this.data);
@@ -364,12 +369,14 @@ export class IssueTicketFormComponent implements OnInit {
     this.loadTags();
     this.loadTicketTypes();
     this.loadUsers();
+    this.loadAllocatedProjects();
   }
 
   private patchForm(d: any): void {
-    console.log("data recieeved in patchform",d);
-    
-    
+
+    this.selectedProject = d.project_id ?? null;
+
+
     this.issueTicketForm.patchValue({
       ticket_number: d.ticket_number ?? '',
       ticketstatus_id: d.ticketstatus_id ?? '',
@@ -380,9 +387,17 @@ export class IssueTicketFormComponent implements OnInit {
       summary: d.summary ?? '',
       description: d.description ?? '',
       steps_to_reproduce: d.steps_to_reproduce ?? '',
-       live_ticket_id: d.live_ticket_id ?? null,
+      live_ticket_id: d.live_ticket_id ?? null,
+
     });
   }
+
+
+  hello() {
+    console.log("Selected Project:", this.selectedProject);
+  }
+
+
 
   loadStatuses(): void {
     this.issueticketService.getTicketStatuses().subscribe(res => {
@@ -395,6 +410,17 @@ export class IssueTicketFormComponent implements OnInit {
       this.priorities = res.data;
     });
   }
+
+  loadAllocatedProjects() {
+
+    this.projectservice.getUserProjects(this.userId).subscribe(res => {
+      this.allocatedProjects = res;
+
+      // this.loadLastProject();
+
+    });
+  }
+
 
   loadTags(): void {
     this.issueticketService.getTicketTags().subscribe(res => {
@@ -473,15 +499,68 @@ export class IssueTicketFormComponent implements OnInit {
     });
   }
 
+  //   onSubmit(): void {
+  //     if (this.issueTicketForm.invalid) return;
+
+  //     const persist = (uploadedPaths: string[]) => {
+  //       const payload = {
+  //         ...this.issueTicketForm.value,
+  //         // keep backend field name consistent
+  //         assigned_user_id: this.issueTicketForm.value.assigned_user_id,
+
+  //         user_id: this.issueTicketForm.value.assigned_user_id ?? null,
+  //         image_path: [...this.existingImages, ...uploadedPaths],
+  //         deleted_images: this.deletedImages,
+  //         reported_by: this.userId,
+  //         updated_by: this.userId,
+  //       };
+  //       if (this.selectedProject && this.selectedProject !== 0) {
+  //   payload.project_id = this.selectedProject;
+  // }
+
+  //       if (this.isEditMode) {
+  //         this.issueticketService
+  //           .updateTicket(this.data.issueticket_id, payload)
+  //           .subscribe(() => this.dialogRef.close(true));
+  //           this.hello();
+  //       } else {
+  //         this.issueticketService.addIssueTicket(payload).subscribe(() => {
+  //           if (this.data?.live_ticket_id) {
+  //             this.liveticketservice.markAsConverted(this.data.live_ticket_id)
+  //               .subscribe();
+  //           }
+  //           this.dialogRef.close(true);
+  //         });
+  //       }
+  //     };
+
+  //     if (this.selectedFiles.length > 0) {
+  //       const formData = new FormData();
+  //       this.selectedFiles.forEach(f => formData.append('images', f));
+
+  //       this.noteAttachmentService.uploadImage(formData).subscribe({
+  //         next: (res: any) => persist(res.image_paths ?? []),
+  //         error: err => console.error('Image upload failed', err)
+  //       });
+  //     } else {
+  //       persist([]);
+  //     }
+  //   }
+
+
+
+
+
   onSubmit(): void {
     if (this.issueTicketForm.invalid) return;
+    if (this.isSubmitting) return;
+
+    this.isSubmitting = true;
 
     const persist = (uploadedPaths: string[]) => {
       const payload = {
         ...this.issueTicketForm.value,
-        // keep backend field name consistent
         assigned_user_id: this.issueTicketForm.value.assigned_user_id,
-
         user_id: this.issueTicketForm.value.assigned_user_id ?? null,
         image_path: [...this.existingImages, ...uploadedPaths],
         deleted_images: this.deletedImages,
@@ -489,17 +568,34 @@ export class IssueTicketFormComponent implements OnInit {
         updated_by: this.userId,
       };
 
+      if (this.selectedProject && this.selectedProject !== 0) {
+        payload.project_id = this.selectedProject;
+      }
+
       if (this.isEditMode) {
         this.issueticketService
           .updateTicket(this.data.issueticket_id, payload)
-          .subscribe(() => this.dialogRef.close(true));
+          .subscribe({
+            next: () => {
+              console.log('SUCCESS'); // is this printing?
+
+              this.hello();
+              this.dialogRef.close(true);
+            },
+            error: () => {
+              this.isSubmitting = false;
+            }
+          });
       } else {
-        this.issueticketService.addIssueTicket(payload).subscribe(() => {
-          if (this.data?.live_ticket_id) {
-            this.liveticketservice.markAsConverted(this.data.live_ticket_id)
-              .subscribe();
+        this.issueticketService.addIssueTicket(payload).subscribe({
+          next: (res) => {
+            console.log('SUCCESS', res); // is this printing?
+            this.dialogRef.close(true);
+          },
+          error: (err) => {
+            console.log('ERROR', err.status, err); // or this?
+            this.isSubmitting = false;
           }
-          this.dialogRef.close(true);
         });
       }
     };
@@ -510,7 +606,10 @@ export class IssueTicketFormComponent implements OnInit {
 
       this.noteAttachmentService.uploadImage(formData).subscribe({
         next: (res: any) => persist(res.image_paths ?? []),
-        error: err => console.error('Image upload failed', err)
+        error: (err) => {
+          console.error('Image upload failed', err);
+          this.isSubmitting = false;
+        }
       });
     } else {
       persist([]);
